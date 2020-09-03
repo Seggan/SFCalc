@@ -17,6 +17,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         getLogger().info("SFCalc enabled.");
 
         Objects.requireNonNull(getCommand("sfcalc")).setExecutor(new Executor(this));
+        Objects.requireNonNull(getCommand("sfcalc")).setTabCompleter(new Completer());
 
         blacklistedRecipes.add(RecipeType.ORE_WASHER);
         blacklistedRecipes.add(RecipeType.GEO_MINER);
