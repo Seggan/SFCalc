@@ -18,7 +18,7 @@ public class Completer implements TabCompleter {
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
         if (commands.isEmpty()) {
             for (SlimefunItem item : SlimefunPlugin.getRegistry().getEnabledSlimefunItems()) {
-                commands.add(item.getID());
+                commands.add(item.getID().toLowerCase());
             }
         }
 
