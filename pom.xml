@@ -52,7 +52,7 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/public/</url>
         </repository>
         <repository>
-            <id>slimefun-repo</id>
+            <id>jittpack</id>
             <url>https://jitpack.io</url>
         </repository>
     </repositories>

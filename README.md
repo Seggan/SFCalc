@@ -1,5 +1,5 @@
 # SFCalc
-A calculator for the plugin Slimefun.
+A calculator for the plugin Slimefun. This is based off of john000708's SlimeCalculator.
 
 This addon for Slimefun adds a new command: /sfcalc. This command can calculate how much basic slimefun resources you need to make the specified item.
 
