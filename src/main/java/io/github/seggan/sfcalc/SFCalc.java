@@ -1,6 +1,7 @@
 package io.github.seggan.sfcalc;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -8,7 +9,8 @@ import java.util.HashSet;
 import java.util.Objects;
 
 public class SFCalc extends JavaPlugin implements SlimefunAddon {
-    public static HashSet<RecipeType> blacklistedRecipes = new HashSet<>();
+    static HashSet<RecipeType> blacklistedRecipes = new HashSet<>();
+    static HashSet<String> blacklistedIds = new HashSet<>();
 
 
     @Override
@@ -24,6 +26,9 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         blacklistedRecipes.add(RecipeType.MOB_DROP);
         blacklistedRecipes.add(RecipeType.ORE_CRUSHER);
         blacklistedRecipes.add(RecipeType.NULL);
+
+        blacklistedIds.add("SCRAP");
+        blacklistedIds.add("SILICON");
     }
 
     @Override

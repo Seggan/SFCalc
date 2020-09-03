@@ -40,7 +40,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
-                    <finalName>SFCalc ${project.version}</finalName>
+                    <finalName>SFCalc_${project.version}</finalName>
                 </configuration>
             </plugin>
         </plugins>

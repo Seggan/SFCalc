@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 public class Executor implements CommandExecutor {
     private final SFCalc plugin;
@@ -52,7 +53,7 @@ public class Executor implements CommandExecutor {
             return true;
         }
 
-        ArrayList<String> result = calculate(item);
+        List<String> result = calculate(item);
         HashSet<String> resultSet = new HashSet<>(result);
 
         sender.sendMessage(ChatColor.YELLOW + "Recipe for " + WordUtils.capitalizeFully(
@@ -69,8 +70,8 @@ public class Executor implements CommandExecutor {
         return true;
     }
 
-    public ArrayList<String> calculate(SlimefunItem item) {
-        ArrayList<String> result = new ArrayList<>();
+    public List<String> calculate(SlimefunItem item) {
+        List<String> result = new ArrayList<>();
         for (ItemStack i : item.getRecipe()) {
             if (i == null) {
                 // empty slot
@@ -85,9 +86,15 @@ public class Executor implements CommandExecutor {
                 continue;
             }
 
+            if (SFCalc.blacklistedIds.contains(ChatColor.stripColor(ingredient.getItemName()).toUpperCase())) {
+                // it's a blacklisted item
+                result.add(ChatColor.stripColor(ingredient.getItemName()));
+                continue;
+            }
+
             if (!SFCalc.blacklistedRecipes.contains(ingredient.getRecipeType())) {
                 // item is a crafted Slimefun item; get its ingredients
-                ArrayList<String> subitems = calculate(ingredient);
+                List<String> subitems = calculate(ingredient);
                 result.addAll(subitems);
             } else {
                 // item is a dust or a geo miner resource; just add it
