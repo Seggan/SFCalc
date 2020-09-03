@@ -85,7 +85,7 @@ public class Executor implements CommandExecutor {
                 continue;
             }
 
-            if (plugin.blacklistedIds.contains(ChatColor.stripColor(ingredient.getItemName()).toLowerCase())) {
+            if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
                 // it's a blacklisted item
                 result.add(ChatColor.stripColor(ingredient.getItemName()));
                 continue;
