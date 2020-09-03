@@ -9,6 +9,7 @@ import org.bukkit.util.StringUtil;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Completer implements TabCompleter {
@@ -30,6 +31,8 @@ public class Completer implements TabCompleter {
         if (args.length == 1) {
             StringUtil.copyPartialMatches(args[0], commands, completions);
         }
+
+        Collections.sort(completions);
 
         return completions;
     }

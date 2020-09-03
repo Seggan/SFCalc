@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
+import java.text.spi.NumberFormatProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -27,23 +28,21 @@ public class Executor implements CommandExecutor {
         String reqItem;
         SlimefunItem item;
 
-        if (args.length > 2) {
+        if (args.length > 2 || args.length == 0) {
             return false;
         }
 
-        try {
-            reqItem = args[0];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return false;
-        }
+        reqItem = args[0];
 
-        try {
-            amount = Integer.parseInt(args[1]);
-        } catch (ArrayIndexOutOfBoundsException e) {
+        if (args.length == 1) {
             amount = 1;
-        } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.RED + "That's not a number!");
-            return true;
+        } else {
+            try {
+                amount = Integer.parseInt(args[1]);
+            } catch (NumberFormatException e) {
+                sender.sendMessage(ChatColor.RED + "That's not a number!");
+                return true;
+            }
         }
 
         reqItem = reqItem.toUpperCase();
