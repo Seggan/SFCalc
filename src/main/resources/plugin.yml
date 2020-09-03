@@ -1,0 +1,10 @@
+name: SFCalc
+main: io.github.seggan.sfcalc.SFCalc
+version: ${version}
+author: Seggan
+depend: [Slimefun]
+api-version: 1.15
+commands:
+  sfcalc:
+    description: Calculate the required resources for the specified item. Replace spaces with underscores (_).
+    usage: "Usage: /sfcalc <item> [amount]"
