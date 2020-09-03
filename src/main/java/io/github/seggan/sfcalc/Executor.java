@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 public class Executor implements CommandExecutor {
-    SFCalc plugin;
+    private final SFCalc plugin;
 
 
     public Executor(SFCalc plugin) {

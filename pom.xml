@@ -67,14 +67,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.github.thebusybiscuit</groupId>
             <artifactId>Slimefun4</artifactId>
             <version>RC-15</version>
