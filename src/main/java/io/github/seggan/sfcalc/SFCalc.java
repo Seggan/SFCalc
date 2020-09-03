@@ -1,7 +1,6 @@
 package io.github.seggan.sfcalc;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,8 +26,8 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         blacklistedRecipes.add(RecipeType.ORE_CRUSHER);
         blacklistedRecipes.add(RecipeType.NULL);
 
-        blacklistedIds.add("SCRAP");
-        blacklistedIds.add("SILICON");
+        blacklistedIds.add("scrap");
+        blacklistedIds.add("silicon");
     }
 
     @Override

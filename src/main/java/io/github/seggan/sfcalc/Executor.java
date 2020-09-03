@@ -86,7 +86,7 @@ public class Executor implements CommandExecutor {
                 continue;
             }
 
-            if (SFCalc.blacklistedIds.contains(ChatColor.stripColor(ingredient.getItemName()).toUpperCase())) {
+            if (SFCalc.blacklistedIds.contains(ChatColor.stripColor(ingredient.getItemName()).toLowerCase())) {
                 // it's a blacklisted item
                 result.add(ChatColor.stripColor(ingredient.getItemName()));
                 continue;

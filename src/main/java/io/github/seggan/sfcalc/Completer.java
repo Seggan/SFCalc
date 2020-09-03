@@ -19,7 +19,7 @@ public class Completer implements TabCompleter {
         Field[] fields = SlimefunItems.class.getFields();
         for (Field f : fields) {
             if (Modifier.isStatic(f.getModifiers())) {
-                commands.add(f.getName());
+                commands.add(f.getName().toLowerCase());
             }
         }
     }
