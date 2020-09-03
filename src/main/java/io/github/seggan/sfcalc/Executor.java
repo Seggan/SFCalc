@@ -43,6 +43,7 @@ public class Executor implements CommandExecutor {
             amount = 1;
         } catch (NumberFormatException e) {
             sender.sendMessage(ChatColor.RED + "That's not a number!");
+            return true;
         }
 
         reqItem = reqItem.toUpperCase();
@@ -63,7 +64,7 @@ public class Executor implements CommandExecutor {
         for (String name : resultSet) {
             sender.sendMessage(ChatColor.YELLOW + String.format(
                     "%d of %s",
-                    Collections.frequency(result, name),
+                    Collections.frequency(result, name) * amount,
                     WordUtils.capitalizeFully(name.replaceAll("_", " ").toLowerCase())
             ));
         }
