@@ -23,6 +23,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         blacklistedRecipes.add(RecipeType.GOLD_PAN);
         blacklistedRecipes.add(RecipeType.MOB_DROP);
         blacklistedRecipes.add(RecipeType.ORE_CRUSHER);
+        blacklistedRecipes.add(RecipeType.NULL);
     }
 
     @Override

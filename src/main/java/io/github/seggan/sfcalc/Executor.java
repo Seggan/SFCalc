@@ -3,13 +3,11 @@ package io.github.seggan.sfcalc;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-import java.text.spi.NumberFormatProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
