@@ -85,13 +85,13 @@ public class Executor implements CommandExecutor {
                 continue;
             }
 
-            if (SFCalc.blacklistedIds.contains(ChatColor.stripColor(ingredient.getItemName()).toLowerCase())) {
+            if (plugin.blacklistedIds.contains(ChatColor.stripColor(ingredient.getItemName()).toLowerCase())) {
                 // it's a blacklisted item
                 result.add(ChatColor.stripColor(ingredient.getItemName()));
                 continue;
             }
 
-            if (!SFCalc.blacklistedRecipes.contains(ingredient.getRecipeType())) {
+            if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
                 // item is a crafted Slimefun item; get its ingredients
                 List<String> subitems = calculate(ingredient);
                 result.addAll(subitems);

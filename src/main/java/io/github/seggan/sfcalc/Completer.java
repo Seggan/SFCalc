@@ -1,31 +1,27 @@
 package io.github.seggan.sfcalc;
 
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Completer implements TabCompleter {
-    List<String> commands = new ArrayList<>();
-
-    public Completer() {
-        Field[] fields = SlimefunItems.class.getFields();
-        for (Field f : fields) {
-            if (Modifier.isStatic(f.getModifiers())) {
-                commands.add(f.getName().toLowerCase());
-            }
-        }
-    }
+    private final List<String> commands = new ArrayList<>();
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+        if (commands.isEmpty()) {
+            for (SlimefunItem item : SlimefunPlugin.getRegistry().getEnabledSlimefunItems()) {
+                commands.add(item.getID());
+            }
+        }
+
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {

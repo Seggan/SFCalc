@@ -9,8 +9,8 @@ import java.util.Objects;
 import java.util.Set;
 
 public class SFCalc extends JavaPlugin implements SlimefunAddon {
-    static Set<RecipeType> blacklistedRecipes = new HashSet<>();
-    static Set<String> blacklistedIds = new HashSet<>();
+    final Set<RecipeType> blacklistedRecipes = new HashSet<>();
+    final Set<String> blacklistedIds = new HashSet<>();
 
 
     @Override
