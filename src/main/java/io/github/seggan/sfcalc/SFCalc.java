@@ -6,10 +6,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class SFCalc extends JavaPlugin implements SlimefunAddon {
-    static HashSet<RecipeType> blacklistedRecipes = new HashSet<>();
-    static HashSet<String> blacklistedIds = new HashSet<>();
+    static Set<RecipeType> blacklistedRecipes = new HashSet<>();
+    static Set<String> blacklistedIds = new HashSet<>();
 
 
     @Override

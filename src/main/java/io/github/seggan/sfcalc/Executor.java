@@ -2,17 +2,13 @@ package io.github.seggan.sfcalc;
 
 import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class Executor implements CommandExecutor {
@@ -57,23 +53,23 @@ public class Executor implements CommandExecutor {
         }
 
         List<String> result = calculate(item);
-        HashSet<String> resultSet = new HashSet<>(result);
+        Set<String> resultSet = new HashSet<>(result);
 
-        sender.sendMessage(ChatColor.YELLOW + "Recipe for " + WordUtils.capitalizeFully(
-                reqItem.replaceAll("_", " ") + ":"));
+        sender.sendMessage(ChatColor.YELLOW + "Recipe for " + capitalize(
+                reqItem.replace("_", " ") + ":"));
 
         for (String name : resultSet) {
             sender.sendMessage(ChatColor.YELLOW + String.format(
                     "%d of %s",
                     Collections.frequency(result, name) * amount,
-                    WordUtils.capitalizeFully(name.replace("_", " ").toLowerCase())
+                    capitalize(name.replace("_", " ").toLowerCase())
             ));
         }
 
         return true;
     }
 
-    public List<String> calculate(SlimefunItem item) {
+    private List<String> calculate(SlimefunItem item) {
         List<String> result = new ArrayList<>();
         for (ItemStack i : item.getRecipe()) {
             if (i == null) {
@@ -106,5 +102,29 @@ public class Executor implements CommandExecutor {
         }
 
         return result;
+    }
+
+    private static String capitalize(String s) {
+        StringBuilder capped = new StringBuilder();
+        String string = s.trim();
+
+        for (int i = 0; i < string.length(); i++){
+            char c = string.charAt(i);
+
+            if (i == 0) {
+                capped.append(Character.toUpperCase(c));
+                continue;
+            }
+
+            c = Character.toLowerCase(c);
+
+            if (string.charAt(i - 1) == ' ') {
+                c = Character.toUpperCase(c);
+            }
+
+            capped.append(c);
+        }
+
+        return capped.toString();
     }
 }
