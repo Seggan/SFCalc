@@ -1,5 +1,6 @@
 package io.github.seggan.sfcalc;
 
+import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Executor implements CommandExecutor {
     private final SFCalc plugin;
@@ -36,13 +38,14 @@ public class Executor implements CommandExecutor {
         if (args.length == 1) {
             amount = 1;
         } else {
-            try {
+            if (Pattern.matches(String.valueOf(PatternUtils.NUMERIC), args[1])) {
                 amount = Integer.parseInt(args[1]);
-            } catch (NumberFormatException e) {
+            } else {
                 sender.sendMessage(ChatColor.RED + "That's not a number!");
                 return true;
             }
         }
+
 
         reqItem = reqItem.toUpperCase();
 
@@ -63,7 +66,7 @@ public class Executor implements CommandExecutor {
             sender.sendMessage(ChatColor.YELLOW + String.format(
                     "%d of %s",
                     Collections.frequency(result, name) * amount,
-                    WordUtils.capitalizeFully(name.replaceAll("_", " ").toLowerCase())
+                    WordUtils.capitalizeFully(name.replace("_", " ").toLowerCase())
             ));
         }
 
