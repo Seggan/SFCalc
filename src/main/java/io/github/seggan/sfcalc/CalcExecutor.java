@@ -54,14 +54,14 @@ public class CalcExecutor implements CommandExecutor {
         List<String> result = calculate(item);
         Set<String> resultSet = new HashSet<>(result);
 
-        sender.sendMessage(ChatColor.YELLOW + String.format(
-                plugin.headerString != null ? plugin.headerString : "Recipe for %s:",
+        sender.sendMessage(String.format(
+                plugin.headerString != null ? plugin.headerString : "&e&nRecipe for %s:",
                 capitalize(ChatColor.stripColor(item.getItemName()))
         ));
 
         for (String name : resultSet) {
-            sender.sendMessage(ChatColor.YELLOW + String.format(
-                    plugin.amountString != null ? plugin.amountString : "%d of %s",
+            sender.sendMessage(String.format(
+                    plugin.amountString != null ? plugin.amountString : "&e%d of %s",
                     Collections.frequency(result, name) * amount,
                     capitalize(name.replace("_", " ").toLowerCase())
             ));
