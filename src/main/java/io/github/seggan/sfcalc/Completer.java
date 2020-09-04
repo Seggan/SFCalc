@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CalcCompleter implements TabCompleter {
+public class Completer implements TabCompleter {
     private final List<String> commands = new ArrayList<>();
 
     @Override

@@ -6,15 +6,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.*;
 
-public class CalcExecutor implements CommandExecutor {
+public class Executor implements CommandExecutor {
     private final SFCalc plugin;
 
 
-    public CalcExecutor(SFCalc plugin) {
+    public Executor(SFCalc plugin) {
         this.plugin = plugin;
     }
 
@@ -58,13 +60,39 @@ public class CalcExecutor implements CommandExecutor {
                 plugin.headerString != null ? plugin.headerString : "&e&nRecipe for %s:",
                 capitalize(ChatColor.stripColor(item.getItemName()))
         ));
+        if (s.equalsIgnoreCase("sfcalc")) {
+            for (String name : resultSet) {
+                sender.sendMessage(String.format(
+                        plugin.amountString != null ? plugin.amountString : "&e%d of %s",
+                        Collections.frequency(result, name) * amount,
+                        capitalize(name.replace("_", " ").toLowerCase())
+                ));
+            }
+        } else {
+            if (sender instanceof Player) {
+                PlayerInventory inv = ((Player) sender).getInventory();
+                List<String> sfInv = new ArrayList<>();
+                for (ItemStack i : inv.getContents()) {
+                    if (i == null) {
+                        continue;
+                    }
 
-        for (String name : resultSet) {
-            sender.sendMessage(String.format(
-                    plugin.amountString != null ? plugin.amountString : "&e%d of %s",
-                    Collections.frequency(result, name) * amount,
-                    capitalize(name.replace("_", " ").toLowerCase())
-            ));
+                    SlimefunItem sfItem = SlimefunItem.getByItem(i);
+
+                    if (sfItem == null) {
+                        continue;
+                    }
+
+                    sfInv.add(sfItem.getItemName());
+                }
+                for (String name : resultSet) {
+                    sender.sendMessage(String.format(
+                            plugin.amountString != null ? plugin.amountString : "&e%d of %s",
+                            Collections.frequency(result, name) * amount - Collections.frequency(sfInv, name),
+                            capitalize(name.replace("_", " "))
+                    ));
+                }
+            }
         }
 
         return true;
