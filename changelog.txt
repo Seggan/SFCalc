@@ -1,5 +1,6 @@
 Build 3:
 - Added changelog
+- Made messages configurable
 
 Build 2:
 - Fixed build

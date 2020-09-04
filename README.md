@@ -1,6 +1,8 @@
 # SFCalc
 A calculator for the plugin Slimefun. This is based off of john000708's SlimeCalculator.
 
+Find most recent build [here](https://thebusybiscuit.github.io/builds).
+
 This addon for Slimefun adds a new command: /sfcalc. This command can calculate how much basic slimefun resources you need to make the specified item.
 
 Usage: /sfcalc [required: item] [optional: amount]

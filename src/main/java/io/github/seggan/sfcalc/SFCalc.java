@@ -2,6 +2,7 @@ package io.github.seggan.sfcalc;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashSet;
@@ -9,16 +10,24 @@ import java.util.Objects;
 import java.util.Set;
 
 public class SFCalc extends JavaPlugin implements SlimefunAddon {
+    FileConfiguration config = getConfig();
+
     final Set<RecipeType> blacklistedRecipes = new HashSet<>();
     final Set<String> blacklistedIds = new HashSet<>();
+
+    final String headerString = config.getString("header-string");
+    final String amountString = config.getString("amount-string");
+
 
 
     @Override
     public void onEnable() {
         getLogger().info("SFCalc enabled.");
 
-        Objects.requireNonNull(getCommand("sfcalc")).setExecutor(new Executor(this));
-        Objects.requireNonNull(getCommand("sfcalc")).setTabCompleter(new Completer());
+        saveDefaultConfig();
+
+        Objects.requireNonNull(getCommand("sfcalc")).setExecutor(new CalcExecutor(this));
+        Objects.requireNonNull(getCommand("sfcalc")).setTabCompleter(new CalcCompleter());
 
         blacklistedRecipes.add(RecipeType.ORE_WASHER);
         blacklistedRecipes.add(RecipeType.GEO_MINER);

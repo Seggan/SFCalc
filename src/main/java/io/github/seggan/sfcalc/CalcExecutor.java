@@ -10,11 +10,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-public class Executor implements CommandExecutor {
+public class CalcExecutor implements CommandExecutor {
     private final SFCalc plugin;
 
 
-    public Executor(SFCalc plugin) {
+    public CalcExecutor(SFCalc plugin) {
         this.plugin = plugin;
     }
 
@@ -54,12 +54,14 @@ public class Executor implements CommandExecutor {
         List<String> result = calculate(item);
         Set<String> resultSet = new HashSet<>(result);
 
-        sender.sendMessage(ChatColor.YELLOW + "Recipe for " + capitalize(
-                reqItem.replace("_", " ") + ":"));
+        sender.sendMessage(ChatColor.YELLOW + String.format(
+                plugin.headerString != null ? plugin.headerString : "Recipe for %s:",
+                capitalize(ChatColor.stripColor(item.getItemName()))
+        ));
 
         for (String name : resultSet) {
             sender.sendMessage(ChatColor.YELLOW + String.format(
-                    "%d of %s",
+                    plugin.amountString != null ? plugin.amountString : "%d of %s",
                     Collections.frequency(result, name) * amount,
                     capitalize(name.replace("_", " ").toLowerCase())
             ));
