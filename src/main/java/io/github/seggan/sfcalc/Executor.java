@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class Executor implements CommandExecutor {
     private final SFCalc plugin;
@@ -34,7 +33,7 @@ public class Executor implements CommandExecutor {
         if (args.length == 1) {
             amount = 1;
         } else {
-            if (Pattern.matches(String.valueOf(PatternUtils.NUMERIC), args[1])) {
+            if (PatternUtils.NUMERIC.matcher(args[1]).matches()) {
                 amount = Integer.parseInt(args[1]);
             } else {
                 sender.sendMessage(ChatColor.RED + "That's not a number!");
