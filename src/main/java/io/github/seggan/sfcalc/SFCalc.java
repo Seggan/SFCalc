@@ -12,6 +12,8 @@ import java.util.Set;
 public class SFCalc extends JavaPlugin implements SlimefunAddon {
     FileConfiguration config = getConfig();
 
+    private static SFCalc instance;
+
     final Set<RecipeType> blacklistedRecipes = new HashSet<>();
     final Set<String> blacklistedIds = new HashSet<>();
 
@@ -41,6 +43,8 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 
         blacklistedIds.add("uu_matter");
         blacklistedIds.add("silicon");
+
+        instance = this;
     }
 
     @Override
@@ -56,5 +60,17 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     @Override
     public String getBugTrackerURL() {
         return "https://github.com/Seggan/SFCalc/issues";
+    }
+
+    static SFCalc getInstance() {
+        return instance;
+    }
+
+    static int getSlots(int c) {
+        int n = 9;
+        while (n < c) {
+            n *= 2;
+        }
+        return n;
     }
 }

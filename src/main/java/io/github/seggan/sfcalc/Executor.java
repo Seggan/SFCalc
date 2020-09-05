@@ -1,12 +1,17 @@
 package io.github.seggan.sfcalc;
 
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -26,8 +31,17 @@ public class Executor implements CommandExecutor {
         String reqItem;
         SlimefunItem item;
 
-        if (args.length > 2 || args.length == 0) {
+        if (args.length > 2) {
             return false;
+        }
+
+        if (args.length == 0) {
+            if (sender instanceof Player) {
+                openGUI((Player) sender);
+                return true;
+            } else {
+                return false;
+            }
         }
 
         reqItem = args[0];
@@ -53,8 +67,13 @@ public class Executor implements CommandExecutor {
             return true;
         }
 
-        List<String> result = calculate(item);
-        Set<String> resultSet = new HashSet<>(result);
+        printResults(calculate(item), sender, item, amount);
+
+        return true;
+    }
+
+    void printResults(List<String> results, CommandSender sender, SlimefunItem item, int amount) {
+        Set<String> resultSet = new HashSet<>(results);
 
         sender.sendMessage(String.format(
                 plugin.headerString != null ? plugin.headerString : "&e&nRecipe for %s:",
@@ -94,11 +113,9 @@ public class Executor implements CommandExecutor {
                 }
             }
         }
-
-        return true;
     }
 
-    private List<String> calculate(SlimefunItem item) {
+    List<String> calculate(SlimefunItem item) {
         List<String> result = new ArrayList<>();
         for (ItemStack i : item.getRecipe()) {
             if (i == null) {
@@ -156,4 +173,17 @@ public class Executor implements CommandExecutor {
 
         return capped.toString();
     }
+
+    private void openGUI(Player player) {
+        Inventory inv = Bukkit.createInventory(
+                null,
+                SFCalc.getSlots(SlimefunPlugin.getRegistry().getCategories().size()),
+                "Choose a Category"
+        );
+        for (Category category : SlimefunPlugin.getRegistry().getCategories()) {
+            inv.addItem(category.getItem(player));
+        }
+        player.openInventory(inv);
+    }
+
 }
