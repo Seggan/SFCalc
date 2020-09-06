@@ -75,13 +75,13 @@ public class CalcExecutor implements CommandExecutor {
         Set<String> resultSet = new HashSet<>(results);
 
         sender.sendMessage(String.format(
-                plugin.headerString != null ? plugin.headerString : "&e&nRecipe for %s:",
+                plugin.headerString,
                 capitalize(ChatColor.stripColor(item.getItemName()))
         ));
         if (s.equalsIgnoreCase("sfcalc")) {
             for (String name : resultSet) {
                 sender.sendMessage(String.format(
-                        plugin.amountString != null ? plugin.amountString : "&e%d of %s",
+                        plugin.amountString,
                         Collections.frequency(results, name) * amount,
                         capitalize(name.replace("_", " ").toLowerCase())
                 ));
@@ -105,7 +105,7 @@ public class CalcExecutor implements CommandExecutor {
                 }
                 for (String name : resultSet) {
                     sender.sendMessage(String.format(
-                            plugin.amountString != null ? plugin.amountString : "&e%d of %s",
+                            plugin.amountString,
                             Collections.frequency(results, name) * amount - Collections.frequency(sfInv, name),
                             capitalize(name.replace("_", " "))
                     ));

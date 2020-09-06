@@ -2,6 +2,7 @@ package io.github.seggan.sfcalc;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,8 +18,10 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     final Set<RecipeType> blacklistedRecipes = new HashSet<>();
     final Set<String> blacklistedIds = new HashSet<>();
 
-    final String headerString = config.getString("header-string");
-    final String amountString = config.getString("amount-string");
+    final String headerString = ChatColor.translateAlternateColorCodes('&',
+            Objects.requireNonNull(config.getString("header-string")));
+    final String amountString = ChatColor.translateAlternateColorCodes('&',
+            Objects.requireNonNull(config.getString("amount-string")));
 
 
 

@@ -16,17 +16,17 @@ import java.util.Objects;
 public class CalcHandler implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        e.setCancelled(true);
-        e.getWhoClicked().closeInventory();
         if (e.getView().getTitle().equals("Choose a Category")) {
+            e.setCancelled(true);
+            e.getWhoClicked().closeInventory();
             ItemStack clicked = e.getCurrentItem();
 
             if (clicked == null) {
                 return;
             }
             for (Category category : SlimefunPlugin.getRegistry().getCategories()) {
-                if (ChatColor.stripColor(category.getUnlocalizedName()).equals(Objects.requireNonNull(
-                        clicked.getItemMeta()).getDisplayName())) {
+                if (ChatColor.stripColor(category.getUnlocalizedName()).equals(
+                        ChatColor.stripColor(Objects.requireNonNull(clicked.getItemMeta()).getDisplayName()))) {
                     Inventory newInv = Bukkit.createInventory(
                             null,
                             SFCalc.getSlots(category.getItems().size()),
@@ -39,6 +39,8 @@ public class CalcHandler implements Listener {
                 }
             }
         } else if (e.getView().getTitle().equals("Choose an Item")) {
+            e.setCancelled(true);
+            e.getWhoClicked().closeInventory();
             ItemStack clicked = e.getCurrentItem();
             SlimefunItem item = SlimefunItem.getByItem(clicked);
             if (item == null) {
