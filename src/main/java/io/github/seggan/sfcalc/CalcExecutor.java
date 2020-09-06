@@ -10,18 +10,17 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.util.*;
 
-public class Executor implements CommandExecutor {
+public class CalcExecutor implements CommandExecutor {
     private final SFCalc plugin;
 
 
-    public Executor(SFCalc plugin) {
+    public CalcExecutor(SFCalc plugin) {
         this.plugin = plugin;
     }
 
@@ -67,12 +66,12 @@ public class Executor implements CommandExecutor {
             return true;
         }
 
-        printResults(calculate(item), sender, item, amount);
+        printResults(calculate(item), sender, s, item, amount);
 
         return true;
     }
 
-    void printResults(List<String> results, CommandSender sender, SlimefunItem item, int amount) {
+    void printResults(List<String> results, CommandSender sender, String s, SlimefunItem item, int amount) {
         Set<String> resultSet = new HashSet<>(results);
 
         sender.sendMessage(String.format(
@@ -83,7 +82,7 @@ public class Executor implements CommandExecutor {
             for (String name : resultSet) {
                 sender.sendMessage(String.format(
                         plugin.amountString != null ? plugin.amountString : "&e%d of %s",
-                        Collections.frequency(result, name) * amount,
+                        Collections.frequency(results, name) * amount,
                         capitalize(name.replace("_", " ").toLowerCase())
                 ));
             }
@@ -107,10 +106,12 @@ public class Executor implements CommandExecutor {
                 for (String name : resultSet) {
                     sender.sendMessage(String.format(
                             plugin.amountString != null ? plugin.amountString : "&e%d of %s",
-                            Collections.frequency(result, name) * amount - Collections.frequency(sfInv, name),
+                            Collections.frequency(results, name) * amount - Collections.frequency(sfInv, name),
                             capitalize(name.replace("_", " "))
                     ));
                 }
+            } else {
+                sender.sendMessage("You have to be a player to send this message!");
             }
         }
     }
