@@ -11,6 +11,8 @@ Item is the id of the item you want to craft. An item id is like this: "electric
 
 Amount is the number of items you want to craft. It defaults to 1 if you don't specify any amount.
 
+You can also open a GUI version by simply typing /sfcalc without any arguments.
+
 Minecraft version: 1.15.2, reportedly works on 1.16.2
 
 Slimefun version: RC-15
