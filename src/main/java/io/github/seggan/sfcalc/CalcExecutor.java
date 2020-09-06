@@ -80,7 +80,7 @@ public class CalcExecutor implements CommandExecutor {
         ));
         if (s.equalsIgnoreCase("sfcalc")) {
             for (String name : resultSet) {
-                sender.sendMessage(String.format(
+                sender.sendMessage(format(
                         plugin.amountString,
                         Collections.frequency(results, name) * amount,
                         capitalize(name.replace("_", " ").toLowerCase())
@@ -104,7 +104,7 @@ public class CalcExecutor implements CommandExecutor {
                     sfInv.add(sfItem.getItemName());
                 }
                 for (String name : resultSet) {
-                    sender.sendMessage(String.format(
+                    sender.sendMessage(format(
                             plugin.amountString,
                             Collections.frequency(results, name) * amount - Collections.frequency(sfInv, name),
                             capitalize(name.replace("_", " "))
@@ -185,6 +185,10 @@ public class CalcExecutor implements CommandExecutor {
             inv.addItem(category.getItem(player));
         }
         player.openInventory(inv);
+    }
+
+    private String format(String s, int a, String i) {
+        return s.replace("%d", Integer.toString(a)).replace("%s", i);
     }
 
 }

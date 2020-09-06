@@ -2,6 +2,7 @@ Build 4:
 - Added GUI calculator
 - Added configurable color codes to chat messages
 - Added /sfneeded (broken)
+- Fixed order of %s and %d bug
 
 Build 3:
 - Added changelog
