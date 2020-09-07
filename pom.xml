@@ -6,7 +6,7 @@
 
     <groupId>io.github.seggan.sfcalc</groupId>
     <artifactId>SFCalc</artifactId>
-    <version>DEV 4</version>
+    <version>DEV 5</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -60,9 +60,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.thebusybiscuit</groupId>
+            <groupId>com.github.TheBusyBiscuit</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>RC-15</version>
+            <version>RC-16</version>
             <scope>provided</scope>
         </dependency>
 
