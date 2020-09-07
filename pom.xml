@@ -6,7 +6,7 @@
 
     <groupId>io.github.seggan.sfcalc</groupId>
     <artifactId>SFCalc</artifactId>
-    <version>DEV 5</version>
+    <version>UNOFFICIAL</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
