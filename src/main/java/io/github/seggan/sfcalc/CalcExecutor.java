@@ -176,9 +176,14 @@ public class CalcExecutor implements CommandExecutor {
     }
 
     private void openGUI(Player player) {
+        int size = SFCalc.getSlots(SlimefunPlugin.getRegistry().getCategories().size());
+        if (size > 54) {
+            player.sendMessage(ChatColor.RED + "That many categories is not supported yet. Please use the command form of the calculator.");
+            return;
+        }
         Inventory inv = Bukkit.createInventory(
                 null,
-                SFCalc.getSlots(SlimefunPlugin.getRegistry().getCategories().size()),
+                size,
                 "Choose a Category"
         );
         for (Category category : SlimefunPlugin.getRegistry().getCategories()) {
