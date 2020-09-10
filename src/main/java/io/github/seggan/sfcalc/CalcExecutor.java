@@ -78,7 +78,7 @@ public class CalcExecutor implements CommandExecutor {
         item = SlimefunItem.getByID(reqItem);
 
         if (item == null) {
-            sender.sendMessage(ChatColor.RED + "That item was not found.");
+            sender.sendMessage(plugin.noItemString);
             return true;
         }
 
@@ -217,7 +217,7 @@ public class CalcExecutor implements CommandExecutor {
     private void openGUI(Player player) {
         int size = SFCalc.getSlots(SlimefunPlugin.getRegistry().getCategories().size());
         if (size > 54) {
-            player.sendMessage(ChatColor.RED + "That many categories is not supported yet. Please use the command form of the calculator.");
+            player.sendMessage(plugin.tooManyCategoriesString);
             return;
         }
         Inventory inv = Bukkit.createInventory(

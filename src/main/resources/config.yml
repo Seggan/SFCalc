@@ -3,3 +3,12 @@
 header-string: "&e&nRecipe for %s:"
 # Amount string ("200 of Copper Dust"). Defaults to "%d of %s".
 amount-string: "&e%d of %s"
+# Item not found string ("That item was not found."). Defaults to "&cThat item was not found."
+no-item-string: "&cThat item was not found."
+# Not a number string ("That's not a number!"). Defaults to "&cThat's not a number!"
+no-number-string: "&cThat's not a number!"
+# Too many categories/items strings
+# ("That many categories/items is not supported yet. Please use the command form of the calculator.").
+# Defaults to "&cThat many categories/items is not supported yet. Please use the command form of the calculator.".
+category-error-string: "&cThat many categories is not supported yet. Please use the command form of the calculator."
+item-error-string: "&cThat many items is not supported yet. Please use the command form of the calculator."

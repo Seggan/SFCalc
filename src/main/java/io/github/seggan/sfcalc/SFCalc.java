@@ -19,10 +19,12 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     final Set<RecipeType> blacklistedRecipes = new HashSet<>();
     final Set<String> blacklistedIds = new HashSet<>();
 
-    String headerString = ChatColor.translateAlternateColorCodes('&',
-            Objects.requireNonNull(config.getString("header-string")));
-    String amountString = ChatColor.translateAlternateColorCodes('&',
-            Objects.requireNonNull(config.getString("amount-string")));
+    String headerString;
+    String amountString;
+    String noItemString;
+    String noNumberString;
+    String tooManyCategoriesString;
+    String tooManyItemsString;
 
 
 
@@ -44,6 +46,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 //            exceptions.put(key, ingredients);
 //        }
 
+        // init metrics
         int id = 8812;
         Metrics metrics = new Metrics(this, id);
 
@@ -67,13 +70,36 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 
         instance = this;
 
+        // Load config
         headerString = ChatColor.translateAlternateColorCodes(
                 '&',
-                config.getString("header-string") != null ? config.getString("header-string") : "&e&nRecipe for %s:"
+                config.getString("header-string") != null ? config.getString("header-string") :
+                        "&e&nRecipe for %s:"
         );
         amountString = ChatColor.translateAlternateColorCodes(
                 '&',
-                config.getString("amount-string") != null ? config.getString("amount-string") : "&e&nRecipe for %s:"
+                config.getString("amount-string") != null ? config.getString("amount-string") :
+                        "&e%d of %s"
+        );
+        noItemString = ChatColor.translateAlternateColorCodes(
+                '&',
+                config.getString("no-item-string") != null ? config.getString("no-item-string") :
+                        "&cThat item was not found."
+        );
+        noNumberString = ChatColor.translateAlternateColorCodes(
+                '&',
+                config.getString("no-number-string") != null ? config.getString("no-number-string") :
+                        "&cThat's not a number!"
+        );
+        tooManyCategoriesString = ChatColor.translateAlternateColorCodes(
+                '&',
+                config.getString("category-error-string") != null ? config.getString("category-error-string") :
+                        "&cThat many categories is not supported yet. Please use the command form of the calculator."
+        );
+        tooManyItemsString = ChatColor.translateAlternateColorCodes(
+                '&',
+                config.getString("item-error-string") != null ? config.getString("item-error-string") :
+                        "&cThat many items is not supported yet. Please use the command form of the calculator."
         );
     }
 

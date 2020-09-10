@@ -27,9 +27,13 @@ public class CalcHandler implements Listener {
             for (Category category : SlimefunPlugin.getRegistry().getCategories()) {
                 if (ChatColor.stripColor(category.getUnlocalizedName()).equals(
                         ChatColor.stripColor(Objects.requireNonNull(clicked.getItemMeta()).getDisplayName()))) {
+                    int slots = SFCalc.getSlots(category.getItems().size());
+                    if (slots > 54) {
+                        e.getWhoClicked().sendMessage(SFCalc.getInstance().tooManyItemsString);
+                    }
                     Inventory newInv = Bukkit.createInventory(
                             null,
-                            SFCalc.getSlots(category.getItems().size()),
+                            slots,
                             "Choose an Item"
                     );
                     for (SlimefunItem item : category.getItems()) {
