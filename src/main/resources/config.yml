@@ -1,5 +1,5 @@
 # The messages for showing recipes. Replace numbers with %d and item names with %s.
-# Header string ("Recipie for Solar Panel"). Defaults to "&eRecipe for %s:".
+# Header string ("Recipe for Solar Panel"). Defaults to "&eRecipe for %s:".
 header-string: "&e&nRecipe for %s:"
 # Amount string ("200 of Copper Dust"). Defaults to "%d of %s".
 amount-string: "&e%d of %s"

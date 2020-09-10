@@ -18,9 +18,9 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     final Set<RecipeType> blacklistedRecipes = new HashSet<>();
     final Set<String> blacklistedIds = new HashSet<>();
 
-    final String headerString = ChatColor.translateAlternateColorCodes('&',
+    String headerString = ChatColor.translateAlternateColorCodes('&',
             Objects.requireNonNull(config.getString("header-string")));
-    final String amountString = ChatColor.translateAlternateColorCodes('&',
+    String amountString = ChatColor.translateAlternateColorCodes('&',
             Objects.requireNonNull(config.getString("amount-string")));
 
 
@@ -30,6 +30,18 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         getLogger().info("SFCalc enabled.");
 
         saveDefaultConfig();
+
+//        ConfigurationSection exceptionSection = config.getConfigurationSection("special-items");
+//        Set<String> keys = exceptionSection.getKeys(false);
+//        for (String key : keys) {
+//            int amount = exceptionSection.getInt(key + ".amount");
+//            String item = exceptionSection.getString(key + ".ingredient");
+//            String[] ingredients = new String[amount];
+//            for (int n = 0; n < amount; n++) {
+//                ingredients[n] = item;
+//            }
+//            exceptions.put(key, ingredients);
+//        }
 
         Objects.requireNonNull(getCommand("sfcalc")).setExecutor(new CalcExecutor(this));
         Objects.requireNonNull(getCommand("sfcalc")).setTabCompleter(new CalcCompleter());
@@ -50,6 +62,15 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         blacklistedIds.add("silicon");
 
         instance = this;
+
+        headerString = ChatColor.translateAlternateColorCodes(
+                '&',
+                config.getString("header-string") != null ? config.getString("header-string") : "&e&nRecipe for %s:"
+        );
+        amountString = ChatColor.translateAlternateColorCodes(
+                '&',
+                config.getString("amount-string") != null ? config.getString("amount-string") : "&e&nRecipe for %s:"
+        );
     }
 
     @Override

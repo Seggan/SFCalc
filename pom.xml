@@ -14,7 +14,7 @@
     </properties>
 
     <build>
-        <finalName>SFCalc</finalName>
+        <finalName>${project.name} v${project.version}</finalName>
 
         <resources>
             <resource>

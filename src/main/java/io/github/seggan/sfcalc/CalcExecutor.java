@@ -19,9 +19,25 @@ import java.util.*;
 public class CalcExecutor implements CommandExecutor {
     private final SFCalc plugin;
 
+    private final Map<String, SlimefunItem[]> exceptions = new HashMap<>();
+
 
     public CalcExecutor(SFCalc plugin) {
         this.plugin = plugin;
+
+        SlimefunItem[] steelPlateRecipe = new SlimefunItem[8];
+        SlimefunItem steel = SlimefunItem.getByID("STEEL_INGOT");
+        for (int n = 0; n < 8; n++) {
+            steelPlateRecipe[n] = steel;
+        }
+        exceptions.put("steel_plate", steelPlateRecipe);
+
+        SlimefunItem[] reinforcedPlateRecipe = new SlimefunItem[8];
+        SlimefunItem alloy = SlimefunItem.getByID("REINFORCED_ALLOY_INGOT");
+        for (int n = 0; n < 8; n++) {
+            steelPlateRecipe[n] = steel;
+        }
+        exceptions.put("steel_plate", steelPlateRecipe);
     }
 
     @Override
@@ -118,34 +134,57 @@ public class CalcExecutor implements CommandExecutor {
 
     List<String> calculate(SlimefunItem item) {
         List<String> result = new ArrayList<>();
-        for (ItemStack i : item.getRecipe()) {
-            if (i == null) {
-                // empty slot
-                continue;
-            }
 
-            SlimefunItem ingredient = SlimefunItem.getByItem(i);
+        switch (item.getID().toLowerCase()) {
+            case "carbon":
+                for (int n = 0; n < 8; n++) {
+                    result.add("coal");
+                }
+                break;
+            case "compressed_carbon":
+                for (int n = 0; n < 4; n++) {
+                    result.addAll(calculate(SlimefunItem.getByID("CARBON")));
+                }
+                break;
+            case "reinforced_plate":
+                for (int n = 0; n < 8; n++) {
+                    result.addAll(calculate(SlimefunItem.getByID("REINFORCED_ALLOY_INGOT")));
+                }
+                break;
+            case "steel_plate":
+                for (int n = 0; n < 8; n++) {
+                    result.addAll(calculate(SlimefunItem.getByID("STEEL_INGOT")));
+                }
+                break;
+            default:
+                for (ItemStack i : item.getRecipe()) {
+                    if (i == null) {
+                        // empty slot
+                        continue;
+                    }
 
-            if (ingredient == null) {
-                // ingredient is null; it's a normal Minecraft item
-                result.add(i.getType().toString());
-                continue;
-            }
+                    SlimefunItem ingredient = SlimefunItem.getByItem(i);
 
-            if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
-                // it's a blacklisted item
-                result.add(ChatColor.stripColor(ingredient.getItemName()));
-                continue;
-            }
+                    if (ingredient == null) {
+                        // ingredient is null; it's a normal Minecraft item
+                        result.add(i.getType().toString());
+                        continue;
+                    }
 
-            if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
-                // item is a crafted Slimefun item; get its ingredients
-                List<String> subitems = calculate(ingredient);
-                result.addAll(subitems);
-            } else {
-                // item is a dust or a geo miner resource; just add it
-                result.add(ChatColor.stripColor(ingredient.getItemName()));
-            }
+                    if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
+                        // it's a blacklisted item
+                        result.add(ChatColor.stripColor(ingredient.getItemName()));
+                        continue;
+                    }
+
+                    if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
+                        // item is a crafted Slimefun item; get its ingredients
+                        result.addAll(calculate(ingredient));
+                    } else {
+                        // item is a dust or a geo miner resource; just add it
+                        result.add(ChatColor.stripColor(ingredient.getItemName()));
+                    }
+                }
         }
 
         return result;
