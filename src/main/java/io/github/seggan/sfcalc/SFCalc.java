@@ -2,6 +2,7 @@ package io.github.seggan.sfcalc;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -42,6 +43,9 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 //            }
 //            exceptions.put(key, ingredients);
 //        }
+
+        int id = 8812;
+        Metrics metrics = new Metrics(this, id);
 
         Objects.requireNonNull(getCommand("sfcalc")).setExecutor(new CalcExecutor(this));
         Objects.requireNonNull(getCommand("sfcalc")).setTabCompleter(new CalcCompleter());
