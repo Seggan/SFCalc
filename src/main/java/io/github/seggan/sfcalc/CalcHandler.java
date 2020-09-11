@@ -27,7 +27,7 @@ public class CalcHandler implements Listener {
             for (Category category : SlimefunPlugin.getRegistry().getCategories()) {
                 if (ChatColor.stripColor(category.getUnlocalizedName()).equals(
                         ChatColor.stripColor(Objects.requireNonNull(clicked.getItemMeta()).getDisplayName()))) {
-                    int slots = SFCalc.getSlots(category.getItems().size());
+                    int slots = Util.getSlots(category.getItems().size());
                     if (slots > 54) {
                         e.getWhoClicked().sendMessage(SFCalc.getInstance().tooManyItemsString);
                     }
@@ -43,6 +43,7 @@ public class CalcHandler implements Listener {
                 }
             }
         } else if (e.getView().getTitle().equals("Choose an Item")) {
+            SFCalc plugin = SFCalc.getInstance();
             e.setCancelled(true);
             e.getWhoClicked().closeInventory();
             ItemStack clicked = e.getCurrentItem();
@@ -51,8 +52,7 @@ public class CalcHandler implements Listener {
                 return;
             }
 
-            CalcExecutor executor = new CalcExecutor(SFCalc.getInstance());
-            executor.printResults(executor.calculate(item), e.getWhoClicked(), "sfcalc", item, 1);
+            Calculator.printResults(Calculator.calculate(item, plugin), e.getWhoClicked(), "sfcalc", item, 1, plugin);
         }
     }
 }

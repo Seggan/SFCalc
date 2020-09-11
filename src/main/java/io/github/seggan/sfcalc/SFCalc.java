@@ -47,8 +47,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 //        }
 
         // init metrics
-        int id = 8812;
-        Metrics metrics = new Metrics(this, id);
+        Metrics metrics = new Metrics(this, 8812);
 
         Objects.requireNonNull(getCommand("sfcalc")).setExecutor(new CalcExecutor(this));
         Objects.requireNonNull(getCommand("sfcalc")).setTabCompleter(new CalcCompleter());
@@ -122,11 +121,4 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         return instance;
     }
 
-    static int getSlots(int c) {
-        int n = 9;
-        while (n < c) {
-            n *= 2;
-        }
-        return n;
-    }
 }
