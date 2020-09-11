@@ -1,3 +1,14 @@
+## Build 8:
+- Added bStats
+- Made *all* messages configurable
+- Fixed another GUI bug
+
+## Build 7:
+- Fixed calculator not calculating correct amount
+
+## Build 6:
+- Fixed GUI bug
+
 ## Build 5:
 - Updated Slimefun version from RC-15 to RC-16
 
