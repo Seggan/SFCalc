@@ -2,6 +2,7 @@
 - Added more bStats charts
 - Reformatted code
 - Updated license
+- Added auto updater
 
 ## Build 8:
 - Added bStats

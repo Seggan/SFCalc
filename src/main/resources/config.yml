@@ -1,3 +1,8 @@
+options:
+  auto-update: true
+
+
+
 # The messages for showing recipes. Replace numbers with %d and item names with %s.
 # Header string ("Recipe for Solar Panel"). Defaults to "&eRecipe for %s:".
 header-string: "&e&nRecipe for %s:"

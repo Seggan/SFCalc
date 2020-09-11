@@ -2,6 +2,7 @@ package io.github.seggan.sfcalc;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -90,6 +91,10 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
             }
             return searches;
         }));
+
+        if (getConfig().getBoolean("options.auto-update") && getDescription().getVersion().startsWith("DEV - ")) {
+            new GitHubBuildsUpdater(this, getFile(), "Seggan/SFCalc/master").start();
+        }
 
         Objects.requireNonNull(getCommand("sfcalc")).setExecutor(new CalcExecutor(this));
         Objects.requireNonNull(getCommand("sfcalc")).setTabCompleter(new CalcCompleter());
