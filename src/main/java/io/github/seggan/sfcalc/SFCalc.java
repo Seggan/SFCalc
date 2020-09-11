@@ -7,9 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class SFCalc extends JavaPlugin implements SlimefunAddon {
 //    Copyright (C) 2020 Seggan
@@ -42,6 +40,9 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     String tooManyCategoriesString;
     String tooManyItemsString;
 
+    static List<String> itemsSearched = new ArrayList<>();
+    private boolean sent = false;
+
 
 
     @Override
@@ -64,6 +65,31 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 
         // init metrics
         Metrics metrics = new Metrics(this, 8812);
+        metrics.addCustomChart(new Metrics.AdvancedPie("items_searched", () -> {
+            Map<String, Integer> result = new HashMap<>();
+            Set<String> itemSet = new HashSet<>(itemsSearched);
+            for (String item : itemSet) {
+                result.put(item, Collections.frequency(itemsSearched, item));
+            }
+            if (sent) {
+                sent = false;
+                itemsSearched.clear();
+            } else {
+                sent = true;
+            }
+            return result;
+        }));
+
+        metrics.addCustomChart(new Metrics.SingleLineChart("searches", () -> {
+            int searches = itemsSearched.size();
+            if (sent) {
+                sent = false;
+                itemsSearched.clear();
+            } else {
+                sent = true;
+            }
+            return searches;
+        }));
 
         Objects.requireNonNull(getCommand("sfcalc")).setExecutor(new CalcExecutor(this));
         Objects.requireNonNull(getCommand("sfcalc")).setTabCompleter(new CalcCompleter());

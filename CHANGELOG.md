@@ -1,3 +1,8 @@
+## Build 9:
+- Added more bStats charts
+- Reformatted code
+- Updated license
+
 ## Build 8:
 - Added bStats
 - Made *all* messages configurable

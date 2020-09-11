@@ -97,6 +97,8 @@ public class CalcExecutor implements CommandExecutor {
             return true;
         }
 
+        SFCalc.itemsSearched.add(Util.capitalize(item.getItemName()));
+
         Calculator.printResults(Calculator.calculate(item, plugin), sender, s, item, amount, plugin);
 
         return true;
