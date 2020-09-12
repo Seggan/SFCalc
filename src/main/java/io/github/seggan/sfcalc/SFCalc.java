@@ -40,6 +40,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     String noNumberString;
     String tooManyCategoriesString;
     String tooManyItemsString;
+    String notAPlayerString;
 
     static List<String> itemsSearched = new ArrayList<>();
     private boolean sent = false;
@@ -146,6 +147,11 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
                 '&',
                 config.getString("item-error-string") != null ? config.getString("item-error-string") :
                         "&cThat many items is not supported yet. Please use the command form of the calculator."
+        );
+        notAPlayerString = ChatColor.translateAlternateColorCodes(
+                '&',
+                config.getString("not-a-player-string") != null ? config.getString("not-a-player-string") :
+                        "&cYou must be a player to send this message!"
         );
     }
 

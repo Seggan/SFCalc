@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.util.*;
 
@@ -91,40 +90,34 @@ public final class Calculator {
                 plugin.headerString,
                 Util.capitalize(ChatColor.stripColor(item.getItemName()))
         ));
-        if (s.equalsIgnoreCase("sfcalc")) {
+        for (String name : resultSet) {
+            sender.sendMessage(Util.format(
+                    plugin.amountString,
+                    Collections.frequency(results, name) * amount,
+                    Util.capitalize(name.replace("_", " ").toLowerCase())
+            ));
+        }
+        if (sender instanceof Player) {
+            List<String> sfInv = new ArrayList<>();
+            for (ItemStack i : ((Player) sender).getInventory().getContents()) {
+                if (i == null) {
+                    continue;
+                }
+
+                SlimefunItem sfItem = SlimefunItem.getByItem(i);
+
+                if (sfItem == null) {
+                    continue;
+                }
+
+                sfInv.add(sfItem.getItemName());
+            }
             for (String name : resultSet) {
                 sender.sendMessage(Util.format(
                         plugin.amountString,
-                        Collections.frequency(results, name) * amount,
-                        Util.capitalize(name.replace("_", " ").toLowerCase())
+                        Collections.frequency(results, name) * amount - Collections.frequency(sfInv, name),
+                        Util.capitalize(name.replace("_", " "))
                 ));
-            }
-        } else {
-            if (sender instanceof Player) {
-                PlayerInventory inv = ((Player) sender).getInventory();
-                List<String> sfInv = new ArrayList<>();
-                for (ItemStack i : inv.getContents()) {
-                    if (i == null) {
-                        continue;
-                    }
-
-                    SlimefunItem sfItem = SlimefunItem.getByItem(i);
-
-                    if (sfItem == null) {
-                        continue;
-                    }
-
-                    sfInv.add(sfItem.getItemName());
-                }
-                for (String name : resultSet) {
-                    sender.sendMessage(Util.format(
-                            plugin.amountString,
-                            Collections.frequency(results, name) * amount - Collections.frequency(sfInv, name),
-                            Util.capitalize(name.replace("_", " "))
-                    ));
-                }
-            } else {
-                sender.sendMessage("You have to be a player to send this message!");
             }
         }
     }

@@ -5,7 +5,6 @@ import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -57,6 +56,11 @@ public class CalcExecutor implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+        if (!(sender instanceof Player) && s.equals("sfneeded")) {
+            sender.sendMessage(plugin.notAPlayerString);
+            return true;
+        }
+
         int amount;
         String reqItem;
         SlimefunItem item;
@@ -82,7 +86,7 @@ public class CalcExecutor implements CommandExecutor {
             if (PatternUtils.NUMERIC.matcher(args[1]).matches()) {
                 amount = Integer.parseInt(args[1]);
             } else {
-                sender.sendMessage(ChatColor.RED + "That's not a number!");
+                sender.sendMessage(plugin.noNumberString);
                 return true;
             }
         }

@@ -17,3 +17,6 @@ no-number-string: "&cThat's not a number!"
 # Defaults to "&cThat many categories/items is not supported yet. Please use the command form of the calculator.".
 category-error-string: "&cThat many categories is not supported yet. Please use the command form of the calculator."
 item-error-string: "&cThat many items is not supported yet. Please use the command form of the calculator."
+# Not a player string ("You must be a player to send this message!").
+# Defaults to "&cYou must be a player to send this message!"
+not-a-player-string: "&cYou must be a player to send this message!"
