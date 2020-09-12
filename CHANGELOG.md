@@ -1,6 +1,7 @@
 ## Build 10:
 - Made ***all*** ***all*** ***all*** messages configurable
 - Code reformat
+- Removed unused code
 
 ## Build 9:
 - Added more bStats charts

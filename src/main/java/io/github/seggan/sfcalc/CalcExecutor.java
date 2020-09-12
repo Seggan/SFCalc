@@ -39,19 +39,19 @@ public class CalcExecutor implements CommandExecutor {
     public CalcExecutor(SFCalc plugin) {
         this.plugin = plugin;
 
-        SlimefunItem[] steelPlateRecipe = new SlimefunItem[8];
-        SlimefunItem steel = SlimefunItem.getByID("STEEL_INGOT");
-        for (int n = 0; n < 8; n++) {
-            steelPlateRecipe[n] = steel;
-        }
-        exceptions.put("steel_plate", steelPlateRecipe);
-
-        SlimefunItem[] reinforcedPlateRecipe = new SlimefunItem[8];
-        SlimefunItem alloy = SlimefunItem.getByID("REINFORCED_ALLOY_INGOT");
-        for (int n = 0; n < 8; n++) {
-            steelPlateRecipe[n] = steel;
-        }
-        exceptions.put("steel_plate", steelPlateRecipe);
+//        SlimefunItem[] steelPlateRecipe = new SlimefunItem[8];
+//        SlimefunItem steel = SlimefunItem.getByID("STEEL_INGOT");
+//        for (int n = 0; n < 8; n++) {
+//            steelPlateRecipe[n] = steel;
+//        }
+//        exceptions.put("steel_plate", steelPlateRecipe);
+//
+//        SlimefunItem[] reinforcedPlateRecipe = new SlimefunItem[8];
+//        SlimefunItem alloy = SlimefunItem.getByID("REINFORCED_ALLOY_INGOT");
+//        for (int n = 0; n < 8; n++) {
+//            steelPlateRecipe[n] = steel;
+//        }
+//        exceptions.put("steel_plate", steelPlateRecipe);
     }
 
     @Override
@@ -64,7 +64,6 @@ public class CalcExecutor implements CommandExecutor {
         int amount;
         String reqItem;
         SlimefunItem item;
-
         if (args.length > 2) {
             return false;
         }
