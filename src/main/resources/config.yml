@@ -4,10 +4,12 @@ options:
 
 
 # The messages for showing recipes. Replace numbers with %d and item names with %s.
-# Header string ("Recipe for Solar Panel"). Defaults to "&eRecipe for %s:".
+# Header string ("Recipe for Solar Panel"). Defaults to "&eRecipe for %s:"
 header-string: "&e&nRecipe for %s:"
 # Amount string ("200 of Copper Dust"). Defaults to "%d of %s".
 amount-string: "&e%d of %s"
+# Needed string ("10 more Silicon needed"). Defaults to "&e%d more %s needed"
+needed-string: "&e%d more %s needed"
 # Item not found string ("That item was not found."). Defaults to "&cThat item was not found."
 no-item-string: "&cThat item was not found."
 # Not a number string ("That's not a number!"). Defaults to "&cThat's not a number!"

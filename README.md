@@ -1,7 +1,7 @@
 # SFCalc
 A calculator for the plugin Slimefun. This is based off of john000708's SlimeCalculator.
 
-Find most recent build [here](https://thebusybiscuit.github.io/builds).
+Find most recent build [here](https://thebusybiscuit.github.io/builds/Seggan/SFCalc/master).
 
 Find the changelog [here](https://github.com/Seggan/SFCalc/blob/master/CHANGELOG.md).
 
@@ -16,6 +16,8 @@ Item is the id of the item you want to craft. An item id is like this: "electric
 Amount is the number of items you want to craft. It defaults to 1 if you don't specify any amount.
 
 You can also open a GUI version by simply typing /sfcalc without any arguments.
+
+There is also another command that has the same format: /sfneeded. However, this only displays the resources left to create the item.
 
 Minecraft version: 1.15.2, reportedly works on 1.16.2
 

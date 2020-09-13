@@ -36,6 +36,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 
     String headerString;
     String amountString;
+    String neededString;
     String noItemString;
     String noNumberString;
     String tooManyCategoriesString;
@@ -117,7 +118,29 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 
         instance = this;
 
-        // Load config
+        loadStrings();
+    }
+
+    @Override
+    public void onDisable() {
+        getLogger().info("SFCalc disabled.");
+    }
+
+    @Override
+    public JavaPlugin getJavaPlugin() {
+        return this;
+    }
+
+    @Override
+    public String getBugTrackerURL() {
+        return "https://github.com/Seggan/SFCalc/issues";
+    }
+
+    static SFCalc getInstance() {
+        return instance;
+    }
+
+    private void loadStrings() {
         headerString = ChatColor.translateAlternateColorCodes(
                 '&',
                 config.getString("header-string") != null ? config.getString("header-string") :
@@ -127,6 +150,11 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
                 '&',
                 config.getString("amount-string") != null ? config.getString("amount-string") :
                         "&e%d of %s"
+        );
+        neededString = ChatColor.translateAlternateColorCodes(
+                '&',
+                config.getString("needed-string") != null ? config.getString("needed-string") :
+                        "&e%d more %s needed"
         );
         noItemString = ChatColor.translateAlternateColorCodes(
                 '&',
@@ -154,24 +182,4 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
                         "&cYou must be a player to send this message!"
         );
     }
-
-    @Override
-    public void onDisable() {
-        getLogger().info("SFCalc disabled.");
-    }
-
-    @Override
-    public JavaPlugin getJavaPlugin() {
-        return this;
-    }
-
-    @Override
-    public String getBugTrackerURL() {
-        return "https://github.com/Seggan/SFCalc/issues";
-    }
-
-    static SFCalc getInstance() {
-        return instance;
-    }
-
 }

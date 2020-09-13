@@ -2,6 +2,7 @@
 - Made ***all*** ***all*** ***all*** messages configurable
 - Code reformat
 - Removed unused code
+- Actually added /sfneeded
 
 ## Build 9:
 - Added more bStats charts

@@ -5,6 +5,7 @@ import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -100,7 +101,7 @@ public class CalcExecutor implements CommandExecutor {
             return true;
         }
 
-        SFCalc.itemsSearched.add(Util.capitalize(item.getItemName()));
+        SFCalc.itemsSearched.add(Util.capitalize(ChatColor.stripColor(item.getItemName())));
 
         Calculator.printResults(Calculator.calculate(item, plugin), sender, s, item, amount, plugin);
 

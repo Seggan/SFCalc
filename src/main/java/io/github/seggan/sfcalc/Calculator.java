@@ -90,14 +90,8 @@ public final class Calculator {
                 plugin.headerString,
                 Util.capitalize(ChatColor.stripColor(item.getItemName()))
         ));
-        for (String name : resultSet) {
-            sender.sendMessage(Util.format(
-                    plugin.amountString,
-                    Collections.frequency(results, name) * amount,
-                    Util.capitalize(name.replace("_", " ").toLowerCase())
-            ));
-        }
-        if (sender instanceof Player) {
+
+        if (s.equals("sfneeded")) {
             List<String> sfInv = new ArrayList<>();
             for (ItemStack i : ((Player) sender).getInventory().getContents()) {
                 if (i == null) {
@@ -110,13 +104,23 @@ public final class Calculator {
                     continue;
                 }
 
-                sfInv.add(sfItem.getItemName());
+                for (int n = 0; n < i.getAmount(); n++) {
+                    sfInv.add(ChatColor.stripColor(sfItem.getItemName()));
+                }
             }
             for (String name : resultSet) {
                 sender.sendMessage(Util.format(
-                        plugin.amountString,
+                        plugin.neededString,
                         Collections.frequency(results, name) * amount - Collections.frequency(sfInv, name),
-                        Util.capitalize(name.replace("_", " "))
+                        Util.capitalize(name)
+                ));
+            }
+        } else {
+            for (String name : resultSet) {
+                sender.sendMessage(Util.format(
+                        plugin.amountString,
+                        Collections.frequency(results, name) * amount,
+                        Util.capitalize(name)
                 ));
             }
         }
