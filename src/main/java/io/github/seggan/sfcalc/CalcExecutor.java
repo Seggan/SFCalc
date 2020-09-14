@@ -1,5 +1,6 @@
 package io.github.seggan.sfcalc;
 
+import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
 import me.mrCookieSlime.Slimefun.Objects.Category;
@@ -120,6 +121,9 @@ public class CalcExecutor implements CommandExecutor {
                 "Choose a Category"
         );
         for (Category category : SlimefunPlugin.getRegistry().getCategories()) {
+            if (category instanceof FlexCategory) {
+                continue;
+            }
             inv.addItem(category.getItem(player));
         }
         player.openInventory(inv);
