@@ -1,3 +1,6 @@
+## Build 11:
+- Made GUI calculator ignore FlexCategory
+
 ## Build 10:
 - Made ***all*** ***all*** ***all*** messages configurable
 - Code reformat
