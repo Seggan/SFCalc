@@ -18,6 +18,7 @@
 
     <build>
         <finalName>${project.name} v${project.version}</finalName>
+        <defaultGoal>clean package</defaultGoal>
 
         <resources>
             <resource>

@@ -41,8 +41,8 @@ public final class Util {
         return capped.toString();
     }
 
-    static String format(String s, int a, String i) {
-        return s.replace("%d", Integer.toString(a)).replace("%s", i);
+    static String format(String s, long a, String i) {
+        return s.replace("%d", Long.toString(a)).replace("%s", i);
     }
 
     static int getSlots(int c) {

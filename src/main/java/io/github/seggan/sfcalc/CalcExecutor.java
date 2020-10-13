@@ -63,7 +63,7 @@ public class CalcExecutor implements CommandExecutor {
             return true;
         }
 
-        int amount;
+        long amount;
         String reqItem;
         SlimefunItem item;
         if (args.length > 2) {
@@ -85,7 +85,7 @@ public class CalcExecutor implements CommandExecutor {
             amount = 1;
         } else {
             if (PatternUtils.NUMERIC.matcher(args[1]).matches()) {
-                amount = Integer.parseInt(args[1]);
+                amount = Long.parseLong(args[1]);
             } else {
                 sender.sendMessage(plugin.noNumberString);
                 return true;
