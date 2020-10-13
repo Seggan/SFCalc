@@ -83,7 +83,7 @@ public final class Calculator {
         return result;
     }
 
-    static void printResults(List<String> results, CommandSender sender, String s, SlimefunItem item, int amount, SFCalc plugin) {
+    static void printResults(List<String> results, CommandSender sender, String s, SlimefunItem item, Long amount, SFCalc plugin) {
         Set<String> resultSet = new HashSet<>(results);
 
         sender.sendMessage(String.format(

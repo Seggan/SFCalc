@@ -68,7 +68,7 @@ public class CalcHandler implements Listener {
                 return;
             }
 
-            Calculator.printResults(Calculator.calculate(item, plugin), e.getWhoClicked(), "sfcalc", item, 1, plugin);
+            Calculator.printResults(Calculator.calculate(item, plugin), e.getWhoClicked(), "sfcalc", item, (long) 1, plugin);
         }
     }
 }
