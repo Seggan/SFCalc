@@ -1,10 +1,8 @@
 package io.github.seggan.sfcalc;
 
-import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
-import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -13,8 +11,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import java.util.HashMap;
-import java.util.Map;
+import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
+import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 
 /*
  * Copyright (C) 2020 Seggan
@@ -36,7 +37,6 @@ import java.util.Map;
 public class CalcExecutor implements CommandExecutor {
 
     private final SFCalc plugin;
-
     private final Map<String, SlimefunItem[]> exceptions = new HashMap<>();
 
     public CalcExecutor(SFCalc plugin) {
@@ -85,17 +85,14 @@ public class CalcExecutor implements CommandExecutor {
 
         if (args.length == 1) {
             amount = 1;
+        } else if (PatternUtils.NUMERIC.matcher(args[1]).matches()) {
+            amount = Long.parseLong(args[1]);
         } else {
-            if (PatternUtils.NUMERIC.matcher(args[1]).matches()) {
-                amount = Long.parseLong(args[1]);
-            } else {
-                sender.sendMessage(plugin.noNumberString);
-                return true;
-            }
+            sender.sendMessage(plugin.noNumberString);
+            return true;
         }
 
         reqItem = reqItem.toUpperCase();
-
         item = SlimefunItem.getByID(reqItem);
 
         if (item == null) {
@@ -103,7 +100,7 @@ public class CalcExecutor implements CommandExecutor {
             return true;
         }
 
-        SFCalc.itemsSearched.add(Util.capitalize(ChatColor.stripColor(item.getItemName())));
+        plugin.itemsSearched.add(Util.capitalize(ChatColor.stripColor(item.getItemName())));
 
         Calculator.printResults(Calculator.calculate(item, plugin), sender, s, item, amount, plugin);
 
