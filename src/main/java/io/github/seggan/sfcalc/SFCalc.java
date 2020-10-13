@@ -74,12 +74,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
             new GitHubBuildsUpdater(this, getFile(), "Seggan/SFCalc/master").start();
         }
 
-        Objects.requireNonNull(getCommand("sfcalc")).setExecutor(new CalcExecutor(this));
-        Objects.requireNonNull(getCommand("sfcalc")).setTabCompleter(new CalcCompleter());
-
-        Objects.requireNonNull(getCommand("sfneeded")).setExecutor(new CalcExecutor(this));
-        Objects.requireNonNull(getCommand("sfneeded")).setTabCompleter(new CalcCompleter());
-
+        registerCommands();
         getServer().getPluginManager().registerEvents(new CalcHandler(), this);
 
         blacklistedRecipes.add(RecipeType.ORE_WASHER);
@@ -95,6 +90,18 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         instance = this;
 
         loadStrings();
+    }
+
+    private void registerCommands() {
+        CalcExecutor executor = new CalcExecutor(this);
+        CalcCompleter completer = new CalcCompleter();
+
+        Objects.requireNonNull(getCommand("sfcalc")).setExecutor(executor);
+        Objects.requireNonNull(getCommand("sfcalc")).setTabCompleter(completer);
+
+        Objects.requireNonNull(getCommand("sfneeded")).setExecutor(executor);
+        Objects.requireNonNull(getCommand("sfneeded")).setTabCompleter(completer);
+
     }
 
     @Override
