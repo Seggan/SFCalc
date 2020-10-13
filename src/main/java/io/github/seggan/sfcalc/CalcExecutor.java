@@ -102,7 +102,8 @@ public class CalcExecutor implements CommandExecutor {
 
         plugin.itemsSearched.add(Util.capitalize(ChatColor.stripColor(item.getItemName())));
 
-        Calculator.printResults(Calculator.calculate(item, plugin), sender, s, item, amount, plugin);
+        Calculator calculator = new Calculator(plugin);
+        calculator.printResults(sender, s, item, amount);
 
         return true;
     }

@@ -31,75 +31,16 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-public final class Calculator {
+public class Calculator {
 
-    private Calculator() {}
+    private final SFCalc plugin;
 
-    public static List<String> calculate(SlimefunItem item, SFCalc plugin) {
-        List<String> result = new ArrayList<>();
-
-        switch (item.getID().toLowerCase()) {
-        case "carbon":
-            for (int n = 0; n < 8; n++) {
-                result.add("coal");
-            }
-            break;
-        case "compressed_carbon":
-            for (int n = 0; n < 4; n++) {
-                result.addAll(calculate(SlimefunItem.getByID("CARBON"), plugin));
-            }
-            break;
-        case "reinforced_plate":
-            for (int n = 0; n < 8; n++) {
-                result.addAll(calculate(SlimefunItem.getByID("REINFORCED_ALLOY_INGOT"), plugin));
-            }
-            break;
-        case "steel_plate":
-            for (int n = 0; n < 8; n++) {
-                result.addAll(calculate(SlimefunItem.getByID("STEEL_INGOT"), plugin));
-            }
-            break;
-        default:
-            for (ItemStack i : item.getRecipe()) {
-                if (i == null) {
-                    // empty slot
-                    continue;
-                }
-
-                SlimefunItem ingredient = SlimefunItem.getByItem(i);
-
-                if (ingredient == null) {
-                    // ingredient is null; it's a normal Minecraft item
-                    result.add(ItemUtils.getItemName(i));
-                    continue;
-                }
-
-                if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
-                    for (int n = 0; n < 9; n++) {
-                        result.add("diamond");
-                    }
-                }
-
-                if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
-                    // it's a blacklisted item
-                    result.add(ChatColor.stripColor(ingredient.getItemName()));
-                    continue;
-                }
-
-                if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
-                    // item is a crafted Slimefun item; get its ingredients
-                    result.addAll(calculate(ingredient, plugin));
-                } else {
-                    // item is a dust or a geo miner resource; just add it
-                    result.add(ChatColor.stripColor(ingredient.getItemName()));
-                }
-            }
-        }
-
-        return result;
+    public Calculator(SFCalc plugin) {
+        this.plugin = plugin;
     }
 
-    static void printResults(List<String> results, CommandSender sender, String s, SlimefunItem item, Long amount, SFCalc plugin) {
+    public void printResults(CommandSender sender, String s, SlimefunItem item, long amount) {
+        List<String> results = calculate(item);
         Set<String> resultSet = new HashSet<>(results);
 
         sender.sendMessage(String.format(plugin.headerString, Util.capitalize(ChatColor.stripColor(item.getItemName()))));
@@ -131,6 +72,70 @@ public final class Calculator {
                 sender.sendMessage(Util.format(plugin.amountString, Collections.frequency(results, name) * amount, Util.capitalize(name)));
             }
         }
+    }
+
+    private List<String> calculate(SlimefunItem item) {
+        List<String> result = new ArrayList<>();
+
+        switch (item.getID().toLowerCase()) {
+        case "carbon":
+            for (int n = 0; n < 8; n++) {
+                result.add("coal");
+            }
+            break;
+        case "compressed_carbon":
+            for (int n = 0; n < 4; n++) {
+                result.addAll(calculate(SlimefunItem.getByID("CARBON")));
+            }
+            break;
+        case "reinforced_plate":
+            for (int n = 0; n < 8; n++) {
+                result.addAll(calculate(SlimefunItem.getByID("REINFORCED_ALLOY_INGOT")));
+            }
+            break;
+        case "steel_plate":
+            for (int n = 0; n < 8; n++) {
+                result.addAll(calculate(SlimefunItem.getByID("STEEL_INGOT")));
+            }
+            break;
+        default:
+            for (ItemStack i : item.getRecipe()) {
+                if (i == null) {
+                    // empty slot
+                    continue;
+                }
+
+                SlimefunItem ingredient = SlimefunItem.getByItem(i);
+
+                if (ingredient == null) {
+                    // ingredient is null; it's a normal Minecraft item
+                    result.add(ItemUtils.getItemName(i));
+                    continue;
+                }
+
+                if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
+                    for (int n = 0; n < 9; n++) {
+                        result.add("diamond");
+                    }
+                }
+
+                if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
+                    // it's a blacklisted item
+                    result.add(ChatColor.stripColor(ingredient.getItemName()));
+                    continue;
+                }
+
+                if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
+                    // item is a crafted Slimefun item; get its ingredients
+                    result.addAll(calculate(ingredient));
+                } else {
+                    // item is a dust or a geo miner resource; just add it
+                    result.add(ChatColor.stripColor(ingredient.getItemName()));
+                }
+            }
+        }
+
+        return result;
     }
 
 }
