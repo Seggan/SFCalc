@@ -1,12 +1,17 @@
 package io.github.seggan.sfcalc;
 
+import me.mrCookieSlime.CSCoreLibPlugin.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public final class Calculator {
 //    Copyright (C) 2020 Seggan
@@ -25,7 +30,7 @@ public final class Calculator {
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    static List<String> calculate(SlimefunItem item, SFCalc plugin) {
+    public static List<String> calculate(SlimefunItem item, SFCalc plugin) {
         List<String> result = new ArrayList<>();
 
         switch (item.getID().toLowerCase()) {
@@ -60,8 +65,14 @@ public final class Calculator {
 
                     if (ingredient == null) {
                         // ingredient is null; it's a normal Minecraft item
-                        result.add(i.getType().toString());
+                        result.add(ItemUtils.getItemName(i));
                         continue;
+                    }
+
+                    if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
+                        for (int n = 0; n < 9; n++) {
+                            result.add("diamond");
+                        }
                     }
 
                     if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
