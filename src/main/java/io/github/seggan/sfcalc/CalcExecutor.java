@@ -16,44 +16,45 @@ import org.bukkit.inventory.Inventory;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * Copyright (C) 2020 Seggan
+ * Email: segganew@gmail.com
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
 public class CalcExecutor implements CommandExecutor {
-//    Copyright (C) 2020 Seggan
-//    Email: segganew@gmail.com
-//
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//            (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
     private final SFCalc plugin;
 
     private final Map<String, SlimefunItem[]> exceptions = new HashMap<>();
 
-
     public CalcExecutor(SFCalc plugin) {
         this.plugin = plugin;
 
-//        SlimefunItem[] steelPlateRecipe = new SlimefunItem[8];
-//        SlimefunItem steel = SlimefunItem.getByID("STEEL_INGOT");
-//        for (int n = 0; n < 8; n++) {
-//            steelPlateRecipe[n] = steel;
-//        }
-//        exceptions.put("steel_plate", steelPlateRecipe);
-//
-//        SlimefunItem[] reinforcedPlateRecipe = new SlimefunItem[8];
-//        SlimefunItem alloy = SlimefunItem.getByID("REINFORCED_ALLOY_INGOT");
-//        for (int n = 0; n < 8; n++) {
-//            steelPlateRecipe[n] = steel;
-//        }
-//        exceptions.put("steel_plate", steelPlateRecipe);
+        // SlimefunItem[] steelPlateRecipe = new SlimefunItem[8];
+        // SlimefunItem steel = SlimefunItem.getByID("STEEL_INGOT");
+        // for (int n = 0; n < 8; n++) {
+        // steelPlateRecipe[n] = steel;
+        // }
+        // exceptions.put("steel_plate", steelPlateRecipe);
+        //
+        // SlimefunItem[] reinforcedPlateRecipe = new SlimefunItem[8];
+        // SlimefunItem alloy = SlimefunItem.getByID("REINFORCED_ALLOY_INGOT");
+        // for (int n = 0; n < 8; n++) {
+        // steelPlateRecipe[n] = steel;
+        // }
+        // exceptions.put("steel_plate", steelPlateRecipe);
     }
 
     @Override
@@ -66,6 +67,7 @@ public class CalcExecutor implements CommandExecutor {
         long amount;
         String reqItem;
         SlimefunItem item;
+
         if (args.length > 2) {
             return false;
         }
@@ -92,7 +94,6 @@ public class CalcExecutor implements CommandExecutor {
             }
         }
 
-
         reqItem = reqItem.toUpperCase();
 
         item = SlimefunItem.getByID(reqItem);
@@ -111,23 +112,23 @@ public class CalcExecutor implements CommandExecutor {
 
     private void openGUI(Player player) {
         int size = Util.getSlots(SlimefunPlugin.getRegistry().getCategories().size());
+
         if (size > 54) {
             player.sendMessage(plugin.tooManyCategoriesString);
             return;
         }
-        Inventory inv = Bukkit.createInventory(
-                null,
-                size,
-                "Choose a Category"
-        );
+
+        Inventory inv = Bukkit.createInventory(null, size, "Choose a Category");
+
         for (Category category : SlimefunPlugin.getRegistry().getCategories()) {
             if (category instanceof FlexCategory) {
                 continue;
             }
+
             inv.addItem(category.getItem(player));
         }
+
         player.openInventory(inv);
     }
-
 
 }
