@@ -19,6 +19,8 @@ package io.github.seggan.sfcalc;
  */
 public final class Util {
 
+    private Util() {}
+
     static String capitalize(String s) {
         StringBuilder capped = new StringBuilder();
         String string = s.trim();

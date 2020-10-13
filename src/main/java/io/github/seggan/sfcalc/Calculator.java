@@ -32,6 +32,8 @@ import java.util.Set;
  */
 public final class Calculator {
 
+    private Calculator() {}
+
     public static List<String> calculate(SlimefunItem item, SFCalc plugin) {
         List<String> result = new ArrayList<>();
 
