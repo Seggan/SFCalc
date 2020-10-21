@@ -92,14 +92,14 @@
         <dependency>
             <groupId>com.github.TheBusyBiscuit</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>RC-16</version>
+            <version>RC-17</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.github.TheBusyBiscuit</groupId>
             <artifactId>CS-CoreLib</artifactId>
-            <version>9dd4a1cf8d</version>
+            <version>e42a05d129</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
