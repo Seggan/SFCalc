@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
@@ -74,6 +73,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
             new GitHubBuildsUpdater(this, getFile(), "Seggan/SFCalc/master").start();
         }
 
+        loadStrings();
         registerCommands();
         getServer().getPluginManager().registerEvents(new CalcHandler(), this);
 
@@ -88,8 +88,6 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         blacklistedIds.add("silicon");
 
         instance = this;
-
-        loadStrings();
     }
 
     private void registerCommands() {
@@ -124,14 +122,23 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     }
 
     private void loadStrings() {
-        FileConfiguration config = getConfig();
-        headerString = ChatColors.color(config.getString("header-string") != null ? config.getString("header-string") : "&e&nRecipe for %s:");
-        amountString = ChatColors.color(config.getString("amount-string") != null ? config.getString("amount-string") : "&e%d of %s");
-        neededString = ChatColors.color(config.getString("needed-string") != null ? config.getString("needed-string") : "&e%d more %s needed");
-        noItemString = ChatColors.color(config.getString("no-item-string") != null ? config.getString("no-item-string") : "&cThat item was not found.");
-        noNumberString = ChatColors.color(config.getString("no-number-string") != null ? config.getString("no-number-string") : "&cThat's not a number!");
-        tooManyCategoriesString = ChatColors.color(config.getString("category-error-string") != null ? config.getString("category-error-string") : "&cThat many categories is not supported yet. Please use the command form of the calculator.");
-        tooManyItemsString = ChatColors.color(config.getString("item-error-string") != null ? config.getString("item-error-string") : "&cThat many items is not supported yet. Please use the command form of the calculator.");
-        notAPlayerString = ChatColors.color(config.getString("not-a-player-string") != null ? config.getString("not-a-player-string") : "&cYou must be a player to send this message!");
+        headerString = loadString("header-string", "&e&nRecipe for %s:");
+        amountString = loadString("amount-string", "&e%d of %s");
+        neededString = loadString("needed-string", "&e%d more %s needed");
+        noItemString = loadString("no-item-string", "&cThat item was not found.");
+        noNumberString = loadString("no-number-string", "&cThat's not a number!");
+        tooManyCategoriesString = loadString("category-error-string", "&cThat many categories is not supported yet. Please use the command form of the calculator.");
+        tooManyItemsString = loadString("item-error-string", "&cThat many items is not supported yet. Please use the command form of the calculator.");
+        notAPlayerString = loadString("not-a-player-string", "&cYou must be a player to send this message!");
+    }
+
+    private String loadString(String path, String defaultValue) {
+        String value = getConfig().getString("not-a-player-string");
+
+        if (value != null) {
+            return ChatColors.color(value);
+        } else {
+            return ChatColors.color(defaultValue);
+        }
     }
 }
