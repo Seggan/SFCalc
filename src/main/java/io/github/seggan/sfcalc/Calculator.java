@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
@@ -45,23 +46,7 @@ public class Calculator {
         sender.sendMessage(String.format(plugin.headerString, Util.capitalize(ChatColor.stripColor(item.getItemName()))));
 
         if (command.equals("sfneeded") && sender instanceof Player) {
-            List<String> sfInv = new ArrayList<>();
-
-            for (ItemStack i : ((Player) sender).getInventory().getContents()) {
-                if (i == null) {
-                    continue;
-                }
-
-                SlimefunItem sfItem = SlimefunItem.getByItem(i);
-
-                if (sfItem == null) {
-                    continue;
-                }
-
-                for (int n = 0; n < i.getAmount(); n++) {
-                    sfInv.add(ChatColor.stripColor(sfItem.getItemName()));
-                }
-            }
+            List<String> sfInv = getInventoryAsItemList((Player) sender);
 
             for (Map.Entry<String, Long> entry : results.entrySet()) {
                 int inInventory = Collections.frequency(sfInv, entry.getKey());
@@ -74,10 +59,29 @@ public class Calculator {
         }
     }
 
+    private List<String> getInventoryAsItemList(Player player) {
+        List<String> list = new ArrayList<>();
+
+        for (ItemStack item : player.getInventory().getContents()) {
+            SlimefunItem sfItem = SlimefunItem.getByItem(item);
+
+            // if the Item is null or air, it will return null too
+            if (sfItem == null) {
+                continue;
+            }
+
+            for (int n = 0; n < item.getAmount(); n++) {
+                list.add(ChatColor.stripColor(sfItem.getItemName()));
+            }
+        }
+
+        return list;
+    }
+
     private Map<String, Long> calculate(SlimefunItem item) {
         Map<String, Long> result = new HashMap<>();
 
-        switch (item.getID().toLowerCase()) {
+        switch (item.getID().toLowerCase(Locale.ROOT)) {
         case "carbon":
             add(result, "coal", 8);
             break;
@@ -109,13 +113,10 @@ public class Calculator {
                     add(result, "diamond", 9);
                 }
 
-                if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
+                if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase(Locale.ROOT))) {
                     // it's a blacklisted item
                     add(result, ChatColor.stripColor(ingredient.getItemName()));
-                    continue;
-                }
-
-                if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
+                } else if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
                     // item is a crafted Slimefun item; get its ingredients
                     addAll(result, calculate(ingredient));
                 } else {
