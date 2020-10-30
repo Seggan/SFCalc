@@ -1,3 +1,8 @@
+## Build 12:
+- The calculator now shows correct amounts of items wen large amounts are required
+- Added (broken?) support for LiteXpansion metal forge
+- Added Sonarcloud
+
 ## Build 11:
 - Made GUI calculator ignore FlexCategory
 
