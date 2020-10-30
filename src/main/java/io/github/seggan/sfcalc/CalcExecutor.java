@@ -58,8 +58,8 @@ public class CalcExecutor implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-        if (!(sender instanceof Player) && s.equals("sfneeded")) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (!(sender instanceof Player) && label.equals("sfneeded")) {
             sender.sendMessage(plugin.notAPlayerString);
             return true;
         }
@@ -103,7 +103,7 @@ public class CalcExecutor implements CommandExecutor {
         plugin.itemsSearched.add(Util.capitalize(ChatColor.stripColor(item.getItemName())));
 
         Calculator calculator = new Calculator(plugin);
-        calculator.printResults(sender, s, item, amount);
+        calculator.printResults(sender, label, item, amount);
 
         return true;
     }

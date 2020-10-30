@@ -39,12 +39,12 @@ public class Calculator {
         this.plugin = plugin;
     }
 
-    public void printResults(CommandSender sender, String s, SlimefunItem item, long amount) {
-        Map<String, Integer> results = calculate(item);
+    public void printResults(CommandSender sender, String command, SlimefunItem item, long amount) {
+        Map<String, Long> results = calculate(item);
 
         sender.sendMessage(String.format(plugin.headerString, Util.capitalize(ChatColor.stripColor(item.getItemName()))));
 
-        if (s.equals("sfneeded")) {
+        if (command.equals("sfneeded") && sender instanceof Player) {
             List<String> sfInv = new ArrayList<>();
 
             for (ItemStack i : ((Player) sender).getInventory().getContents()) {
@@ -63,19 +63,19 @@ public class Calculator {
                 }
             }
 
-            for (Map.Entry<String, Integer> entry : results.entrySet()) {
+            for (Map.Entry<String, Long> entry : results.entrySet()) {
                 int inInventory = Collections.frequency(sfInv, entry.getKey());
                 sender.sendMessage(Util.format(plugin.neededString, entry.getValue() * amount - inInventory, Util.capitalize(entry.getKey())));
             }
         } else {
-            for (Map.Entry<String, Integer> entry : results.entrySet()) {
+            for (Map.Entry<String, Long> entry : results.entrySet()) {
                 sender.sendMessage(Util.format(plugin.amountString, entry.getValue() * amount, Util.capitalize(entry.getKey())));
             }
         }
     }
 
-    private Map<String, Integer> calculate(SlimefunItem item) {
-        Map<String, Integer> result = new HashMap<>();
+    private Map<String, Long> calculate(SlimefunItem item) {
+        Map<String, Long> result = new HashMap<>();
 
         switch (item.getID().toLowerCase()) {
         case "carbon":
@@ -128,22 +128,22 @@ public class Calculator {
         return result;
     }
 
-    private void add(Map<String, Integer> map, String key) {
+    private void add(Map<String, Long> map, String key) {
         add(map, key, 1);
     }
 
-    private void add(Map<String, Integer> map, String key, int amount) {
-        map.merge(key, amount, Integer::sum);
+    private void add(Map<String, Long> map, String key, long amount) {
+        map.merge(key, amount, Long::sum);
     }
 
-    private void addAll(Map<String, Integer> map, Map<String, Integer> otherMap) {
-        for (Map.Entry<String, Integer> entry : otherMap.entrySet()) {
+    private void addAll(Map<String, Long> map, Map<String, Long> otherMap) {
+        for (Map.Entry<String, Long> entry : otherMap.entrySet()) {
             add(map, entry.getKey(), entry.getValue());
         }
     }
 
-    private void addAll(Map<String, Integer> map, Map<String, Integer> otherMap, int multiplier) {
-        for (Map.Entry<String, Integer> entry : otherMap.entrySet()) {
+    private void addAll(Map<String, Long> map, Map<String, Long> otherMap, long multiplier) {
+        for (Map.Entry<String, Long> entry : otherMap.entrySet()) {
             add(map, entry.getKey(), entry.getValue() * multiplier);
         }
     }
