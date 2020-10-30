@@ -43,6 +43,10 @@ public final class Calculator {
                 continue;
             }
 
+            if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
+                put("diamond", 9, result);
+            }
+
             if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
                 // it's a blacklisted item
                 put(ingredient.getItemName(), i.getAmount(), result);
