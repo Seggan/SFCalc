@@ -2,9 +2,9 @@ package io.github.seggan.sfcalc;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -40,8 +40,7 @@ public class Calculator {
     }
 
     public void printResults(CommandSender sender, String s, SlimefunItem item, long amount) {
-        List<String> results = calculate(item);
-        Set<String> resultSet = new HashSet<>(results);
+        Map<String, Integer> results = calculate(item);
 
         sender.sendMessage(String.format(plugin.headerString, Util.capitalize(ChatColor.stripColor(item.getItemName()))));
 
@@ -64,39 +63,32 @@ public class Calculator {
                 }
             }
 
-            for (String name : resultSet) {
-                sender.sendMessage(Util.format(plugin.neededString, Collections.frequency(results, name) * amount - Collections.frequency(sfInv, name), Util.capitalize(name)));
+            for (Map.Entry<String, Integer> entry : results.entrySet()) {
+                int inInventory = Collections.frequency(sfInv, entry.getKey());
+                sender.sendMessage(Util.format(plugin.neededString, entry.getValue() * amount - inInventory, Util.capitalize(entry.getKey())));
             }
         } else {
-            for (String name : resultSet) {
-                sender.sendMessage(Util.format(plugin.amountString, Collections.frequency(results, name) * amount, Util.capitalize(name)));
+            for (Map.Entry<String, Integer> entry : results.entrySet()) {
+                sender.sendMessage(Util.format(plugin.amountString, entry.getValue() * amount, Util.capitalize(entry.getKey())));
             }
         }
     }
 
-    private List<String> calculate(SlimefunItem item) {
-        List<String> result = new ArrayList<>();
+    private Map<String, Integer> calculate(SlimefunItem item) {
+        Map<String, Integer> result = new HashMap<>();
 
         switch (item.getID().toLowerCase()) {
         case "carbon":
-            for (int n = 0; n < 8; n++) {
-                result.add("coal");
-            }
+            add(result, "coal", 8);
             break;
         case "compressed_carbon":
-            for (int n = 0; n < 4; n++) {
-                result.addAll(calculate(SlimefunItem.getByID("CARBON")));
-            }
+            addAll(result, calculate(SlimefunItem.getByID("CARBON")), 4);
             break;
         case "reinforced_plate":
-            for (int n = 0; n < 8; n++) {
-                result.addAll(calculate(SlimefunItem.getByID("REINFORCED_ALLOY_INGOT")));
-            }
+            addAll(result, calculate(SlimefunItem.getByID("REINFORCED_ALLOY_INGOT")), 8);
             break;
         case "steel_plate":
-            for (int n = 0; n < 8; n++) {
-                result.addAll(calculate(SlimefunItem.getByID("STEEL_INGOT")));
-            }
+            addAll(result, calculate(SlimefunItem.getByID("STEEL_INGOT")), 8);
             break;
         default:
             for (ItemStack i : item.getRecipe()) {
@@ -109,33 +101,51 @@ public class Calculator {
 
                 if (ingredient == null) {
                     // ingredient is null; it's a normal Minecraft item
-                    result.add(ItemUtils.getItemName(i));
+                    add(result, ItemUtils.getItemName(i));
                     continue;
                 }
 
                 if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
-                    for (int n = 0; n < 9; n++) {
-                        result.add("diamond");
-                    }
+                    add(result, "diamond", 9);
                 }
 
                 if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
                     // it's a blacklisted item
-                    result.add(ChatColor.stripColor(ingredient.getItemName()));
+                    add(result, ChatColor.stripColor(ingredient.getItemName()));
                     continue;
                 }
 
                 if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
                     // item is a crafted Slimefun item; get its ingredients
-                    result.addAll(calculate(ingredient));
+                    addAll(result, calculate(ingredient));
                 } else {
                     // item is a dust or a geo miner resource; just add it
-                    result.add(ChatColor.stripColor(ingredient.getItemName()));
+                    add(result, ChatColor.stripColor(ingredient.getItemName()));
                 }
             }
         }
 
         return result;
+    }
+
+    private void add(Map<String, Integer> map, String key) {
+        add(map, key, 1);
+    }
+
+    private void add(Map<String, Integer> map, String key, int amount) {
+        map.merge(key, amount, Integer::sum);
+    }
+
+    private void addAll(Map<String, Integer> map, Map<String, Integer> otherMap) {
+        for (Map.Entry<String, Integer> entry : otherMap.entrySet()) {
+            add(map, entry.getKey(), entry.getValue());
+        }
+    }
+
+    private void addAll(Map<String, Integer> map, Map<String, Integer> otherMap, int multiplier) {
+        for (Map.Entry<String, Integer> entry : otherMap.entrySet()) {
+            add(map, entry.getKey(), entry.getValue() * multiplier);
+        }
     }
 
 }
