@@ -8,6 +8,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class CalcCompleter implements TabCompleter {
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
     private final List<String> commands = new ArrayList<>();
+    private static final List<String> NUMBERS = Arrays.asList("8", "64", "256");
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
@@ -42,6 +44,10 @@ public class CalcCompleter implements TabCompleter {
 
         if (args.length == 1) {
             StringUtil.copyPartialMatches(args[0], commands, completions);
+        }
+
+        if (args.length == 2) {
+            StringUtil.copyPartialMatches(args[1], NUMBERS, completions);
         }
 
         Collections.sort(completions);

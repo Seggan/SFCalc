@@ -1,6 +1,7 @@
 package io.github.seggan.sfcalc;
 
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,70 +26,45 @@ public final class Calculator {
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    static List<String> calculate(SlimefunItem item, SFCalc plugin) {
-        List<String> result = new ArrayList<>();
+    static HashMap<String, Long> calculate(SlimefunItem item, SFCalc plugin) {
+        HashMap<String, Long> result = new HashMap<>();
 
-        switch (item.getID().toLowerCase()) {
-            case "carbon":
-                for (int n = 0; n < 8; n++) {
-                    result.add("coal");
-                }
-                break;
-            case "compressed_carbon":
-                for (int n = 0; n < 4; n++) {
-                    result.addAll(calculate(SlimefunItem.getByID("CARBON"), plugin));
-                }
-                break;
-            case "reinforced_plate":
-                for (int n = 0; n < 8; n++) {
-                    result.addAll(calculate(SlimefunItem.getByID("REINFORCED_ALLOY_INGOT"), plugin));
-                }
-                break;
-            case "steel_plate":
-                for (int n = 0; n < 8; n++) {
-                    result.addAll(calculate(SlimefunItem.getByID("STEEL_INGOT"), plugin));
-                }
-                break;
-            default:
-                for (ItemStack i : item.getRecipe()) {
-                    if (i == null) {
-                        // empty slot
-                        continue;
-                    }
+        for (ItemStack i : item.getRecipe()) {
+            if (i == null) {
+                // empty slot
+                continue;
+            }
 
-                    SlimefunItem ingredient = SlimefunItem.getByItem(i);
+            SlimefunItem ingredient = SlimefunItem.getByItem(i);
 
-                    if (ingredient == null) {
-                        // ingredient is null; it's a normal Minecraft item
-                        result.add(i.getType().toString());
-                        continue;
-                    }
+            if (ingredient == null) {
+                // ingredient is null; it's a normal Minecraft item
+                put(ItemUtils.getItemName(i), i.getAmount(), result);
+                continue;
+            }
 
-                    if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
-                        // it's a blacklisted item
-                        result.add(ChatColor.stripColor(ingredient.getItemName()));
-                        continue;
-                    }
+            if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
+                // it's a blacklisted item
+                put(ingredient.getItemName(), i.getAmount(), result);
+                continue;
+            }
 
-                    if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
-                        // item is a crafted Slimefun item; get its ingredients
-                        result.addAll(calculate(ingredient, plugin));
-                    } else {
-                        // item is a dust or a geo miner resource; just add it
-                        result.add(ChatColor.stripColor(ingredient.getItemName()));
-                    }
-                }
+            if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
+                // item is a crafted Slimefun item; get its ingredients
+                putAll(result, calculate(ingredient, plugin), i.getAmount());
+            } else {
+                // item is a dust or a geo miner resource; just add it
+                put(ChatColor.stripColor(ingredient.getItemName()), i.getAmount(), result);
+            }
         }
 
         return result;
     }
 
-    static void printResults(List<String> results, CommandSender sender, String s, SlimefunItem item, Long amount, SFCalc plugin) {
-        Set<String> resultSet = new HashSet<>(results);
-
+    static void printResults(HashMap<String, Long> results, CommandSender sender, String s, SlimefunItem item, Long amount, SFCalc plugin) {
         sender.sendMessage(String.format(
                 plugin.headerString,
-                Util.capitalize(ChatColor.stripColor(item.getItemName()))
+                amount + " " + Util.capitalize(ChatColor.stripColor(item.getItemName()))
         ));
 
         if (s.equals("sfneeded")) {
@@ -108,24 +84,43 @@ public final class Calculator {
                     sfInv.add(ChatColor.stripColor(sfItem.getItemName()));
                 }
             }
-            for (String name : resultSet) {
+            for (String name : results.keySet()) {
                 sender.sendMessage(Util.format(
                         plugin.neededString,
-                        Collections.frequency(results, name) * amount - Collections.frequency(sfInv, name),
+                        results.get(name) * amount - Collections.frequency(sfInv, name),
                         Util.capitalize(name)
                 ));
             }
         } else {
-            for (String name : resultSet) {
+            for (String name : results.keySet()) {
                 sender.sendMessage(Util.format(
                         plugin.amountString,
-                        Collections.frequency(results, name) * amount,
+                        results.get(name) * amount,
                         Util.capitalize(name)
                 ));
             }
         }
     }
 
+    /**
+     * This method will add the item to the hashmap
+     *
+     * @param id id of item
+     */
+    static void put(String id, int amount, HashMap<String, Long> result) {
+        result.put(ChatColor.stripColor(id).toLowerCase(), result.getOrDefault(id, 0L) + amount);
+    }
 
-
+    /**
+     * This method adds all items to the target from another hashmap
+     *
+     * @param target target hashmap
+     * @param from other hashmap
+     * @param amount amount of each item in map
+     */
+    static void putAll(HashMap<String, Long> target, HashMap<String, Long> from, int amount) {
+        for (String key : from.keySet()) {
+            target.put(key, (target.getOrDefault(key, 0L) + from.get(key)) * amount);
+        }
+    }
 }

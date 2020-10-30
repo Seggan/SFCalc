@@ -42,11 +42,10 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     String tooManyCategoriesString;
     String tooManyItemsString;
     String notAPlayerString;
+    String invalidNumberString;
 
     static List<String> itemsSearched = new ArrayList<>();
     private boolean sent = false;
-
-
 
     @Override
     public void onEnable() {
@@ -180,6 +179,11 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
                 '&',
                 config.getString("not-a-player-string") != null ? config.getString("not-a-player-string") :
                         "&cYou must be a player to send this message!"
+        );
+        invalidNumberString = ChatColor.translateAlternateColorCodes(
+                '&',
+                config.getString("invalid-number-string") != null ? config.getString("invalid-number-string") :
+                        "&cInvalid number!"
         );
     }
 }

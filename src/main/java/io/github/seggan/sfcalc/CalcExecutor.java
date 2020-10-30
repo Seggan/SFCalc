@@ -37,7 +37,6 @@ public class CalcExecutor implements CommandExecutor {
 
     private final Map<String, SlimefunItem[]> exceptions = new HashMap<>();
 
-
     public CalcExecutor(SFCalc plugin) {
         this.plugin = plugin;
 
@@ -85,13 +84,21 @@ public class CalcExecutor implements CommandExecutor {
             amount = 1;
         } else {
             if (PatternUtils.NUMERIC.matcher(args[1]).matches()) {
-                amount = Long.parseLong(args[1]);
+                try {
+                    amount = Long.parseLong(args[1]);
+                    if (amount == 0) {
+                        sender.sendMessage(plugin.invalidNumberString);
+                        return true;
+                    }
+                } catch (NumberFormatException e) {
+                    sender.sendMessage(plugin.invalidNumberString);
+                    return true;
+                }
             } else {
                 sender.sendMessage(plugin.noNumberString);
                 return true;
             }
         }
-
 
         reqItem = reqItem.toUpperCase();
 

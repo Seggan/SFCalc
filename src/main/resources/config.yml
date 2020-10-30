@@ -22,3 +22,6 @@ item-error-string: "&cThat many items is not supported yet. Please use the comma
 # Not a player string ("You must be a player to send this message!").
 # Defaults to "&cYou must be a player to send this message!"
 not-a-player-string: "&cYou must be a player to send this message!"
+# Invalid number string ("Invalid number!").
+# Defaults to "&cInvalid number!"
+invalid-number-string: "&cInvalid number!"
