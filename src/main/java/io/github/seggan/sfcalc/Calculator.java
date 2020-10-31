@@ -2,6 +2,7 @@ package io.github.seggan.sfcalc;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -45,15 +46,19 @@ public class Calculator {
 
         sender.sendMessage(String.format(plugin.headerString, Util.capitalize(ChatColor.stripColor(item.getItemName()))));
 
+        // This will put our entries in order from lowest to highest
+        List<Map.Entry<String, Long>> entries = new ArrayList<>(results.entrySet());
+        Collections.sort(entries, Comparator.comparingLong(Map.Entry::getValue));
+
         if (command.equals("sfneeded") && sender instanceof Player) {
             List<String> sfInv = getInventoryAsItemList((Player) sender);
 
-            for (Map.Entry<String, Long> entry : results.entrySet()) {
+            for (Map.Entry<String, Long> entry : entries) {
                 int inInventory = Collections.frequency(sfInv, entry.getKey());
                 sender.sendMessage(Util.format(plugin.neededString, entry.getValue() * amount - inInventory, Util.capitalize(entry.getKey())));
             }
         } else {
-            for (Map.Entry<String, Long> entry : results.entrySet()) {
+            for (Map.Entry<String, Long> entry : entries) {
                 sender.sendMessage(Util.format(plugin.amountString, entry.getValue() * amount, Util.capitalize(entry.getKey())));
             }
         }
