@@ -81,7 +81,7 @@ public class Calculator {
     private Map<String, Long> calculate(SlimefunItem item) {
         Map<String, Long> result = new HashMap<>();
 
-        switch (item.getID().toLowerCase(Locale.ROOT)) {
+        switch (item.getId().toLowerCase(Locale.ROOT)) {
         case "carbon":
             add(result, "coal", 8);
             break;
@@ -113,7 +113,7 @@ public class Calculator {
                     add(result, "diamond", 9);
                 }
 
-                if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase(Locale.ROOT))) {
+                if (plugin.blacklistedIds.contains(ingredient.getId().toLowerCase(Locale.ROOT))) {
                     // it's a blacklisted item
                     add(result, ChatColor.stripColor(ingredient.getItemName()));
                 } else if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {

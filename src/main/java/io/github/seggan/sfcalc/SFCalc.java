@@ -133,7 +133,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     }
 
     private String loadString(String path, String defaultValue) {
-        String value = getConfig().getString("not-a-player-string");
+        String value = getConfig().getString(path);
 
         if (value != null) {
             return ChatColors.color(value);
