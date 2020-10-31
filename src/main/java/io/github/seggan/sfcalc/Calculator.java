@@ -1,142 +1,157 @@
 package io.github.seggan.sfcalc;
 
-import me.mrCookieSlime.CSCoreLibPlugin.cscorelib2.inventory.ItemUtils;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import me.mrCookieSlime.CSCoreLibPlugin.cscorelib2.inventory.ItemUtils;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 
-public final class Calculator {
-//    Copyright (C) 2020 Seggan
-//    Email: segganew@gmail.com
-//
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//            (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+/*
+ * Copyright (C) 2020 Seggan
+ * Email: segganew@gmail.com
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+public class Calculator {
 
-    public static List<String> calculate(SlimefunItem item, SFCalc plugin) {
-        List<String> result = new ArrayList<>();
+    private final SFCalc plugin;
 
-        switch (item.getID().toLowerCase()) {
-            case "carbon":
-                for (int n = 0; n < 8; n++) {
-                    result.add("coal");
+    public Calculator(SFCalc plugin) {
+        this.plugin = plugin;
+    }
+
+    public void printResults(CommandSender sender, String command, SlimefunItem item, long amount) {
+        Map<String, Long> results = calculate(item);
+
+        sender.sendMessage(String.format(plugin.headerString, Util.capitalize(ChatColor.stripColor(item.getItemName()))));
+
+        // This will put our entries in order from lowest to highest
+        List<Map.Entry<String, Long>> entries = new ArrayList<>(results.entrySet());
+        Collections.sort(entries, Comparator.comparingLong(Map.Entry::getValue));
+
+        if (command.equals("sfneeded") && sender instanceof Player) {
+            List<String> sfInv = getInventoryAsItemList((Player) sender);
+
+            for (Map.Entry<String, Long> entry : entries) {
+                int inInventory = Collections.frequency(sfInv, entry.getKey());
+                sender.sendMessage(Util.format(plugin.neededString, entry.getValue() * amount - inInventory, Util.capitalize(entry.getKey())));
+            }
+        } else {
+            for (Map.Entry<String, Long> entry : entries) {
+                sender.sendMessage(Util.format(plugin.amountString, entry.getValue() * amount, Util.capitalize(entry.getKey())));
+            }
+        }
+    }
+
+    private List<String> getInventoryAsItemList(Player player) {
+        List<String> list = new ArrayList<>();
+
+        for (ItemStack item : player.getInventory().getContents()) {
+            SlimefunItem sfItem = SlimefunItem.getByItem(item);
+
+            // if the Item is null or air, it will return null too
+            if (sfItem == null) {
+                continue;
+            }
+
+            for (int n = 0; n < item.getAmount(); n++) {
+                list.add(ChatColor.stripColor(sfItem.getItemName()));
+            }
+        }
+
+        return list;
+    }
+
+    private Map<String, Long> calculate(SlimefunItem item) {
+        Map<String, Long> result = new HashMap<>();
+
+        switch (item.getId().toLowerCase(Locale.ROOT)) {
+        case "carbon":
+            add(result, "coal", 8);
+            break;
+        case "compressed_carbon":
+            addAll(result, calculate(SlimefunItem.getByID("CARBON")), 4);
+            break;
+        case "reinforced_plate":
+            addAll(result, calculate(SlimefunItem.getByID("REINFORCED_ALLOY_INGOT")), 8);
+            break;
+        case "steel_plate":
+            addAll(result, calculate(SlimefunItem.getByID("STEEL_INGOT")), 8);
+            break;
+        default:
+            for (ItemStack i : item.getRecipe()) {
+                if (i == null) {
+                    // empty slot
+                    continue;
                 }
-                break;
-            case "compressed_carbon":
-                for (int n = 0; n < 4; n++) {
-                    result.addAll(calculate(SlimefunItem.getByID("CARBON"), plugin));
+
+                SlimefunItem ingredient = SlimefunItem.getByItem(i);
+
+                if (ingredient == null) {
+                    // ingredient is null; it's a normal Minecraft item
+                    add(result, ItemUtils.getItemName(i));
+                    continue;
                 }
-                break;
-            case "reinforced_plate":
-                for (int n = 0; n < 8; n++) {
-                    result.addAll(calculate(SlimefunItem.getByID("REINFORCED_ALLOY_INGOT"), plugin));
+
+                if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
+                    add(result, "diamond", 9);
                 }
-                break;
-            case "steel_plate":
-                for (int n = 0; n < 8; n++) {
-                    result.addAll(calculate(SlimefunItem.getByID("STEEL_INGOT"), plugin));
+
+                if (plugin.blacklistedIds.contains(ingredient.getId().toLowerCase(Locale.ROOT))) {
+                    // it's a blacklisted item
+                    add(result, ChatColor.stripColor(ingredient.getItemName()));
+                } else if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
+                    // item is a crafted Slimefun item; get its ingredients
+                    addAll(result, calculate(ingredient));
+                } else {
+                    // item is a dust or a geo miner resource; just add it
+                    add(result, ChatColor.stripColor(ingredient.getItemName()));
                 }
-                break;
-            default:
-                for (ItemStack i : item.getRecipe()) {
-                    if (i == null) {
-                        // empty slot
-                        continue;
-                    }
-
-                    SlimefunItem ingredient = SlimefunItem.getByItem(i);
-
-                    if (ingredient == null) {
-                        // ingredient is null; it's a normal Minecraft item
-                        result.add(ItemUtils.getItemName(i));
-                        continue;
-                    }
-
-                    if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
-                        for (int n = 0; n < 9; n++) {
-                            result.add("diamond");
-                        }
-                    }
-
-                    if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
-                        // it's a blacklisted item
-                        result.add(ChatColor.stripColor(ingredient.getItemName()));
-                        continue;
-                    }
-
-                    if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
-                        // item is a crafted Slimefun item; get its ingredients
-                        result.addAll(calculate(ingredient, plugin));
-                    } else {
-                        // item is a dust or a geo miner resource; just add it
-                        result.add(ChatColor.stripColor(ingredient.getItemName()));
-                    }
-                }
+            }
         }
 
         return result;
     }
 
-    static void printResults(List<String> results, CommandSender sender, String s, SlimefunItem item, int amount, SFCalc plugin) {
-        Set<String> resultSet = new HashSet<>(results);
+    private void add(Map<String, Long> map, String key) {
+        add(map, key, 1);
+    }
 
-        sender.sendMessage(String.format(
-                plugin.headerString,
-                Util.capitalize(ChatColor.stripColor(item.getItemName()))
-        ));
+    private void add(Map<String, Long> map, String key, long amount) {
+        map.merge(key, amount, Long::sum);
+    }
 
-        if (s.equals("sfneeded")) {
-            List<String> sfInv = new ArrayList<>();
-            for (ItemStack i : ((Player) sender).getInventory().getContents()) {
-                if (i == null) {
-                    continue;
-                }
-
-                SlimefunItem sfItem = SlimefunItem.getByItem(i);
-
-                if (sfItem == null) {
-                    continue;
-                }
-
-                for (int n = 0; n < i.getAmount(); n++) {
-                    sfInv.add(ChatColor.stripColor(sfItem.getItemName()));
-                }
-            }
-            for (String name : resultSet) {
-                sender.sendMessage(Util.format(
-                        plugin.neededString,
-                        Collections.frequency(results, name) * amount - Collections.frequency(sfInv, name),
-                        Util.capitalize(name)
-                ));
-            }
-        } else {
-            for (String name : resultSet) {
-                sender.sendMessage(Util.format(
-                        plugin.amountString,
-                        Collections.frequency(results, name) * amount,
-                        Util.capitalize(name)
-                ));
-            }
+    private void addAll(Map<String, Long> map, Map<String, Long> otherMap) {
+        for (Map.Entry<String, Long> entry : otherMap.entrySet()) {
+            add(map, entry.getKey(), entry.getValue());
         }
     }
 
-
+    private void addAll(Map<String, Long> map, Map<String, Long> otherMap, long multiplier) {
+        for (Map.Entry<String, Long> entry : otherMap.entrySet()) {
+            add(map, entry.getKey(), entry.getValue() * multiplier);
+        }
+    }
 
 }
