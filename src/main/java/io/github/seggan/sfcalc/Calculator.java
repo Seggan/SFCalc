@@ -30,8 +30,8 @@ public final class Calculator {
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-    static HashMap<String, Long> calculate(SlimefunItem item, SFCalc plugin) {
-        HashMap<String, Long> result = new HashMap<>();
+    static HashMap<String, Integer> calculate(SlimefunItem item, SFCalc plugin) {
+        HashMap<String, Integer> result = new HashMap<>();
 
         for (ItemStack i : item.getRecipe()) {
             if (i == null) {
@@ -69,10 +69,10 @@ public final class Calculator {
         return result;
     }
 
-    static void printResults(HashMap<String, Long> results, CommandSender sender, String s, SlimefunItem item, Long amount, SFCalc plugin) {
+    static void printResults(HashMap<String, Integer> results, CommandSender sender, String s, SlimefunItem item, long amount, SFCalc plugin) {
         sender.sendMessage(String.format(
                 plugin.headerString,
-                amount + " " + Util.capitalize(ChatColor.stripColor(item.getItemName()))
+                amount + " " + ChatColor.stripColor(item.getItemName())
         ));
 
         if (s.equals("sfneeded")) {
@@ -115,9 +115,9 @@ public final class Calculator {
      *
      * @param id id of item
      */
-    static void put(String id, int amount, HashMap<String, Long> result) {
+    static void put(String id, int amount, HashMap<String, Integer> result) {
         String name = ChatColor.stripColor(id).toLowerCase();
-        result.put(name, result.getOrDefault(name, 0L) + amount);
+        result.put(name, result.getOrDefault(name, 0) + amount);
     }
 
     /**
@@ -127,9 +127,9 @@ public final class Calculator {
      * @param from other hashmap
      * @param amount amount of each item in map
      */
-    static void putAll(HashMap<String, Long> target, HashMap<String, Long> from, int amount) {
+    static void putAll(HashMap<String, Integer> target, HashMap<String, Integer> from, int amount) {
         for (String key : from.keySet()) {
-            target.put(key, (target.getOrDefault(key, 0L) + from.get(key)) * amount);
+            target.put(key, (target.getOrDefault(key, 0) + from.get(key)) * amount);
         }
     }
 }
