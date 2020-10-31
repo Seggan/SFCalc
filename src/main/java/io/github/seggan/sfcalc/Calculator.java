@@ -43,11 +43,11 @@ public final class Calculator {
                 continue;
             }
 
-            if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
+            if (ingredient.getRecipeType().getKey().getKey().equalsIgnoreCase("metal_forge")) {
                 put("diamond", 9, result);
             }
 
-            if (plugin.blacklistedIds.contains(ingredient.getID().toLowerCase())) {
+            if (plugin.blacklistedIds.contains(ingredient.getId().toLowerCase())) {
                 // it's a blacklisted item
                 put(ingredient.getItemName(), i.getAmount(), result);
                 continue;
@@ -112,7 +112,8 @@ public final class Calculator {
      * @param id id of item
      */
     static void put(String id, int amount, HashMap<String, Long> result) {
-        result.put(ChatColor.stripColor(id).toLowerCase(), result.getOrDefault(id, 0L) + amount);
+        String name = ChatColor.stripColor(id).toLowerCase();
+        result.put(name, result.getOrDefault(name, 0L) + amount);
     }
 
     /**
