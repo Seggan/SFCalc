@@ -1,5 +1,12 @@
 package io.github.seggan.sfcalc;
 
+import me.mrCookieSlime.CSCoreLibPlugin.cscorelib2.inventory.ItemUtils;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,14 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import me.mrCookieSlime.CSCoreLibPlugin.cscorelib2.inventory.ItemUtils;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 
 /*
  * Copyright (C) 2020 Seggan
@@ -44,7 +43,7 @@ public class Calculator {
     public void printResults(CommandSender sender, String command, SlimefunItem item, long amount) {
         Map<String, Long> results = calculate(item);
 
-        sender.sendMessage(String.format(plugin.headerString, Util.capitalize(ChatColor.stripColor(item.getItemName()))));
+        sender.sendMessage(String.format(plugin.headerString, ChatColor.stripColor(ItemUtils.getItemName(item.getItem()))));
 
         // This will put our entries in order from lowest to highest
         List<Map.Entry<String, Long>> entries = new ArrayList<>(results.entrySet());
@@ -120,13 +119,13 @@ public class Calculator {
 
                 if (plugin.blacklistedIds.contains(ingredient.getId().toLowerCase(Locale.ROOT))) {
                     // it's a blacklisted item
-                    add(result, ChatColor.stripColor(ingredient.getItemName()));
+                    add(result, ChatColor.stripColor(ItemUtils.getItemName(i)));
                 } else if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
                     // item is a crafted Slimefun item; get its ingredients
                     addAll(result, calculate(ingredient));
                 } else {
                     // item is a dust or a geo miner resource; just add it
-                    add(result, ChatColor.stripColor(ingredient.getItemName()));
+                    add(result, ChatColor.stripColor(ItemUtils.getItemName(i)));
                 }
             }
         }

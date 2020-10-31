@@ -4,6 +4,7 @@
 - Memory usage has been cut by a ton
 - Bugfixes
 - The license is now included in the jar
+- Entries are now listed from lowest to highest
 
 ## Build 12:
 - The calculator now shows correct amounts of items wen large amounts are required

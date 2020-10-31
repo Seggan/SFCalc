@@ -1,17 +1,16 @@
 package io.github.seggan.sfcalc;
 
+import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
+import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-
-import org.bukkit.plugin.java.JavaPlugin;
-
-import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
-import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 
 /*
  * Copyright (C) 2020 Seggan
@@ -81,6 +80,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         blacklistedRecipes.add(RecipeType.GEO_MINER);
         blacklistedRecipes.add(RecipeType.GOLD_PAN);
         blacklistedRecipes.add(RecipeType.MOB_DROP);
+        blacklistedRecipes.add(RecipeType.BARTER_DROP);
         blacklistedRecipes.add(RecipeType.ORE_CRUSHER);
         blacklistedRecipes.add(RecipeType.NULL);
 
