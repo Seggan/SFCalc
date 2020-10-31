@@ -43,7 +43,15 @@ public class Calculator {
     public void printResults(CommandSender sender, String command, SlimefunItem item, long amount) {
         Map<String, Long> results = calculate(item);
 
-        sender.sendMessage(String.format(plugin.headerString, ChatColor.stripColor(ItemUtils.getItemName(item.getItem()))));
+        String header;
+        String name = ChatColor.stripColor(ItemUtils.getItemName(item.getItem()));
+        if (amount == 1) {
+            header = String.format(plugin.headerString, name);
+        } else {
+            header = String.format(plugin.headerAmountString, amount, name);
+        }
+
+        sender.sendMessage(header);
 
         // This will put our entries in order from lowest to highest
         List<Map.Entry<String, Long>> entries = new ArrayList<>(results.entrySet());
@@ -92,42 +100,35 @@ public class Calculator {
             }
 
             SlimefunItem ingredient = SlimefunItem.getByItem(i);
+            int amount = i.getAmount();
 
             if (ingredient == null) {
                 // ingredient is null; it's a normal Minecraft item
-                add(result, ItemUtils.getItemName(i));
+                add(result, ItemUtils.getItemName(i), amount);
                 continue;
             }
 
             if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
-                add(result, "diamond", 9);
+                add(result, "diamond", 9 * amount);
             }
 
             if (plugin.blacklistedIds.contains(ingredient.getId().toLowerCase(Locale.ROOT))) {
                 // it's a blacklisted item
-                add(result, ChatColor.stripColor(ItemUtils.getItemName(i)));
+                add(result, ChatColor.stripColor(ItemUtils.getItemName(i)), amount);
             } else if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
                 // item is a crafted Slimefun item; get its ingredients
-                addAll(result, calculate(ingredient));
+                addAll(result, calculate(ingredient), amount);
             } else {
                 // item is a dust or a geo miner resource; just add it
-                add(result, ChatColor.stripColor(ItemUtils.getItemName(i)));
+                add(result, ChatColor.stripColor(ItemUtils.getItemName(i)), amount);
             }
         }
 
         return result;
     }
 
-    private void add(Map<String, Long> map, String key) {
-        add(map, key, 1);
-    }
-
     private void add(Map<String, Long> map, String key, long amount) {
-        map.merge(key, amount, Long::sum);
-    }
-
-    private void addAll(Map<String, Long> map, Map<String, Long> otherMap) {
-        addAll(map, otherMap, 1);
+        map.merge(key.toLowerCase(), amount, Long::sum);
     }
 
     private void addAll(Map<String, Long> map, Map<String, Long> otherMap, long multiplier) {

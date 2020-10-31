@@ -39,6 +39,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 
     // "Localization"
     protected String headerString;
+    protected String headerAmountString;
     protected String amountString;
     protected String neededString;
     protected String noItemString;
@@ -124,6 +125,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 
     private void loadStrings() {
         headerString = loadString("header-string", "&e&nRecipe for %s:");
+        headerAmountString = loadString("header-amount-string", "&e&nRecipe for %d %s:");
         amountString = loadString("amount-string", "&e%d of %s");
         neededString = loadString("needed-string", "&e%d more %s needed");
         noItemString = loadString("no-item-string", "&cThat item was not found.");
