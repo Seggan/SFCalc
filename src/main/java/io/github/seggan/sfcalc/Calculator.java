@@ -1,5 +1,6 @@
 package io.github.seggan.sfcalc;
 
+import me.mrCookieSlime.CSCoreLibPlugin.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import org.bukkit.ChatColor;
@@ -7,7 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public final class Calculator {
 //    Copyright (C) 2020 Seggan
@@ -25,6 +30,7 @@ public final class Calculator {
 //
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 
     static HashMap<String, Long> calculate(SlimefunItem item, SFCalc plugin) {
         HashMap<String, Long> result = new HashMap<>();

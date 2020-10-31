@@ -11,6 +11,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <author>Seggan</author>
+        <sonar.projectKey>Seggan_SFCalc</sonar.projectKey>
+        <sonar.organization>seggan</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <build>
