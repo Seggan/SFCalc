@@ -92,36 +92,52 @@ public class Calculator {
 
     private Map<String, Long> calculate(SlimefunItem item) {
         Map<String, Long> result = new HashMap<>();
+        Map<String, Map<String, Long>> calculated = new HashMap<>(); //stores names that are already calculated for reference
 
         for (ItemStack i : item.getRecipe()) {
             if (i == null) {
                 // empty slot
                 continue;
             }
-
-            SlimefunItem ingredient = SlimefunItem.getByItem(i);
+            
+            String name = ChatColor.stripColor(ItemUtils.getItemName(i));
+            
             int amount = i.getAmount();
+
+            if (calculated.containsKey(name)) { //check already calculated items
+                addAll(result, calculated.get(name), amount);
+                continue;
+            }
+            
+            Map<String, Long> recipe = new HashMap<>();
+            
+            SlimefunItem ingredient = SlimefunItem.getByItem(i);
 
             if (ingredient == null) {
                 // ingredient is null; it's a normal Minecraft item
-                add(result, ItemUtils.getItemName(i), amount);
-                continue;
-            }
-
-            if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
-                add(result, "diamond", 9 * amount);
-            }
-
-            if (plugin.blacklistedIds.contains(ingredient.getId().toLowerCase(Locale.ROOT))) {
-                // it's a blacklisted item
-                add(result, ChatColor.stripColor(ItemUtils.getItemName(i)), amount);
-            } else if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
-                // item is a crafted Slimefun item; get its ingredients
-                addAll(result, calculate(ingredient), amount);
+                add(recipe, name, 1);
+                
             } else {
-                // item is a dust or a geo miner resource; just add it
-                add(result, ChatColor.stripColor(ItemUtils.getItemName(i)), amount);
+                
+                if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
+                    add(recipe, "diamond", 9);
+                }
+
+                if (plugin.blacklistedIds.contains(ingredient.getId().toLowerCase(Locale.ROOT))) {
+                    // it's a blacklisted item
+                    add(recipe, name, 1);
+                } else if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
+                    // item is a crafted Slimefun item; get its ingredients
+                    addAll(recipe, calculate(ingredient), 1);
+                } else {
+                    // item is a dust or a geo miner resource; just add it
+                    add(recipe, name, 1);
+                }
             }
+
+            calculated.put(name, recipe);
+            addAll(result, recipe, amount);
+            
         }
 
         return result;

@@ -134,6 +134,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         tooManyItemsString = loadString("item-error-string", "&cThat many items is not supported yet. Please use the command form of the calculator.");
         notAPlayerString = loadString("not-a-player-string", "&cYou must be a player to send this message!");
         invalidNumberString = loadString("invalid-number-string", "&cInvalid number!");
+        saveConfig();
     }
 
     private String loadString(String path, String defaultValue) {
@@ -142,6 +143,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         if (value != null) {
             return ChatColors.color(value);
         } else {
+            getConfig().set(path, defaultValue);
             return ChatColors.color(defaultValue);
         }
     }
