@@ -145,10 +145,4 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
             return ChatColors.color(defaultValue);
         }
     }
-
-    private void updateConfig() {
-        getConfig().options().copyDefaults(true);
-        getConfig().options().copyHeader(true);
-        saveConfig();
-    }
 }
