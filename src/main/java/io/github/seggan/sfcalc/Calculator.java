@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +47,7 @@ public class Calculator {
         if (amount == 1) {
             header = String.format(plugin.headerString, name);
         } else {
-            header = String.format(plugin.headerAmountString, amount, name);
+            header = Util.format(plugin.headerAmountString, amount, name);
         }
 
         sender.sendMessage(header);
@@ -58,10 +57,10 @@ public class Calculator {
         entries.sort(Comparator.comparingLong(Map.Entry::getValue));
 
         if (command.equals("sfneeded") && sender instanceof Player) {
-            List<String> sfInv = getInventoryAsItemList((Player) sender);
+            Map<String, Long> inv = getInventoryAsItemList((Player) sender);
 
             for (Map.Entry<String, Long> entry : entries) {
-                int inInventory = Collections.frequency(sfInv, entry.getKey());
+                Long inInventory = inv.getOrDefault(entry.getKey(), 0L);
                 sender.sendMessage(Util.format(plugin.neededString, entry.getValue() * amount - inInventory, Util.capitalize(entry.getKey())));
             }
         } else {
@@ -71,23 +70,19 @@ public class Calculator {
         }
     }
 
-    private List<String> getInventoryAsItemList(Player player) {
-        List<String> list = new ArrayList<>();
+    private Map<String, Long> getInventoryAsItemList(Player player) {
+        Map<String, Long> inv = new HashMap<>();
 
         for (ItemStack item : player.getInventory().getContents()) {
-            SlimefunItem sfItem = SlimefunItem.getByItem(item);
-
             // if the Item is null or air, it will return null too
-            if (sfItem == null) {
+            if (item == null) {
                 continue;
             }
 
-            for (int n = 0; n < item.getAmount(); n++) {
-                list.add(ChatColor.stripColor(sfItem.getItemName()));
-            }
+            add(inv, ChatColor.stripColor(ItemUtils.getItemName(item)), item.getAmount());
         }
 
-        return list;
+        return inv;
     }
 
     private Map<String, Long> calculate(SlimefunItem item) {
