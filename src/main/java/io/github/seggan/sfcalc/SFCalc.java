@@ -39,6 +39,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 
     // "Localization"
     protected String headerString;
+    protected String headerAmountString;
     protected String amountString;
     protected String neededString;
     protected String noItemString;
@@ -46,6 +47,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     protected String tooManyCategoriesString;
     protected String tooManyItemsString;
     protected String notAPlayerString;
+    protected String invalidNumberString;
 
     @Override
     public void onEnable() {
@@ -123,6 +125,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 
     private void loadStrings() {
         headerString = loadString("header-string", "&e&nRecipe for %s:");
+        headerAmountString = loadString("header-amount-string", "&e&nRecipe for %d %s:");
         amountString = loadString("amount-string", "&e%d of %s");
         neededString = loadString("needed-string", "&e%d more %s needed");
         noItemString = loadString("no-item-string", "&cThat item was not found.");
@@ -130,6 +133,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         tooManyCategoriesString = loadString("category-error-string", "&cThat many categories is not supported yet. Please use the command form of the calculator.");
         tooManyItemsString = loadString("item-error-string", "&cThat many items is not supported yet. Please use the command form of the calculator.");
         notAPlayerString = loadString("not-a-player-string", "&cYou must be a player to send this message!");
+        invalidNumberString = loadString("invalid-number-string", "&cInvalid number!");
     }
 
     private String loadString(String path, String defaultValue) {

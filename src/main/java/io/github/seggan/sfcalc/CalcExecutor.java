@@ -85,11 +85,20 @@ public class CalcExecutor implements CommandExecutor {
 
         if (args.length == 1) {
             amount = 1;
-        } else if (PatternUtils.NUMERIC.matcher(args[1]).matches()) {
-            amount = Long.parseLong(args[1]);
-        } else {
+        } else if (!PatternUtils.NUMERIC.matcher(args[1]).matches()) {
             sender.sendMessage(plugin.noNumberString);
             return true;
+        } else {
+            try {
+                amount = Long.parseLong(args[1]);
+                if (amount == 0 || amount > Integer.MAX_VALUE) {
+                    sender.sendMessage(plugin.invalidNumberString);
+                    return true;
+                }
+            } catch (NumberFormatException e) {
+                sender.sendMessage(plugin.invalidNumberString);
+                return true;
+            }
         }
 
         reqItem = reqItem.toUpperCase();

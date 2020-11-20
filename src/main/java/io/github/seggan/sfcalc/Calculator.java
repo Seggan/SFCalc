@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -43,17 +42,25 @@ public class Calculator {
     public void printResults(CommandSender sender, String command, SlimefunItem item, long amount) {
         Map<String, Long> results = calculate(item);
 
-        sender.sendMessage(String.format(plugin.headerString, ChatColor.stripColor(ItemUtils.getItemName(item.getItem()))));
+        String header;
+        String name = ChatColor.stripColor(ItemUtils.getItemName(item.getItem()));
+        if (amount == 1) {
+            header = String.format(plugin.headerString, name);
+        } else {
+            header = Util.format(plugin.headerAmountString, amount, name);
+        }
+
+        sender.sendMessage(header);
 
         // This will put our entries in order from lowest to highest
         List<Map.Entry<String, Long>> entries = new ArrayList<>(results.entrySet());
-        Collections.sort(entries, Comparator.comparingLong(Map.Entry::getValue));
+        entries.sort(Comparator.comparingLong(Map.Entry::getValue));
 
         if (command.equals("sfneeded") && sender instanceof Player) {
-            List<String> sfInv = getInventoryAsItemList((Player) sender);
+            Map<String, Long> inv = getInventoryAsItemList((Player) sender);
 
             for (Map.Entry<String, Long> entry : entries) {
-                int inInventory = Collections.frequency(sfInv, entry.getKey());
+                Long inInventory = inv.getOrDefault(entry.getKey(), 0L);
                 sender.sendMessage(Util.format(plugin.neededString, entry.getValue() * amount - inInventory, Util.capitalize(entry.getKey())));
             }
         } else {
@@ -63,88 +70,76 @@ public class Calculator {
         }
     }
 
-    private List<String> getInventoryAsItemList(Player player) {
-        List<String> list = new ArrayList<>();
+    private Map<String, Long> getInventoryAsItemList(Player player) {
+        Map<String, Long> inv = new HashMap<>();
 
         for (ItemStack item : player.getInventory().getContents()) {
-            SlimefunItem sfItem = SlimefunItem.getByItem(item);
-
             // if the Item is null or air, it will return null too
-            if (sfItem == null) {
+            if (item == null) {
                 continue;
             }
 
-            for (int n = 0; n < item.getAmount(); n++) {
-                list.add(ChatColor.stripColor(sfItem.getItemName()));
-            }
+            add(inv, ChatColor.stripColor(ItemUtils.getItemName(item)), item.getAmount());
         }
 
-        return list;
+        return inv;
     }
 
     private Map<String, Long> calculate(SlimefunItem item) {
         Map<String, Long> result = new HashMap<>();
+        Map<String, Map<String, Long>> calculated = new HashMap<>(); //stores names that are already calculated for reference
 
-        switch (item.getId().toLowerCase(Locale.ROOT)) {
-        case "carbon":
-            add(result, "coal", 8);
-            break;
-        case "compressed_carbon":
-            addAll(result, calculate(SlimefunItem.getByID("CARBON")), 4);
-            break;
-        case "reinforced_plate":
-            addAll(result, calculate(SlimefunItem.getByID("REINFORCED_ALLOY_INGOT")), 8);
-            break;
-        case "steel_plate":
-            addAll(result, calculate(SlimefunItem.getByID("STEEL_INGOT")), 8);
-            break;
-        default:
-            for (ItemStack i : item.getRecipe()) {
-                if (i == null) {
-                    // empty slot
-                    continue;
-                }
+        for (ItemStack i : item.getRecipe()) {
+            if (i == null) {
+                // empty slot
+                continue;
+            }
+            
+            String name = ChatColor.stripColor(ItemUtils.getItemName(i));
+            
+            int amount = i.getAmount();
 
-                SlimefunItem ingredient = SlimefunItem.getByItem(i);
+            if (calculated.containsKey(name)) { //check already calculated items
+                addAll(result, calculated.get(name), amount);
+                continue;
+            }
+            
+            Map<String, Long> recipe = new HashMap<>();
+            
+            SlimefunItem ingredient = SlimefunItem.getByItem(i);
 
-                if (ingredient == null) {
-                    // ingredient is null; it's a normal Minecraft item
-                    add(result, ItemUtils.getItemName(i));
-                    continue;
-                }
-
+            if (ingredient == null) {
+                // ingredient is null; it's a normal Minecraft item
+                add(recipe, name, 1);
+                
+            } else {
+                
                 if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
-                    add(result, "diamond", 9);
+                    add(recipe, "diamond", 9);
                 }
 
                 if (plugin.blacklistedIds.contains(ingredient.getId().toLowerCase(Locale.ROOT))) {
                     // it's a blacklisted item
-                    add(result, ChatColor.stripColor(ItemUtils.getItemName(i)));
+                    add(recipe, name, 1);
                 } else if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
                     // item is a crafted Slimefun item; get its ingredients
-                    addAll(result, calculate(ingredient));
+                    addAll(recipe, calculate(ingredient), 1);
                 } else {
                     // item is a dust or a geo miner resource; just add it
-                    add(result, ChatColor.stripColor(ItemUtils.getItemName(i)));
+                    add(recipe, name, 1);
                 }
             }
+
+            calculated.put(name, recipe);
+            addAll(result, recipe, amount);
+            
         }
 
         return result;
     }
 
-    private void add(Map<String, Long> map, String key) {
-        add(map, key, 1);
-    }
-
     private void add(Map<String, Long> map, String key, long amount) {
-        map.merge(key, amount, Long::sum);
-    }
-
-    private void addAll(Map<String, Long> map, Map<String, Long> otherMap) {
-        for (Map.Entry<String, Long> entry : otherMap.entrySet()) {
-            add(map, entry.getKey(), entry.getValue());
-        }
+        map.merge(key.toLowerCase(), amount, Long::sum);
     }
 
     private void addAll(Map<String, Long> map, Map<String, Long> otherMap, long multiplier) {
@@ -152,5 +147,4 @@ public class Calculator {
             add(map, entry.getKey(), entry.getValue() * multiplier);
         }
     }
-
 }

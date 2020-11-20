@@ -32,6 +32,7 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 public class CalcCompleter implements TabCompleter {
 
     private final List<String> commands = new ArrayList<>();
+    private static final List<String> NUMBERS = Collections.singletonList("64");
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
@@ -45,6 +46,10 @@ public class CalcCompleter implements TabCompleter {
 
         if (args.length == 1) {
             StringUtil.copyPartialMatches(args[0], commands, completions);
+        }
+
+        if (args.length == 2) {
+            StringUtil.copyPartialMatches(args[1], NUMBERS, completions);
         }
 
         Collections.sort(completions);

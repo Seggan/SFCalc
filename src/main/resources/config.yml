@@ -6,6 +6,9 @@ options:
 # The messages for showing recipes. Replace numbers with %d and item names with %s.
 # Header string ("Recipe for Solar Panel"). Defaults to "&eRecipe for %s:"
 header-string: "&e&nRecipe for %s:"
+# The messages for showing recipes with an amount. Replace numbers with %d, item names with %s, and amount with %d.
+# Header string ("Recipe for 64 Solar Panel"). Defaults to "&eRecipe for %d %s:"
+header-amount-string: "&e&nRecipe for %d %s:"
 # Amount string ("200 of Copper Dust"). Defaults to "%d of %s".
 amount-string: "&e%d of %s"
 # Needed string ("10 more Silicon needed"). Defaults to "&e%d more %s needed"
@@ -22,3 +25,6 @@ item-error-string: "&cThat many items is not supported yet. Please use the comma
 # Not a player string ("You must be a player to send this message!").
 # Defaults to "&cYou must be a player to send this message!"
 not-a-player-string: "&cYou must be a player to send this message!"
+# Invalid number string ("Invalid number!").
+# Defaults to "&cInvalid number!"
+invalid-number-string: "&cInvalid number!"
