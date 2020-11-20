@@ -2,6 +2,7 @@ package io.github.seggan.sfcalc;
 
 import me.mrCookieSlime.CSCoreLibPlugin.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -61,11 +62,13 @@ public class Calculator {
 
             for (Map.Entry<String, Long> entry : entries) {
                 Long inInventory = inv.getOrDefault(entry.getKey(), 0L);
-                sender.sendMessage(Util.format(plugin.neededString, entry.getValue() * amount - inInventory, Util.capitalize(entry.getKey())));
+                sender.sendMessage(Util.format(
+                    plugin.neededString, entry.getValue() * amount - inInventory, WordUtils.capitalizeFully(entry.getKey())));
             }
         } else {
             for (Map.Entry<String, Long> entry : entries) {
-                sender.sendMessage(Util.format(plugin.amountString, entry.getValue() * amount, Util.capitalize(entry.getKey())));
+                sender.sendMessage(Util.format(
+                    plugin.amountString, entry.getValue() * amount, WordUtils.capitalizeFully(entry.getKey())));
             }
         }
     }

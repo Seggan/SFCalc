@@ -1,8 +1,11 @@
 package io.github.seggan.sfcalc;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
+import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -11,11 +14,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
-import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import java.util.HashMap;
+import java.util.Map;
 
 /*
  * Copyright (C) 2020 Seggan
@@ -109,7 +109,7 @@ public class CalcExecutor implements CommandExecutor {
             return true;
         }
 
-        plugin.itemsSearched.add(Util.capitalize(ChatColor.stripColor(item.getItemName())));
+        plugin.itemsSearched.add(WordUtils.capitalizeFully(ChatColor.stripColor(item.getItemName())));
 
         Calculator calculator = new Calculator(plugin);
         calculator.printResults(sender, label, item, amount);
