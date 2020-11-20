@@ -1,3 +1,8 @@
+## Build 14:
+- Calculations are now nearly instantaneous (but use more RAM)
+- Code reformats
+- Removed slow methods and replaced with faster ones
+
 ## Build 13:
 - Many code reformats
 - Speed improvements
@@ -7,7 +12,7 @@
 - Entries are now listed from lowest to highest
 
 ## Build 12:
-- The calculator now shows correct amounts of items wen large amounts are required
+- The calculator now shows correct amounts of items when large amounts are required
 - Added (broken?) support for LiteXpansion metal forge
 - Added Sonarcloud
 
