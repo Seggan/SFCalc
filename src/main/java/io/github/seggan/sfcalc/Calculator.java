@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /*
@@ -40,7 +39,7 @@ public class Calculator {
     }
 
     public void printResults(CommandSender sender, String command, SlimefunItem item, long amount) {
-        Map<String, Long> results = calculate(item);
+        Map<String, Long> results = startCalculation(item);
 
         String header;
         String name = ChatColor.stripColor(ItemUtils.getItemName(item.getItem()));
@@ -84,62 +83,82 @@ public class Calculator {
 
         return inv;
     }
+    
+    private Map<String, Long> startCalculation(SlimefunItem item) {
+        
+        if (item.getId().equals("UU_MATTER")) {
+            Map<String, Long> uuRecipe = new HashMap<>();
+            add(uuRecipe, "scrap", 200);
+            return uuRecipe;
+        }
+        
+        return calculate(item.getItem(), new HashMap<>());
+    }
 
-    private Map<String, Long> calculate(SlimefunItem item) {
+    private Map<String, Long> calculate(ItemStack i, Map<String, Map<String, Long>> cache) {
         Map<String, Long> result = new HashMap<>();
-        Map<String, Map<String, Long>> calculated = new HashMap<>(); //stores names that are already calculated for reference
 
-        for (ItemStack i : item.getRecipe()) {
-            if (i == null) {
-                // empty slot
-                continue;
-            }
-            
-            String name = ChatColor.stripColor(ItemUtils.getItemName(i));
-            
-            int amount = i.getAmount();
+        String name = ChatColor.stripColor(ItemUtils.getItemName(i).toLowerCase());
 
-            if (calculated.containsKey(name)) { //check already calculated items
-                addAll(result, calculated.get(name), amount);
-                continue;
-            }
-            
-            Map<String, Long> recipe = new HashMap<>();
-            
-            SlimefunItem ingredient = SlimefunItem.getByItem(i);
-
-            if (ingredient == null) {
-                // ingredient is null; it's a normal Minecraft item
-                add(recipe, name, 1);
-                
-            } else {
-                
-                if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
-                    add(recipe, "diamond", 9);
-                }
-
-                if (plugin.blacklistedIds.contains(ingredient.getId().toLowerCase(Locale.ROOT))) {
-                    // it's a blacklisted item
-                    add(recipe, name, 1);
-                } else if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
-                    // item is a crafted Slimefun item; get its ingredients
-                    addAll(recipe, calculate(ingredient), 1);
-                } else {
-                    // item is a dust or a geo miner resource; just add it
-                    add(recipe, name, 1);
-                }
-            }
-
-            calculated.put(name, recipe);
-            addAll(result, recipe, amount);
-            
+        int amount = i.getAmount();
+        
+        // check if already calculated
+        if (cache.containsKey(name)) {
+            addAll(result, cache.get(name), amount);
+            return result;
         }
 
+        Map<String, Long> recipe = new HashMap<>();
+
+        SlimefunItem item = SlimefunItem.getByItem(i);
+
+        if (item == null || (plugin.blacklistedNames.contains(name) && cache.size() > 0)) {
+            // slimefun item is null its a vanilla item or id is blacklisted and they aren't calculating this item
+            add(recipe, name);
+
+        } else {
+
+            if (item.getRecipeType().getKey().getKey().equals("metal_forge")) {
+                add(recipe, "diamond", 9);
+            }
+
+             if (!plugin.blacklistedRecipes.contains(item.getRecipeType().getKey().getKey())) {
+                // item is a crafted Slimefun item; get its ingredients
+                 boolean hasRecipe = false;
+                 for (ItemStack ingredient : item.getRecipe()) {
+                     if (ingredient != null) {
+                         addAll(recipe, calculate(ingredient, cache));
+                         hasRecipe = true;
+                     }
+                 }
+                
+                // item had empty recipe, just add it
+                 if (!hasRecipe) {
+                     add(recipe, name);
+                 }
+                
+            } else {
+                // item is a dust or a geo miner resource; just add it
+                add(recipe, name);
+            }
+        }
+
+        cache.put(name, recipe);
+        addAll(result, recipe, amount);
+        
         return result;
     }
 
+    private void add(Map<String, Long> map, String key) {
+        add(map, key, 1);
+    }
+
     private void add(Map<String, Long> map, String key, long amount) {
-        map.merge(key.toLowerCase(), amount, Long::sum);
+        map.merge(key, amount, Long::sum);
+    }
+
+    private void addAll(Map<String, Long> map, Map<String, Long> otherMap) {
+        addAll(map, otherMap, 1);
     }
 
     private void addAll(Map<String, Long> map, Map<String, Long> otherMap, long multiplier) {

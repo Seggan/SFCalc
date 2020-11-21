@@ -33,8 +33,8 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
 
     private static SFCalc instance;
 
-    protected final Set<RecipeType> blacklistedRecipes = new HashSet<>();
-    protected final Set<String> blacklistedIds = new HashSet<>();
+    protected final Set<String> blacklistedRecipes = new HashSet<>();
+    protected final Set<String> blacklistedNames = new HashSet<>();
     protected final List<String> itemsSearched = new ArrayList<>();
 
     // "Localization"
@@ -78,16 +78,17 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
         registerCommands();
         getServer().getPluginManager().registerEvents(new CalcHandler(), this);
 
-        blacklistedRecipes.add(RecipeType.ORE_WASHER);
-        blacklistedRecipes.add(RecipeType.GEO_MINER);
-        blacklistedRecipes.add(RecipeType.GOLD_PAN);
-        blacklistedRecipes.add(RecipeType.MOB_DROP);
-        blacklistedRecipes.add(RecipeType.BARTER_DROP);
-        blacklistedRecipes.add(RecipeType.ORE_CRUSHER);
-        blacklistedRecipes.add(RecipeType.NULL);
+        blacklistedRecipes.add(RecipeType.ORE_WASHER.getKey().getKey());
+        blacklistedRecipes.add(RecipeType.GEO_MINER.getKey().getKey());
+        blacklistedRecipes.add(RecipeType.GOLD_PAN.getKey().getKey());
+        blacklistedRecipes.add(RecipeType.MOB_DROP.getKey().getKey());
+        blacklistedRecipes.add(RecipeType.BARTER_DROP.getKey().getKey());
+        blacklistedRecipes.add(RecipeType.ORE_CRUSHER.getKey().getKey());
+        blacklistedRecipes.add(RecipeType.NULL.getKey().getKey());
+        blacklistedRecipes.add("void_harvester");
 
-        blacklistedIds.add("uu_matter");
-        blacklistedIds.add("silicon");
+        blacklistedNames.add("uu-matter");
+        blacklistedNames.add("silicon");
 
         instance = this;
     }
