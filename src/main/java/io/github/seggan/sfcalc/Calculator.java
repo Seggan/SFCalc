@@ -112,8 +112,8 @@ public class Calculator {
 
         SlimefunItem item = SlimefunItem.getByItem(i);
 
-        if (item == null || (plugin.blacklistedNames.contains(name) && cache.size() > 0)) {
-            // slimefun item is null its a vanilla item or id is blacklisted and they aren't calculating this item
+        if (item == null || plugin.blacklistedNames.contains(name)) {
+            // slimefun item is null (its a vanilla item) or name is blacklisted 
             add(recipe, name);
 
         } else {
@@ -122,7 +122,8 @@ public class Calculator {
                 add(recipe, "diamond", 9);
             }
 
-             if (!plugin.blacklistedRecipes.contains(item.getRecipeType().getKey().getKey())) {
+            // always get recipe if this is the item they are calculating
+             if (!plugin.blacklistedRecipes.contains(item.getRecipeType().getKey().getKey()) || cache.size() == 0) {
                 // item is a crafted Slimefun item; get its ingredients
                  boolean hasRecipe = false;
                  for (ItemStack ingredient : item.getRecipe()) {
