@@ -1,7 +1,7 @@
 package io.github.seggan.sfcalc;
 
-import me.mrCookieSlime.CSCoreLibPlugin.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
