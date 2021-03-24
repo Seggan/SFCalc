@@ -9,10 +9,12 @@ header-string: "&e&nRecipe for %s:"
 # The messages for showing recipes with an amount. Replace numbers with %d, item names with %s, and amount with %d.
 # Header string ("Recipe for 64 Solar Panel"). Defaults to "&eRecipe for %d %s:"
 header-amount-string: "&e&nRecipe for %d %s:"
-# Amount string ("200 of Copper Dust"). Defaults to "%d of %s".
-amount-string: "&e%d of %s"
-# Needed string ("10 more Silicon needed"). Defaults to "&e%d more %s needed"
-needed-string: "&e%d more %s needed"
+# Stack string ("(20 x64 + 32)"). Provides an easier access to numbers, defaults to "&e%d (%d x64 + %d)"
+stack-string: "&e%d (%d x64 + %d)"
+# Amount string ("200 of Copper Dust"). Defaults to "%s of %s".
+amount-string: "&e%s of %s"
+# Needed string ("10 more Silicon needed"). Defaults to "&e%s more %s needed"
+needed-string: "&e%s more %s needed"
 # Item not found string ("That item was not found."). Defaults to "&cThat item was not found."
 no-item-string: "&cThat item was not found."
 # Not a number string ("That's not a number!"). Defaults to "&cThat's not a number!"

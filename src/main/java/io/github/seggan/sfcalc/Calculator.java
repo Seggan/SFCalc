@@ -62,13 +62,27 @@ public class Calculator {
 
             for (Map.Entry<String, Long> entry : entries) {
                 Long inInventory = inv.getOrDefault(entry.getKey(), 0L);
+                long originalValues = entry.getValue() * amount - inInventory;
+                String parsedAmount;
+                if (originalValues <= 64) {
+                    parsedAmount = Long.toString(originalValues);
+                } else {
+                    parsedAmount = Util.format(plugin.stackString, originalValues, (long) Math.floor(originalValues / 64.0), originalValues % 64);
+                }
                 sender.sendMessage(Util.format(
-                    plugin.neededString, entry.getValue() * amount - inInventory, WordUtils.capitalizeFully(entry.getKey())));
+                    plugin.neededString, parsedAmount, WordUtils.capitalizeFully(entry.getKey())));
             }
         } else {
             for (Map.Entry<String, Long> entry : entries) {
+                long originalValues = entry.getValue() * amount;
+                String parsedAmount;
+                if (originalValues <= 64) {
+                    parsedAmount = Long.toString(originalValues);
+                } else {
+                    parsedAmount = Util.format(plugin.stackString, originalValues, (long) Math.floor(originalValues / 64.0), originalValues % 64);
+                }
                 sender.sendMessage(Util.format(
-                    plugin.amountString, entry.getValue() * amount, WordUtils.capitalizeFully(entry.getKey())));
+                    plugin.amountString, parsedAmount, WordUtils.capitalizeFully(entry.getKey())));
             }
         }
     }
