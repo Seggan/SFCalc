@@ -127,7 +127,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     private void loadStrings() {
         headerString = loadString("header-string", "&e&nRecipe for %s:");
         headerAmountString = loadString("header-amount-string", "&e&nRecipe for %d %s:");
-        stackString = loadString("stack-string", "&e%d (%d x64 + %d)");
+        stackString = loadString("stack-string", "&e%d (%d x%d + %d)");
         amountString = loadString("amount-string", "&e%s of %s");
         neededString = loadString("needed-string", "&e%s more %s needed");
         noItemString = loadString("no-item-string", "&cThat item was not found.");

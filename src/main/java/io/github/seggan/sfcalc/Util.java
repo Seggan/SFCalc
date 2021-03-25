@@ -29,8 +29,8 @@ public final class Util {
         return s.replace("%d", Long.toString(a)).replace("%s", i);
     }
 
-    static String format(String s, long a, long b, long c) {
-        return s.replaceFirst("%d", Long.toString(a)).replaceFirst("%d", Long.toString(b)).replaceFirst("%d", Long.toString(c));
+    static String format(String s, long a, long b, long c, long d) {
+        return s.replaceFirst("%d", Long.toString(a)).replaceFirst("%d", Long.toString(b)).replaceFirst("%d", Long.toString(c)).replaceFirst("%d", Long.toString(d));
     }
 
     static int getSlots(int c) {
