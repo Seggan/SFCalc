@@ -9,7 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /*
  * Copyright (C) 2020 Seggan
@@ -52,7 +57,7 @@ public class Calculator {
         // This will put our entries in order from lowest to highest
         List<Map.Entry<ItemStack, Long>> entries = new ArrayList<>(results.entrySet());
         entries.sort(Comparator.comparingLong(Map.Entry::getValue));
-
+        
         if (command.equals("sfneeded") && sender instanceof Player) {
             Map<ItemStack, Long> inv = getInventoryAsItemList((Player) sender);
 
@@ -60,25 +65,27 @@ public class Calculator {
                 Long inInventory = inv.getOrDefault(entry.getKey(), 0L);
                 long originalValues = entry.getValue() * amount - inInventory;
                 String parsedAmount;
-                if (originalValues <= entry.getKey().getMaxStackSize()) {
+                int maxStackSize = entry.getKey().getMaxStackSize();
+                if (originalValues <= maxStackSize) {
                     parsedAmount = Long.toString(originalValues);
                 } else {
-                    parsedAmount = Util.format(plugin.stackString, originalValues, (long) Math.floor((float) originalValues / entry.getKey().getMaxStackSize()), entry.getKey().getMaxStackSize(), originalValues % entry.getKey().getMaxStackSize());
+                    parsedAmount = Util.format(plugin.stackString, originalValues, (long) Math.floor((float) originalValues / maxStackSize), maxStackSize, originalValues % maxStackSize);
                 }
                 sender.sendMessage(Util.format(
-                        plugin.neededString, parsedAmount, WordUtils.capitalizeFully(ChatColor.stripColor(ItemUtils.getItemName(entry.getKey())))));
+                        plugin.neededString, parsedAmount, ChatColor.stripColor(ItemUtils.getItemName(entry.getKey()))));
             }
         } else {
             for (Map.Entry<ItemStack, Long> entry : entries) {
                 long originalValues = entry.getValue() * amount;
                 String parsedAmount;
-                if (originalValues <= entry.getKey().getMaxStackSize()) {
+                int maxStackSize = entry.getKey().getMaxStackSize();
+                if (originalValues <= maxStackSize) {
                     parsedAmount = Long.toString(originalValues);
                 } else {
-                    parsedAmount = Util.format(plugin.stackString, originalValues, (long) Math.floor(originalValues / (float) entry.getKey().getMaxStackSize()), entry.getKey().getMaxStackSize(), originalValues % entry.getKey().getMaxStackSize());
+                    parsedAmount = Util.format(plugin.stackString, originalValues, (long) Math.floor(originalValues / (float) maxStackSize), maxStackSize, originalValues % maxStackSize);
                 }
                 sender.sendMessage(Util.format(
-                        plugin.amountString, parsedAmount, WordUtils.capitalizeFully(ChatColor.stripColor(ItemUtils.getItemName(entry.getKey())))));
+                        plugin.amountString, parsedAmount, ChatColor.stripColor(ItemUtils.getItemName(entry.getKey()))));
             }
         }
     }
@@ -126,7 +133,7 @@ public class Calculator {
             } else {
 
                 if (ingredient.getRecipeType().getKey().getKey().equals("metal_forge")) {
-                    add(recipe, new ItemStack(Material.DIAMOND, 9), 9);
+                    add(recipe, new ItemStack(Material.DIAMOND), 9);
                 }
 
                 if (plugin.blacklistedIds.contains(ingredient.getId().toLowerCase(Locale.ROOT))) {
