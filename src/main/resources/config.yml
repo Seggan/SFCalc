@@ -1,8 +1,3 @@
-options:
-  auto-update: true
-
-
-
 # The messages for showing recipes. Replace numbers with %d and item names with %s.
 # Header string ("Recipe for Solar Panel"). Defaults to "&eRecipe for %s:"
 header-string: "&e&nRecipe for %s:"
@@ -18,7 +13,7 @@ needed-string: "&e%s more %s needed"
 # Item not found string ("That item was not found."). Defaults to "&cThat item was not found."
 no-item-string: "&cThat item was not found."
 # Not a number string ("That's not a number!"). Defaults to "&cThat's not a number!"
-no-number-string: "&cThat's not a number!"
+not-a-number-string: "&cThat's not a number!"
 # Too many categories/items strings
 # ("That many categories/items is not supported yet. Please use the command form of the calculator.").
 # Defaults to "&cThat many categories/items is not supported yet. Please use the command form of the calculator.".

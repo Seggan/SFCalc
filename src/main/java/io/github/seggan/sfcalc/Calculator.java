@@ -2,13 +2,13 @@ package io.github.seggan.sfcalc;
 
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -16,40 +16,34 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/*
- * Copyright (C) 2020 Seggan
- * Email: segganew@gmail.com
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- */
 public class Calculator {
 
-    private final SFCalc plugin;
+    private final CalculatingAddon plugin;
 
-    public Calculator(SFCalc plugin) {
+    public Calculator(CalculatingAddon plugin) {
         this.plugin = plugin;
     }
 
-    public void printResults(CommandSender sender, String command, SlimefunItem item, long amount) {
+    /**
+     * Calculates the resourrces for the item and prints the out to the specified {@link CommandSender}
+     *
+     * @param sender the sender to send the calculation to
+     * @param needed whether it sould print out how many are needed. Requires {@code sender instanceof Player}
+     * to be {@code true}
+     * @param item the Slimefun item to calculate
+     * @param amount the amount to calculate for
+     */
+    public void printResults(@Nonnull CommandSender sender, boolean needed, @Nonnull SlimefunItem item, long amount) {
         Map<ItemStack, Long> results = calculate(item);
+
+        StringRegistry registry = plugin.getStringRegistry();
 
         String header;
         String name = ChatColor.stripColor(ItemUtils.getItemName(item.getItem()));
         if (amount == 1) {
-            header = String.format(plugin.headerString, name);
+            header = String.format(registry.getHeaderString(), name);
         } else {
-            header = Util.format(plugin.headerAmountString, amount, name);
+            header = Util.format(registry.getHeaderAmountString(), amount, name);
         }
 
         sender.sendMessage(header);
@@ -57,8 +51,8 @@ public class Calculator {
         // This will put our entries in order from lowest to highest
         List<Map.Entry<ItemStack, Long>> entries = new ArrayList<>(results.entrySet());
         entries.sort(Comparator.comparingLong(Map.Entry::getValue));
-        
-        if (command.equals("sfneeded") && sender instanceof Player) {
+
+        if (needed && sender instanceof Player) {
             Map<ItemStack, Long> inv = getInventoryAsItemList((Player) sender);
 
             for (Map.Entry<ItemStack, Long> entry : entries) {
@@ -69,10 +63,10 @@ public class Calculator {
                 if (originalValues <= maxStackSize) {
                     parsedAmount = Long.toString(originalValues);
                 } else {
-                    parsedAmount = Util.format(plugin.stackString, originalValues, (long) Math.floor((float) originalValues / maxStackSize), maxStackSize, originalValues % maxStackSize);
+                    parsedAmount = Util.format(registry.getStackString(), originalValues, (long) Math.floor((float) originalValues / maxStackSize), maxStackSize, originalValues % maxStackSize);
                 }
                 sender.sendMessage(Util.format(
-                        plugin.neededString, parsedAmount, ChatColor.stripColor(ItemUtils.getItemName(entry.getKey()))));
+                    registry.getNeededString(), parsedAmount, ChatColor.stripColor(ItemUtils.getItemName(entry.getKey()))));
             }
         } else {
             for (Map.Entry<ItemStack, Long> entry : entries) {
@@ -82,20 +76,21 @@ public class Calculator {
                 if (originalValues <= maxStackSize) {
                     parsedAmount = Long.toString(originalValues);
                 } else {
-                    parsedAmount = Util.format(plugin.stackString, originalValues, (long) Math.floor(originalValues / (float) maxStackSize), maxStackSize, originalValues % maxStackSize);
+                    parsedAmount = Util.format(registry.getStackString(), originalValues, (long) Math.floor(originalValues / (float) maxStackSize), maxStackSize, originalValues % maxStackSize);
                 }
                 sender.sendMessage(Util.format(
-                        plugin.amountString, parsedAmount, ChatColor.stripColor(ItemUtils.getItemName(entry.getKey()))));
+                    registry.getAmountString(), parsedAmount, ChatColor.stripColor(ItemUtils.getItemName(entry.getKey()))));
             }
         }
     }
 
-    private Map<ItemStack, Long> getInventoryAsItemList(Player player) {
+    @Nonnull
+    private Map<ItemStack, Long> getInventoryAsItemList(@Nonnull Player player) {
         Map<ItemStack, Long> inv = new HashMap<>();
 
         for (ItemStack item : player.getInventory().getContents()) {
             // if the Item is null or air, it will return null too
-            if (item == null) {
+            if (item.getType().isAir()) {
                 continue;
             }
 
@@ -105,7 +100,8 @@ public class Calculator {
         return inv;
     }
 
-    private Map<ItemStack, Long> calculate(SlimefunItem item) {
+    @Nonnull
+    public Map<ItemStack, Long> calculate(@Nonnull SlimefunItem item) {
         Map<ItemStack, Long> result = new HashMap<>();
         Map<ItemStack, Map<ItemStack, Long>> calculated = new HashMap<>(); //stores names that are already calculated for reference
 
@@ -127,7 +123,7 @@ public class Calculator {
             SlimefunItem ingredient = SlimefunItem.getByItem(i);
 
             if (ingredient == null) {
-                // ingredient is null; it's a normal Minecraft item
+                // ingredient is null; it's a vanilla item
                 add(recipe, i, 1);
 
             } else {
@@ -136,31 +132,30 @@ public class Calculator {
                     add(recipe, new ItemStack(Material.DIAMOND), 9);
                 }
 
-                if (plugin.blacklistedIds.contains(ingredient.getId().toLowerCase(Locale.ROOT))) {
+                if (plugin.getBlacklistedIds().contains(ingredient.getId().toLowerCase(Locale.ROOT))) {
                     // it's a blacklisted item
                     add(recipe, i, 1);
-                } else if (!plugin.blacklistedRecipes.contains(ingredient.getRecipeType())) {
-                    // item is a crafted Slimefun item; get its ingredients
-                    addAll(recipe, calculate(ingredient), 1);
-                } else {
+                } else if (plugin.getBlacklistedRecipes().contains(ingredient.getRecipeType())) {
                     // item is a dust or a geo miner resource; just add it
                     add(recipe, i, 1);
+                } else {
+                    // item is a crafted Slimefun item; get its ingredients
+                    addAll(recipe, calculate(ingredient), 1);
                 }
             }
 
             calculated.put(i, recipe);
             addAll(result, recipe, amount);
-
         }
 
         return result;
     }
 
-    private void add(Map<ItemStack, Long> map, ItemStack key, long amount) {
+    private void add(@Nonnull Map<ItemStack, Long> map, @Nonnull ItemStack key, long amount) {
         map.merge(key, amount, Long::sum);
     }
 
-    private void addAll(Map<ItemStack, Long> map, Map<ItemStack, Long> otherMap, long multiplier) {
+    private void addAll(@Nonnull Map<ItemStack, Long> map, @Nonnull Map<ItemStack, Long> otherMap, long multiplier) {
         for (Map.Entry<ItemStack, Long> entry : otherMap.entrySet()) {
             add(map, entry.getKey(), entry.getValue() * multiplier);
         }
