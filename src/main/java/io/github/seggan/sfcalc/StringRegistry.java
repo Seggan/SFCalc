@@ -3,8 +3,14 @@ package io.github.seggan.sfcalc;
 import io.github.mooy1.infinitylib.core.ConfigUtils;
 import lombok.Getter;
 
+import javax.annotation.Nonnull;
+import java.util.regex.Pattern;
+
 @Getter
 public final class StringRegistry {
+
+    private static final Pattern FORMAT_PATTERN = Pattern.compile("%\\d");
+
     private final String headerString;
     private final String headerAmountString;
     private final String stackString;
@@ -29,5 +35,16 @@ public final class StringRegistry {
         tooManyItemsString = ConfigUtils.getString("item-error-string", "&cThat many items is not supported yet. Please use the command form of the calculator.");
         notAPlayerString = ConfigUtils.getString("not-a-player-string", "&cYou must be a player to send this message!");
         invalidNumberString = ConfigUtils.getString("invalid-number-string", "&cInvalid number!");
+    }
+
+    @Nonnull
+    public static String format(@Nonnull String formatString, @Nonnull Object... objects) {
+        String finalString = formatString;
+
+        for (int i = 0; i < objects.length; i++) {
+            finalString = finalString.replace("%" + (i + 1), objects[i].toString());
+        }
+
+        return finalString;
     }
 }

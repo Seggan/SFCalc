@@ -2,12 +2,17 @@ package io.github.seggan.sfcalc;
 
 import io.github.mooy1.infinitylib.commands.CommandManager;
 import io.github.mooy1.infinitylib.core.PluginUtils;
+import io.github.thebusybiscuit.slimefun4.api.MinecraftVersion;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,15 +26,25 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, CalculatingAddo
 
     private StringRegistry stringRegistry;
 
+    public SFCalc() {
+        super();
+    }
+
+    protected SFCalc(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+        super(loader, description, dataFolder, file);
+    }
+
     @Override
     public void onEnable() {
         instance = this;
 
-        PluginUtils.setup("SFCalc", this, "Seggan/SFCalc/master", getFile());
-        // init metrics
-        new SFCalcMetrics(this);
+        if (SlimefunPlugin.getMinecraftVersion() != MinecraftVersion.UNIT_TEST) {
+            PluginUtils.setup("SFCalc", this, "Seggan/SFCalc/master", getFile());
+        } else {
+            PluginUtils.setup("SFCalc", this, "Seggan/SFCalc/master", new File("SFCalc"));
+        }
 
-        CommandManager.setup("sfcalc", "/sfc", new CalcCommand());
+        CommandManager.setup("sfcalc", "/sfc", new CalcCommand(), new NeededCommand());
 
         stringRegistry = new StringRegistry();
 
@@ -41,9 +56,9 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, CalculatingAddo
         blacklistedRecipes.add(RecipeType.ORE_CRUSHER);
         blacklistedRecipes.add(RecipeType.NULL);
 
-        blacklistedIds.add("uu_matter");
-        blacklistedIds.add("silicon");
-        blacklistedIds.add("fallen_meteor");
+        blacklistedIds.add("UU_MATTER");
+        blacklistedIds.add("SILICON");
+        blacklistedIds.add("FALLEN_METEOR");
     }
 
     @Nonnull

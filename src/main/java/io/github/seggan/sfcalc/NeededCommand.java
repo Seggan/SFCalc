@@ -5,6 +5,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import javax.annotation.Nonnull;
@@ -12,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class CalcCommand extends AbstractCommand {
+public class NeededCommand extends AbstractCommand {
 
     private static final List<String> ids = new ArrayList<>();
 
-    public CalcCommand() {
-        super("calc", "Calculates the resources needed for a given item", false);
+    public NeededCommand() {
+        super("needed", "Tells you how much more resources are needed", false);
     }
 
     @Override
@@ -27,6 +28,11 @@ public class CalcCommand extends AbstractCommand {
         SlimefunItem item;
 
         StringRegistry registry = SFCalc.inst().getStringRegistry();
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(registry.getNotAPlayerString());
+            return;
+        }
 
         if (args.length > 3) {
             return;
@@ -62,7 +68,7 @@ public class CalcCommand extends AbstractCommand {
         SFCalcMetrics.addItemSearched(item.getItemName());
 
         Calculator calculator = new Calculator(SFCalc.inst());
-        calculator.printResults(sender, item, amount, false);
+        calculator.printResults(sender, item, amount, true);
     }
 
     @Override

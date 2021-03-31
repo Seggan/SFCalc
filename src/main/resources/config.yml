@@ -1,27 +1,45 @@
-# The messages for showing recipes. Replace numbers with %d and item names with %s.
-# Header string ("Recipe for Solar Panel"). Defaults to "&eRecipe for %s:"
-header-string: "&e&nRecipe for %s:"
-# The messages for showing recipes with an amount. Replace numbers with %d, item names with %s, and amount with %d.
-# Header string ("Recipe for 64 Solar Panel"). Defaults to "&eRecipe for %d %s:"
-header-amount-string: "&e&nRecipe for %d %s:"
-# Stack string ("(20 x64 + 32)"). Provides an easier access to numbers, defaults to "&e%d (%d x%d + %d)"
-stack-string: "&e%d (%d x%d + %d)"
-# Amount string ("200 of Copper Dust"). Defaults to "%s of %s".
-amount-string: "&e%s of %s"
-# Needed string ("10 more Silicon needed"). Defaults to "&e%s more %s needed"
-needed-string: "&e%s more %s needed"
-# Item not found string ("That item was not found."). Defaults to "&cThat item was not found."
-no-item-string: "&cThat item was not found."
-# Not a number string ("That's not a number!"). Defaults to "&cThat's not a number!"
+# The messages for showing recipes. Percent signs with numbers are placeholders for either item names or
+# numbers. See the comments above individual options to see what they are replaced by
+
+# Header string ("Recipe for Synthetic Diamond")
+# %1 name of item
+header-string: "&e&nRecipe for %1:"
+
+# Header amount string ("Recipe for 2 Explosive Pickaxe")
+# %1 name of item
+# %2 amount of item
+header-amount-string: "&e&nRecipe for %2 %1:"
+
+# Stack string ("202 (12 x16 + 2) of Ender Pearl
+# %1 amount of item
+# %2 amount of stacks of item
+# %3 stack size of item
+# %4 amount of item that doesn't fit into a stack
+stack-string: "&e%1 (%2 x%3 + %4)"
+
+# Amount string ("20 of Iron Ore")
+# %1 name of item
+# %2 amount of item (can also be stack string)
+amount-string: "&e%2 of %1"
+
+# Needed string ("10 more Silicon needed")
+# %1 name of item
+# %2 amount of item (can also be stack string)
+needed-string: "&e%2 more %1 needed"
+
+# Item not found string ("That item was not found!")
+no-item-string: "&cThat item was not found!"
+
+# Not a number string ("That's not a number!")
 not-a-number-string: "&cThat's not a number!"
+
 # Too many categories/items strings
-# ("That many categories/items is not supported yet. Please use the command form of the calculator.").
-# Defaults to "&cThat many categories/items is not supported yet. Please use the command form of the calculator.".
+# ("That many categories/items is not supported yet. Please use the command form of the calculator.")
 category-error-string: "&cThat many categories is not supported yet. Please use the command form of the calculator."
 item-error-string: "&cThat many items is not supported yet. Please use the command form of the calculator."
-# Not a player string ("You must be a player to send this message!").
-# Defaults to "&cYou must be a player to send this message!"
+
+# Not a player string ("You must be a player to send this message!")
 not-a-player-string: "&cYou must be a player to send this message!"
-# Invalid number string ("Invalid number!").
-# Defaults to "&cInvalid number!"
+
+# Invalid number string ("Invalid number!")
 invalid-number-string: "&cInvalid number!"
