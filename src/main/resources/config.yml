@@ -10,7 +10,7 @@ header-string: "&e&nRecipe for %1:"
 # %2 amount of item
 header-amount-string: "&e&nRecipe for %2 %1:"
 
-# Stack string ("202 (12 x16 + 2) of Ender Pearl
+# Stack string ("202 (12 x16 + 2)")
 # %1 amount of item
 # %2 amount of stacks of item
 # %3 stack size of item

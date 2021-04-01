@@ -52,7 +52,7 @@ public class CalcCommand extends AbstractCommand {
             }
         }
 
-        item = SlimefunItem.getByID(reqItem.toUpperCase());
+        item = SlimefunItem.getByID(reqItem.toUpperCase(Locale.ROOT));
 
         if (item == null) {
             sender.sendMessage(registry.getNoItemString());

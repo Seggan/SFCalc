@@ -2,9 +2,7 @@ package io.github.seggan.sfcalc;
 
 import io.github.mooy1.infinitylib.commands.CommandManager;
 import io.github.mooy1.infinitylib.core.PluginUtils;
-import io.github.thebusybiscuit.slimefun4.api.MinecraftVersion;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -38,11 +36,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, CalculatingAddo
     public void onEnable() {
         instance = this;
 
-        if (SlimefunPlugin.getMinecraftVersion() != MinecraftVersion.UNIT_TEST) {
-            PluginUtils.setup("SFCalc", this, "Seggan/SFCalc/master", getFile());
-        } else {
-            PluginUtils.setup("SFCalc", this, "Seggan/SFCalc/master", new File("SFCalc"));
-        }
+        PluginUtils.setup("SFCalc", this, "Seggan/SFCalc/master", getFile());
 
         CommandManager.setup("sfcalc", "/sfc", new CalcCommand(), new NeededCommand());
 

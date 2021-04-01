@@ -2,6 +2,7 @@ package io.github.seggan.sfcalc;
 
 import io.github.mooy1.infinitylib.core.ConfigUtils;
 import lombok.Getter;
+import org.apache.commons.lang.Validate;
 
 import javax.annotation.Nonnull;
 import java.util.regex.Pattern;
@@ -39,6 +40,9 @@ public final class StringRegistry {
 
     @Nonnull
     public static String format(@Nonnull String formatString, @Nonnull Object... objects) {
+        Validate.notNull(formatString);
+        Validate.noNullElements(objects);
+
         String finalString = formatString;
 
         for (int i = 0; i < objects.length; i++) {

@@ -167,6 +167,7 @@ public class Calculator {
         }
     }
 
+    @Nonnull
     private static String getBasicName(ItemStack stack) {
         return ChatColor.stripColor(ItemUtils.getItemName(stack));
     }
