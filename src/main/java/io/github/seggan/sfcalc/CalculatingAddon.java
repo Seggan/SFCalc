@@ -13,6 +13,4 @@ public interface CalculatingAddon {
 
     Set<RecipeType> getBlacklistedRecipes();
     Set<String> getBlacklistedIds();
-
-    StringRegistry getStringRegistry();
 }

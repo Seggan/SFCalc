@@ -44,7 +44,7 @@ public class Calculator {
     public void printResults(@Nonnull CommandSender sender, @Nonnull SlimefunItem item, long amount, boolean needed) {
         Map<ItemStack, Long> results = calculate(item);
 
-        StringRegistry registry = plugin.getStringRegistry();
+        StringRegistry registry = SFCalc.inst().getStringRegistry();
 
         String header;
         String name = getBasicName(item.getItem());
