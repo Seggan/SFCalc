@@ -4,6 +4,7 @@ import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
@@ -37,17 +38,17 @@ public class CalcCommand extends AbstractCommand {
         if (args.length == 2) {
             amount = 1;
         } else if (!PatternUtils.NUMERIC.matcher(args[2]).matches()) {
-            sender.sendMessage(registry.getNotANumberString());
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', registry.getNotANumberString()));
             return;
         } else {
             try {
                 amount = Long.parseLong(args[2]);
                 if (amount == 0 || amount > Integer.MAX_VALUE) {
-                    sender.sendMessage(registry.getInvalidNumberString());
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', registry.getInvalidNumberString()));
                     return;
                 }
             } catch (NumberFormatException e) {
-                sender.sendMessage(registry.getInvalidNumberString());
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', registry.getInvalidNumberString()));
                 return;
             }
         }
@@ -55,7 +56,7 @@ public class CalcCommand extends AbstractCommand {
         item = SlimefunItem.getByID(reqItem.toUpperCase(Locale.ROOT));
 
         if (item == null) {
-            sender.sendMessage(registry.getNoItemString());
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', registry.getNoItemString()));
             return;
         }
 

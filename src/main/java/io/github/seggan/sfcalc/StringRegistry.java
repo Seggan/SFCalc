@@ -3,6 +3,7 @@ package io.github.seggan.sfcalc;
 import io.github.mooy1.infinitylib.core.ConfigUtils;
 import lombok.Getter;
 import org.apache.commons.lang.Validate;
+import org.bukkit.ChatColor;
 
 import javax.annotation.Nonnull;
 import java.util.regex.Pattern;
@@ -48,6 +49,8 @@ public final class StringRegistry {
         for (int i = 0; i < objects.length; i++) {
             finalString = finalString.replace("%" + (i + 1), objects[i].toString());
         }
+
+        finalString =  ChatColor.translateAlternateColorCodes('&', finalString);
 
         return finalString;
     }
