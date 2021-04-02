@@ -1,5 +1,7 @@
 package io.github.seggan.sfcalc;
 
+import lombok.AllArgsConstructor;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import org.bukkit.ChatColor;
@@ -15,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import static io.github.seggan.sfcalc.StringRegistry.format;
 
@@ -24,16 +27,14 @@ import static io.github.seggan.sfcalc.StringRegistry.format;
  * @author Seggan
  * @author TheBusyBiscuit
  */
+@AllArgsConstructor
 public class Calculator {
 
-    private final CalculatingAddon plugin;
-
-    public Calculator(CalculatingAddon plugin) {
-        this.plugin = plugin;
-    }
+    private final Set<RecipeType> blacklistedRecipes;
+    private final Set<String> blacklistedIds;
 
     /**
-     * Calculates the resourrces for the item and prints the out to the specified {@link CommandSender}
+     * Calculates the resources for the item and prints the out to the specified {@link CommandSender}
      *
      * @param sender the sender to send the calculation to
      * @param item the Slimefun item to calculate
@@ -138,10 +139,10 @@ public class Calculator {
                     continue;
                 }
 
-                if (plugin.getBlacklistedIds().contains(ingredient.getId())) {
+                if (blacklistedIds.contains(ingredient.getId())) {
                     // it's a blacklisted item
                     add(recipe, i, 1);
-                } else if (plugin.getBlacklistedRecipes().contains(ingredient.getRecipeType())) {
+                } else if (blacklistedRecipes.contains(ingredient.getRecipeType())) {
                     // item is a dust or a geo miner resource; just add it
                     add(recipe, i, 1);
                 } else {
