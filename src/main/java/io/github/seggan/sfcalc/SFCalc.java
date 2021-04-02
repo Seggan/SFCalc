@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Getter
-public class SFCalc extends JavaPlugin implements SlimefunAddon, CalculatingAddon {
+public class SFCalc extends JavaPlugin implements SlimefunAddon {
 
     private static SFCalc instance;
 

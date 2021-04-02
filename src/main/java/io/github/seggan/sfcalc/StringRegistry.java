@@ -2,6 +2,7 @@ package io.github.seggan.sfcalc;
 
 import io.github.mooy1.infinitylib.core.ConfigUtils;
 import lombok.Getter;
+import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 
@@ -50,8 +51,6 @@ public final class StringRegistry {
             finalString = finalString.replace("%" + (i + 1), objects[i].toString());
         }
 
-        finalString =  ChatColor.translateAlternateColorCodes('&', finalString);
-
-        return finalString;
+        return ChatColors.color(finalString);
     }
 }
