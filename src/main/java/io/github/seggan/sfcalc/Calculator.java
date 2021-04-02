@@ -97,7 +97,7 @@ public class Calculator {
 
         for (ItemStack item : player.getInventory().getContents()) {
             // if the Item is null or air, it will return null too
-            if (item.getType().isAir()) {
+            if (item == null || item.getType().isAir()) {
                 continue;
             }
 
