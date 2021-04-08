@@ -5,17 +5,18 @@ import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.ChatColor;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
 
 import javax.annotation.Nonnull;
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
-public class SFCalc extends JavaPlugin implements SlimefunAddon {
+public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
 
     private static SFCalc instance;
 
@@ -23,14 +24,6 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     private final Set<String> blacklistedIds = new HashSet<>();
 
     private StringRegistry stringRegistry;
-
-    public SFCalc() {
-        super();
-    }
-
-    protected SFCalc(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
-        super(loader, description, dataFolder, file);
-    }
 
     @Override
     public void onEnable() {
@@ -69,5 +62,12 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon {
     @Nonnull
     static SFCalc inst() {
         return instance;
+    }
+
+    @EventHandler
+    public void onOpJoin(PlayerJoinEvent e) {
+        if (e.getPlayer().isOp() && stringRegistry.getAmountString().contains("%s")) {
+            e.getPlayer().sendMessage(ChatColor.RED + "[SFCalc] Hey, I see you are using outdated SFCalc config! For SFCalc to work properly, please delete config.yml and restart the server");
+        }
     }
 }
