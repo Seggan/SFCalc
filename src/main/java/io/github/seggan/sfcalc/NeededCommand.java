@@ -34,7 +34,7 @@ public class NeededCommand extends AbstractCommand {
             return;
         }
 
-        if (args.length > 3) {
+        if (args.length > 3 || args.length < 2) {
             return;
         }
 

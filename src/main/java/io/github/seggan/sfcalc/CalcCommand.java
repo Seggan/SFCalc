@@ -28,7 +28,7 @@ public class CalcCommand extends AbstractCommand {
 
         StringRegistry registry = SFCalc.inst().getStringRegistry();
 
-        if (args.length > 3) {
+        if (args.length > 3 || args.length < 2) {
             return;
         }
 
