@@ -67,8 +67,7 @@ public class NeededCommand extends AbstractCommand {
 
         SFCalcMetrics.addItemSearched(item.getItemName());
 
-        Calculator calculator = new Calculator(SFCalc.inst().getBlacklistedRecipes(), SFCalc.inst().getBlacklistedIds());
-        calculator.printResults(sender, item, amount, true);
+        Calculator.printResults(sender, item, amount, true);
     }
 
     @Override

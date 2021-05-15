@@ -20,8 +20,8 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
 
     private static SFCalc instance;
 
-    private final Set<RecipeType> blacklistedRecipes = new HashSet<>();
-    private final Set<String> blacklistedIds = new HashSet<>();
+    private final static Set<RecipeType> blacklistedRecipes = new HashSet<>();
+    private final static Set<String> blacklistedIds = new HashSet<>();
 
     private StringRegistry stringRegistry;
 
@@ -47,12 +47,20 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
         blacklistedIds.add("UU_MATTER");
         blacklistedIds.add("SILICON");
         blacklistedIds.add("FALLEN_METEOR");
+
     }
 
     @Nonnull
     @Override
     public JavaPlugin getJavaPlugin() {
         return this;
+    }
+
+    public static Set<RecipeType> getBlacklistedRecipes() {
+        return blacklistedRecipes;
+    }
+    public static Set<String> getBlacklistedIds() {
+        return blacklistedIds;
     }
 
     @Override

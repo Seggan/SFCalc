@@ -27,11 +27,9 @@ import static io.github.seggan.sfcalc.StringRegistry.format;
  * @author Seggan
  * @author TheBusyBiscuit
  */
-@AllArgsConstructor
 public class Calculator {
 
-    private final Set<RecipeType> blacklistedRecipes;
-    private final Set<String> blacklistedIds;
+    private final static Map<ItemStack, Map<ItemStack, Long>> calculated = new HashMap<>();
 
     /**
      * Calculates the resources for the item and prints the out to the specified {@link CommandSender}
@@ -42,7 +40,7 @@ public class Calculator {
      * @param needed whether it should print out how many are needed. Requires {@code sender instanceof Player}
      * to be {@code true}
      */
-    public void printResults(@Nonnull CommandSender sender, @Nonnull SlimefunItem item, long amount, boolean needed) {
+    public static void printResults(@Nonnull CommandSender sender, @Nonnull SlimefunItem item, long amount, boolean needed) {
         Map<ItemStack, Long> results = calculate(item);
 
         StringRegistry registry = SFCalc.inst().getStringRegistry();
@@ -92,7 +90,7 @@ public class Calculator {
     }
 
     @Nonnull
-    private Map<ItemStack, Long> getInventoryAsItemList(@Nonnull Player player) {
+    private static Map<ItemStack, Long> getInventoryAsItemList(@Nonnull Player player) {
         Map<ItemStack, Long> inv = new HashMap<>();
 
         for (ItemStack item : player.getInventory().getContents()) {
@@ -108,9 +106,8 @@ public class Calculator {
     }
 
     @Nonnull
-    public Map<ItemStack, Long> calculate(@Nonnull SlimefunItem item) {
+    public static Map<ItemStack, Long> calculate(@Nonnull SlimefunItem item) {
         Map<ItemStack, Long> result = new HashMap<>();
-        Map<ItemStack, Map<ItemStack, Long>> calculated = new HashMap<>(); // stores names that are already calculated for reference
 
         for (ItemStack i : item.getRecipe()) {
             if (i == null) {
@@ -139,10 +136,10 @@ public class Calculator {
                     continue;
                 }
 
-                if (blacklistedIds.contains(ingredient.getId())) {
+                if (SFCalc.getBlacklistedIds().contains(ingredient.getId())) {
                     // it's a blacklisted item
                     add(recipe, i, 1);
-                } else if (blacklistedRecipes.contains(ingredient.getRecipeType())) {
+                } else if (SFCalc.getBlacklistedRecipes().contains(ingredient.getRecipeType())) {
                     // item is a dust or a geo miner resource; just add it
                     add(recipe, i, 1);
                 } else {
@@ -158,11 +155,11 @@ public class Calculator {
         return result;
     }
 
-    private void add(@Nonnull Map<ItemStack, Long> map, @Nonnull ItemStack key, long amount) {
+    private static void add(@Nonnull Map<ItemStack, Long> map, @Nonnull ItemStack key, long amount) {
         map.merge(key, amount, Long::sum);
     }
 
-    private void addAll(@Nonnull Map<ItemStack, Long> map, @Nonnull Map<ItemStack, Long> otherMap, long multiplier) {
+    private static void addAll(@Nonnull Map<ItemStack, Long> map, @Nonnull Map<ItemStack, Long> otherMap, long multiplier) {
         for (Map.Entry<ItemStack, Long> entry : otherMap.entrySet()) {
             add(map, entry.getKey(), entry.getValue() * multiplier);
         }
