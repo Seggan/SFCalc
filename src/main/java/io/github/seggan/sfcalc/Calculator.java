@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import static io.github.seggan.sfcalc.StringRegistry.format;
 
@@ -65,7 +66,9 @@ public class Calculator {
 
             for (Map.Entry<ItemStack, Long> entry : entries) {
                 Long inInventory = inv.getOrDefault(entry.getKey(), 0L);
-                long a = entry.getValue() * amount - inInventory;
+                if(entry.getValue() <= 0) continue; //intermediate product/byproduct
+                long a = entry.getValue() - inInventory;
+                if(a < 0) a = 0;
                 String parsedAmount;
                 int maxStackSize = entry.getKey().getMaxStackSize();
                 if (a <= maxStackSize) {
@@ -100,7 +103,6 @@ public class Calculator {
             if (item == null || item.getType().isAir()) {
                 continue;
             }
-
             add(inv, item, item.getAmount());
         }
 
@@ -165,7 +167,9 @@ public class Calculator {
     }
 
     private void add(@Nonnull Map<ItemStack, Long> map, @Nonnull ItemStack key, long amount) {
-        map.merge(key, amount, Long::sum);
+        ItemStack clone = key.clone();
+        clone.setAmount(1);
+        map.merge(clone, amount, Long::sum);
     }
 
     private void addAll(@Nonnull Map<ItemStack, Long> map, @Nonnull Map<ItemStack, Long> otherMap, long multiplier) {
