@@ -33,7 +33,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
         PluginUtils.setup("SFCalc", this, "Seggan/SFCalc/master", getFile());
         PluginUtils.setupMetrics(8812);
 
-        CommandManager.setup("sfcalc", "/sfc", new CalcCommand(), new NeededCommand());
+        CommandManager.setup("sfcalc", "/sfc", new CalcCommand(this), new NeededCommand(this));
 
         stringRegistry = new StringRegistry();
 
