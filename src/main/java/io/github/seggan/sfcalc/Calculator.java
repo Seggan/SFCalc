@@ -1,8 +1,11 @@
 package io.github.seggan.sfcalc;
 
+import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import lombok.AllArgsConstructor;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -18,6 +22,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.logging.Logger;
 
 import static io.github.seggan.sfcalc.StringRegistry.format;
 
@@ -29,7 +35,7 @@ import static io.github.seggan.sfcalc.StringRegistry.format;
  */
 public class Calculator {
 
-    private final static Map<ItemStack, Map<ItemStack, Long>> calculated = new HashMap<>();
+    private final static Map<Pair<ItemStack, Long>, Map<ItemStack, Long>> calculated = new HashMap<>();
 
     /**
      * Calculates the resources for the item and prints the out to the specified {@link CommandSender}
@@ -41,7 +47,7 @@ public class Calculator {
      * to be {@code true}
      */
     public static void printResults(@Nonnull CommandSender sender, @Nonnull SlimefunItem item, long amount, boolean needed) {
-        Map<ItemStack, Long> results = calculate(item);
+        Map<ItemStack, Long> results = calculate(item, amount);
 
         StringRegistry registry = SFCalc.inst().getStringRegistry();
 
@@ -76,7 +82,8 @@ public class Calculator {
             }
         } else {
             for (Map.Entry<ItemStack, Long> entry : entries) {
-                long originalValues = entry.getValue() * amount;
+                long originalValues = entry.getValue();
+                if(originalValues <= 0) continue;
                 String parsedAmount;
                 int maxStackSize = entry.getKey().getMaxStackSize();
                 if (originalValues <= maxStackSize) {
@@ -106,53 +113,51 @@ public class Calculator {
     }
 
     @Nonnull
-    public static Map<ItemStack, Long> calculate(@Nonnull SlimefunItem item) {
-        Map<ItemStack, Long> result = new HashMap<>();
-
-        for (ItemStack i : item.getRecipe()) {
-            if (i == null) {
-                // empty slot
-                continue;
-            }
-
-            int amount = i.getAmount();
-
-            if (calculated.containsKey(i)) { // check already calculated items
-                addAll(result, calculated.get(i), amount);
-                continue;
-            }
-
-            Map<ItemStack, Long> recipe = new HashMap<>();
-
-            SlimefunItem ingredient = SlimefunItem.getByItem(i);
-
-            if (ingredient == null) {
-                // ingredient is null; it's a vanilla item
-                add(recipe, i, 1);
-
-            } else {
-                if (ingredient.getRecipeType().getKey().getKey().toLowerCase(Locale.ROOT).equals("metal_forge")) {
-                    add(recipe, new ItemStack(Material.DIAMOND), 9);
-                    continue;
-                }
-
-                if (SFCalc.getBlacklistedIds().contains(ingredient.getId())) {
-                    // it's a blacklisted item
-                    add(recipe, i, 1);
-                } else if (SFCalc.getBlacklistedRecipes().contains(ingredient.getRecipeType())) {
-                    // item is a dust or a geo miner resource; just add it
-                    add(recipe, i, 1);
-                } else {
-                    // item is a crafted Slimefun item; get its ingredients
-                    addAll(recipe, calculate(ingredient), 1);
-                }
-            }
-
-            calculated.put(i, recipe);
-            addAll(result, recipe, amount);
+    public static Map<ItemStack, Long> calculate(@Nonnull SlimefunItem parent, Long amount) {
+//        SFCalc.inst().log("calcing " + amount + " " + parent.getId());
+        //check cache
+        if(calculated.containsKey(new Pair<>(parent.getItem(), amount))) {
+            return calculated.get(new Pair<>(parent.getItem(), amount));
         }
 
+
+        Map<ItemStack, Long> result = new HashMap<>();
+        add(result, parent.getItem(), amount);
+
+        //decompose the material
+        add(result, parent.getItem(), -parent.getRecipeOutput().getAmount());
+        for(ItemStack item : parent.getRecipe()) {
+            if(item == null) continue;
+            add(result, item, item.getAmount());
+        }
+
+        SlimefunItemStack next = getNextItem(result);
+        //calculate submaterials
+        while(next != null) {
+            add(result, next, -1);
+            Map<ItemStack, Long> craft = calculate(next.getItem(), 1L);
+            addAll(result, craft, 1);
+            next = getNextItem(result);
+        }
+        //store cache
+        calculated.put(new Pair<>(parent.getItem(), amount), result);
         return result;
+    }
+
+    @Nullable
+    private static SlimefunItemStack getNextItem(Map<ItemStack, Long> map) {
+        for(Map.Entry<ItemStack, Long> entry : map.entrySet()) {
+            if(entry.getKey() instanceof SlimefunItemStack) {
+                SlimefunItemStack ingredient = (SlimefunItemStack)entry.getKey();
+                if (!SFCalc.getBlacklistedIds().contains(ingredient.getItemId()) &&
+                        !SFCalc.getBlacklistedRecipes().contains(ingredient.getItem().getRecipeType())) {
+                    if(entry.getValue() > 0) {
+                        return ingredient;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private static void add(@Nonnull Map<ItemStack, Long> map, @Nonnull ItemStack key, long amount) {
