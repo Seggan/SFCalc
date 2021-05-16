@@ -1,14 +1,10 @@
 package io.github.seggan.sfcalc;
 
-import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
-import lombok.AllArgsConstructor;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -19,11 +15,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.logging.Logger;
 
 import static io.github.seggan.sfcalc.StringRegistry.format;
 
@@ -114,36 +106,45 @@ public class Calculator {
 
     @Nonnull
     public static Map<ItemStack, Long> calculate(@Nonnull SlimefunItem parent, Long amount) {
-//        SFCalc.inst().log("calcing " + amount + " " + parent.getId());
         //check cache
         if(calculated.containsKey(new Pair<>(parent.getItem(), amount))) {
             return calculated.get(new Pair<>(parent.getItem(), amount));
         }
 
-
         Map<ItemStack, Long> result = new HashMap<>();
         add(result, parent.getItem(), amount);
 
-        //decompose the material
+        //uncraft the material
         add(result, parent.getItem(), -parent.getRecipeOutput().getAmount());
         for(ItemStack item : parent.getRecipe()) {
             if(item == null) continue;
             add(result, item, item.getAmount());
         }
 
+        //uncraft submaterials if necessary
         SlimefunItemStack next = getNextItem(result);
-        //calculate submaterials
         while(next != null) {
             add(result, next, -1);
             Map<ItemStack, Long> craft = calculate(next.getItem(), 1L);
             addAll(result, craft, 1);
             next = getNextItem(result);
         }
+
         //store cache
         calculated.put(new Pair<>(parent.getItem(), amount), result);
         return result;
     }
 
+    /**
+     * Gets the next item of a map that needs to be uncrafted. Returns null if no items are found.
+     * An item needs to be uncrafted if
+     * - it is a slimefun item
+     * - there is a positive amount in the map(still requires crafting), and
+     * - it is not blacklisted.
+     *
+     * @param map
+     * @return
+     */
     @Nullable
     private static SlimefunItemStack getNextItem(Map<ItemStack, Long> map) {
         for(Map.Entry<ItemStack, Long> entry : map.entrySet()) {

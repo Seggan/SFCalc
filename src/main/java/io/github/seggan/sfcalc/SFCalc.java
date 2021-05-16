@@ -14,14 +14,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Getter
 public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
 
     private static SFCalc instance;
-    private Logger log;
 
     private final static Set<RecipeType> blacklistedRecipes = new HashSet<>();
     private final static Set<String> blacklistedIds = new HashSet<>();
@@ -31,7 +28,6 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
     @Override
     public void onEnable() {
         instance = this;
-        log = getLogger();
 
         PluginUtils.setup("SFCalc", this, "Seggan/SFCalc/master", getFile());
         PluginUtils.setupMetrics(8812);
@@ -82,8 +78,5 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
         if (e.getPlayer().isOp() && stringRegistry.getAmountString().contains("%s")) {
             e.getPlayer().sendMessage(ChatColor.RED + "[SFCalc] Hey, I see you are using outdated SFCalc config! For SFCalc to work properly, please delete config.yml and restart the server");
         }
-    }
-    public void log(String str) {
-        log.log(Level.INFO, str);
     }
 }
