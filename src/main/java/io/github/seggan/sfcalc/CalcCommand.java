@@ -61,7 +61,7 @@ public class CalcCommand extends AbstractCommand {
 
         SFCalcMetrics.addItemSearched(item.getItemName());
 
-        Calculator.printResults(sender, item, amount, false);
+        SFCalc.inst().getCalc().printResults(sender, item, amount, false);
     }
 
     @Override

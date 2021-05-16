@@ -17,17 +17,18 @@ import java.util.Set;
 
 @Getter
 public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
-
     private static SFCalc instance;
+    private Calculator calculator;
 
-    private final static Set<RecipeType> blacklistedRecipes = new HashSet<>();
-    private final static Set<String> blacklistedIds = new HashSet<>();
+    private final Set<RecipeType> blacklistedRecipes = new HashSet<>();
+    private final Set<String> blacklistedIds = new HashSet<>();
 
     private StringRegistry stringRegistry;
 
     @Override
     public void onEnable() {
         instance = this;
+        calculator = new Calculator(this);
 
         PluginUtils.setup("SFCalc", this, "Seggan/SFCalc/master", getFile());
         PluginUtils.setupMetrics(8812);
@@ -56,10 +57,10 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
         return this;
     }
 
-    public static Set<RecipeType> getBlacklistedRecipes() {
+    public Set<RecipeType> getBlacklistedRecipes() {
         return blacklistedRecipes;
     }
-    public static Set<String> getBlacklistedIds() {
+    public Set<String> getBlacklistedIds() {
         return blacklistedIds;
     }
 
@@ -71,6 +72,10 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
     @Nonnull
     static SFCalc inst() {
         return instance;
+    }
+
+    public Calculator getCalc() {
+        return calculator;
     }
 
     @EventHandler

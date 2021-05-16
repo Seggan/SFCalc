@@ -26,9 +26,12 @@ import static io.github.seggan.sfcalc.StringRegistry.format;
  * @author TheBusyBiscuit
  */
 public class Calculator {
+    private SFCalc plugin;
+    private final Map<Pair<ItemStack, Long>, Map<ItemStack, Long>> calculated = new HashMap<>();
 
-    private final static Map<Pair<ItemStack, Long>, Map<ItemStack, Long>> calculated = new HashMap<>();
-
+    public Calculator(SFCalc pl) {
+        this.plugin = pl;
+    }
     /**
      * Calculates the resources for the item and prints the out to the specified {@link CommandSender}
      *
@@ -38,10 +41,10 @@ public class Calculator {
      * @param needed whether it should print out how many are needed. Requires {@code sender instanceof Player}
      * to be {@code true}
      */
-    public static void printResults(@Nonnull CommandSender sender, @Nonnull SlimefunItem item, long amount, boolean needed) {
+    public void printResults(@Nonnull CommandSender sender, @Nonnull SlimefunItem item, long amount, boolean needed) {
         Map<ItemStack, Long> results = calculate(item, amount);
 
-        StringRegistry registry = SFCalc.inst().getStringRegistry();
+        StringRegistry registry = plugin.getStringRegistry();
 
         String header;
         String name = getBasicName(item.getItem());
@@ -89,7 +92,7 @@ public class Calculator {
     }
 
     @Nonnull
-    private static Map<ItemStack, Long> getInventoryAsItemList(@Nonnull Player player) {
+    private Map<ItemStack, Long> getInventoryAsItemList(@Nonnull Player player) {
         Map<ItemStack, Long> inv = new HashMap<>();
 
         for (ItemStack item : player.getInventory().getContents()) {
@@ -105,7 +108,7 @@ public class Calculator {
     }
 
     @Nonnull
-    public static Map<ItemStack, Long> calculate(@Nonnull SlimefunItem parent, Long amount) {
+    public Map<ItemStack, Long> calculate(@Nonnull SlimefunItem parent, Long amount) {
         //check cache
         if(calculated.containsKey(new Pair<>(parent.getItem(), amount))) {
             return calculated.get(new Pair<>(parent.getItem(), amount));
@@ -146,12 +149,12 @@ public class Calculator {
      * @return
      */
     @Nullable
-    private static SlimefunItemStack getNextItem(Map<ItemStack, Long> map) {
+    private SlimefunItemStack getNextItem(Map<ItemStack, Long> map) {
         for(Map.Entry<ItemStack, Long> entry : map.entrySet()) {
             if(entry.getKey() instanceof SlimefunItemStack) {
                 SlimefunItemStack ingredient = (SlimefunItemStack)entry.getKey();
-                if (!SFCalc.getBlacklistedIds().contains(ingredient.getItemId()) &&
-                        !SFCalc.getBlacklistedRecipes().contains(ingredient.getItem().getRecipeType())) {
+                if (!plugin.getBlacklistedIds().contains(ingredient.getItemId()) &&
+                        !plugin.getBlacklistedRecipes().contains(ingredient.getItem().getRecipeType())) {
                     if(entry.getValue() > 0) {
                         return ingredient;
                     }
@@ -161,18 +164,18 @@ public class Calculator {
         return null;
     }
 
-    private static void add(@Nonnull Map<ItemStack, Long> map, @Nonnull ItemStack key, long amount) {
+    private void add(@Nonnull Map<ItemStack, Long> map, @Nonnull ItemStack key, long amount) {
         map.merge(key, amount, Long::sum);
     }
 
-    private static void addAll(@Nonnull Map<ItemStack, Long> map, @Nonnull Map<ItemStack, Long> otherMap, long multiplier) {
+    private void addAll(@Nonnull Map<ItemStack, Long> map, @Nonnull Map<ItemStack, Long> otherMap, long multiplier) {
         for (Map.Entry<ItemStack, Long> entry : otherMap.entrySet()) {
             add(map, entry.getKey(), entry.getValue() * multiplier);
         }
     }
 
     @Nonnull
-    private static String getBasicName(ItemStack stack) {
+    private String getBasicName(ItemStack stack) {
         return ChatColor.stripColor(ItemUtils.getItemName(stack));
     }
 }
