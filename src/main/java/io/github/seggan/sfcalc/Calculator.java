@@ -29,7 +29,6 @@ import static io.github.seggan.sfcalc.StringRegistry.format;
  */
 public class Calculator {
     private SFCalc plugin;
-    private final Map<Pair<ItemStack, Long>, Map<ItemStack, Long>> calculated = new HashMap<>();
 
     public Calculator(SFCalc pl) {
         this.plugin = pl;
