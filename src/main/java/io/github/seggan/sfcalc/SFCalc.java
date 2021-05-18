@@ -12,7 +12,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @Getter
@@ -28,7 +30,6 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
     @Override
     public void onEnable() {
         instance = this;
-        calculator = new Calculator(this);
 
         PluginUtils.setup("SFCalc", this, "Seggan/SFCalc/master", getFile());
         PluginUtils.setupMetrics(8812);
@@ -36,6 +37,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
         CommandManager.setup("sfcalc", "/sfc", new CalcCommand(this), new NeededCommand(this));
 
         stringRegistry = new StringRegistry();
+        calculator = new Calculator(this);
 
         blacklistedRecipes.add(RecipeType.ORE_WASHER);
         blacklistedRecipes.add(RecipeType.GEO_MINER);
@@ -55,13 +57,6 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
     @Override
     public JavaPlugin getJavaPlugin() {
         return this;
-    }
-
-    public Set<RecipeType> getBlacklistedRecipes() {
-        return blacklistedRecipes;
-    }
-    public Set<String> getBlacklistedIds() {
-        return blacklistedIds;
     }
 
     @Override
