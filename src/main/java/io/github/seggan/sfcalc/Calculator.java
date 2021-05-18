@@ -4,6 +4,7 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -43,55 +44,57 @@ public class Calculator {
      * to be {@code true}
      */
     public void printResults(@Nonnull CommandSender sender, @Nonnull SlimefunItem item, long amount, boolean needed) {
-        Map<ItemStack, Long> results = calculate(item, amount);
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            Map<ItemStack, Long> results = calculate(item, amount);
 
-        StringRegistry registry = plugin.getStringRegistry();
+            StringRegistry registry = plugin.getStringRegistry();
 
-        String header;
-        String name = getBasicName(item.getItem());
-        if (amount == 1) {
-            header = format(registry.getHeaderString(), name);
-        } else {
-            header = format(registry.getHeaderAmountString(), name, amount);
-        }
-
-        sender.sendMessage(header);
-
-        // This will put our entries in order from lowest to highest
-        List<Map.Entry<ItemStack, Long>> entries = new ArrayList<>(results.entrySet());
-        entries.sort(Comparator.comparingLong(Map.Entry::getValue));
-
-        if (needed && sender instanceof Player) {
-            Map<ItemStack, Long> inv = getInventoryAsItemList((Player) sender);
-
-            for (Map.Entry<ItemStack, Long> entry : entries) {
-                Long inInventory = inv.getOrDefault(entry.getKey(), 0L);
-                if(entry.getValue() <= 0) continue; //intermediate product/byproduct
-                long a = entry.getValue() - inInventory;
-                if(a < 0) a = 0;
-                String parsedAmount;
-                int maxStackSize = entry.getKey().getMaxStackSize();
-                if (a <= maxStackSize) {
-                    parsedAmount = Long.toString(a);
-                } else {
-                    parsedAmount = format(registry.getStackString(), a, (long) Math.floor((double) a / maxStackSize), maxStackSize, a % maxStackSize);
-                }
-                sender.sendMessage(format(registry.getNeededString(), getBasicName(entry.getKey()), parsedAmount));
+            String header;
+            String name = getBasicName(item.getItem());
+            if (amount == 1) {
+                header = format(registry.getHeaderString(), name);
+            } else {
+                header = format(registry.getHeaderAmountString(), name, amount);
             }
-        } else {
-            for (Map.Entry<ItemStack, Long> entry : entries) {
-                long originalValues = entry.getValue();
-                if(originalValues <= 0) continue;
-                String parsedAmount;
-                int maxStackSize = entry.getKey().getMaxStackSize();
-                if (originalValues <= maxStackSize) {
-                    parsedAmount = Long.toString(originalValues);
-                } else {
-                    parsedAmount = format(registry.getStackString(), originalValues, (long) Math.floor(originalValues / (float) maxStackSize), maxStackSize, originalValues % maxStackSize);
+
+            sender.sendMessage(header);
+
+            // This will put our entries in order from lowest to highest
+            List<Map.Entry<ItemStack, Long>> entries = new ArrayList<>(results.entrySet());
+            entries.sort(Comparator.comparingLong(Map.Entry::getValue));
+
+            if (needed && sender instanceof Player) {
+                Map<ItemStack, Long> inv = getInventoryAsItemList((Player) sender);
+
+                for (Map.Entry<ItemStack, Long> entry : entries) {
+                    Long inInventory = inv.getOrDefault(entry.getKey(), 0L);
+                    if(entry.getValue() <= 0) continue; //intermediate product/byproduct
+                    long a = entry.getValue() - inInventory;
+                    if(a < 0) a = 0;
+                    String parsedAmount;
+                    int maxStackSize = entry.getKey().getMaxStackSize();
+                    if (a <= maxStackSize) {
+                        parsedAmount = Long.toString(a);
+                    } else {
+                        parsedAmount = format(registry.getStackString(), a, (long) Math.floor((double) a / maxStackSize), maxStackSize, a % maxStackSize);
+                    }
+                    sender.sendMessage(format(registry.getNeededString(), getBasicName(entry.getKey()), parsedAmount));
                 }
-                sender.sendMessage(format(registry.getAmountString(), getBasicName(entry.getKey()), parsedAmount));
+            } else {
+                for (Map.Entry<ItemStack, Long> entry : entries) {
+                    long originalValues = entry.getValue();
+                    if(originalValues <= 0) continue;
+                    String parsedAmount;
+                    int maxStackSize = entry.getKey().getMaxStackSize();
+                    if (originalValues <= maxStackSize) {
+                        parsedAmount = Long.toString(originalValues);
+                    } else {
+                        parsedAmount = format(registry.getStackString(), originalValues, (long) Math.floor(originalValues / (float) maxStackSize), maxStackSize, originalValues % maxStackSize);
+                    }
+                    sender.sendMessage(format(registry.getAmountString(), getBasicName(entry.getKey()), parsedAmount));
+                }
             }
-        }
+        });
     }
 
     @Nonnull
@@ -111,10 +114,6 @@ public class Calculator {
 
     @Nonnull
     public Map<ItemStack, Long> calculate(@Nonnull SlimefunItem parent, Long amount) {
-        //check cache
-        if(calculated.containsKey(new Pair<>(parent.getItem(), amount))) {
-            return calculated.get(new Pair<>(parent.getItem(), amount));
-        }
 
         Map<ItemStack, Long> result = new HashMap<>();
         add(result, parent.getItem(), amount);
@@ -126,17 +125,19 @@ public class Calculator {
             add(result, item, item.getAmount());
         }
 
-        //uncraft submaterials if necessary
+        //uncraft submaterials
         SlimefunItemStack next = getNextItem(result);
         while(next != null) {
-            add(result, next, -1);
-            Map<ItemStack, Long> craft = calculate(next.getItem(), 1L);
-            addAll(result, craft, 1);
+            int multiplier = next.getItem().getRecipeOutput().getAmount();
+            Long operations = (result.get(next)+multiplier-1)/multiplier; //ceiling(needed/multiplier) but abusing fast ints
+            add(result, next, -(multiplier*operations));
+            for(ItemStack item : next.getItem().getRecipe()) {
+                if(item == null) continue;
+                add(result, item, item.getAmount() * operations);
+            }
             next = getNextItem(result);
         }
 
-        //store cache
-        calculated.put(new Pair<>(parent.getItem(), amount), result);
         return result;
     }
 
