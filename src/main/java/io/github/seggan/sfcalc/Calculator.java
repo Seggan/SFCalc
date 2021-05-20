@@ -66,7 +66,7 @@ public class Calculator {
                 Map<ItemStack, Long> inv = getInventoryAsItemList((Player) sender);
 
                 for (Map.Entry<ItemStack, Long> entry : entries) {
-                    Long inInventory = inv.getOrDefault(entry.getKey(), 0L);
+                    long inInventory = inv.getOrDefault(entry.getKey(), 0L);
                     if(entry.getValue() <= 0) continue; //intermediate product/byproduct
                     long a = entry.getValue() - inInventory;
                     if(a < 0) a = 0;
