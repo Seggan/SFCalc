@@ -112,7 +112,7 @@ public class Calculator {
     }
 
     @Nonnull
-    public Map<ItemStack, Long> calculate(@Nonnull SlimefunItem parent, Long amount) {
+    public Map<ItemStack, Long> calculate(@Nonnull SlimefunItem parent, long amount) {
 
         Map<ItemStack, Long> result = new HashMap<>();
         add(result, parent.getItem(), amount);
