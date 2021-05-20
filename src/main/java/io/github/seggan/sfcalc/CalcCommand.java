@@ -12,12 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static io.github.seggan.sfcalc.StringRegistry.format;
+
 public class CalcCommand extends AbstractCommand {
-
     private static final List<String> ids = new ArrayList<>();
+    private SFCalc plugin;
 
-    public CalcCommand() {
+    public CalcCommand(SFCalc pl) {
         super("calc", "Calculates the resources needed for a given item", false);
+        this.plugin = pl;
     }
 
     @Override
@@ -26,7 +29,7 @@ public class CalcCommand extends AbstractCommand {
         String reqItem;
         SlimefunItem item;
 
-        StringRegistry registry = SFCalc.inst().getStringRegistry();
+        StringRegistry registry = plugin.getStringRegistry();
 
         if (args.length > 3 || args.length < 2) {
             return;
@@ -37,17 +40,17 @@ public class CalcCommand extends AbstractCommand {
         if (args.length == 2) {
             amount = 1;
         } else if (!PatternUtils.NUMERIC.matcher(args[2]).matches()) {
-            sender.sendMessage(registry.getNotANumberString());
+            sender.sendMessage(format(registry.getNotANumberString()));
             return;
         } else {
             try {
                 amount = Long.parseLong(args[2]);
                 if (amount == 0 || amount > Integer.MAX_VALUE) {
-                    sender.sendMessage(registry.getInvalidNumberString());
+                    sender.sendMessage(format(registry.getInvalidNumberString()));
                     return;
                 }
             } catch (NumberFormatException e) {
-                sender.sendMessage(registry.getInvalidNumberString());
+                sender.sendMessage(format(registry.getInvalidNumberString()));
                 return;
             }
         }
@@ -55,14 +58,13 @@ public class CalcCommand extends AbstractCommand {
         item = SlimefunItem.getByID(reqItem.toUpperCase(Locale.ROOT));
 
         if (item == null) {
-            sender.sendMessage(registry.getNoItemString());
+            sender.sendMessage(format(registry.getNoItemString()));
             return;
         }
 
         SFCalcMetrics.addItemSearched(item.getItemName());
 
-        Calculator calculator = new Calculator(SFCalc.inst().getBlacklistedRecipes(), SFCalc.inst().getBlacklistedIds());
-        calculator.printResults(sender, item, amount, false);
+        plugin.getCalc().printResults(sender, item, amount, false);
     }
 
     @Override

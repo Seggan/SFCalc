@@ -12,13 +12,15 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @Getter
 public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
-
     private static SFCalc instance;
+    private Calculator calculator;
 
     private final Set<RecipeType> blacklistedRecipes = new HashSet<>();
     private final Set<String> blacklistedIds = new HashSet<>();
@@ -32,9 +34,10 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
         PluginUtils.setup("SFCalc", this, "Seggan/SFCalc/master", getFile());
         PluginUtils.setupMetrics(8812);
 
-        CommandManager.setup("sfcalc", "/sfc", new CalcCommand(), new NeededCommand());
+        CommandManager.setup("sfcalc", "/sfc", new CalcCommand(this), new NeededCommand(this));
 
         stringRegistry = new StringRegistry();
+        calculator = new Calculator(this);
 
         blacklistedRecipes.add(RecipeType.ORE_WASHER);
         blacklistedRecipes.add(RecipeType.GEO_MINER);
@@ -47,6 +50,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
         blacklistedIds.add("UU_MATTER");
         blacklistedIds.add("SILICON");
         blacklistedIds.add("FALLEN_METEOR");
+
     }
 
     @Nonnull
@@ -63,6 +67,10 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
     @Nonnull
     static SFCalc inst() {
         return instance;
+    }
+
+    public Calculator getCalc() {
+        return calculator;
     }
 
     @EventHandler
