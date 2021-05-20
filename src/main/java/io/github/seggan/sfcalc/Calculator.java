@@ -128,7 +128,7 @@ public class Calculator {
         SlimefunItemStack next = getNextItem(result);
         while(next != null) {
             int multiplier = next.getItem().getRecipeOutput().getAmount();
-            Long operations = (result.get(next)+multiplier-1)/multiplier; //ceiling(needed/multiplier) but abusing fast ints
+            long operations = (result.get(next)+multiplier-1)/multiplier; //ceiling(needed/multiplier) but abusing fast ints
             add(result, next, -(multiplier*operations));
             for(ItemStack item : next.getItem().getRecipe()) {
                 if(item == null) continue;
