@@ -2,7 +2,6 @@ package io.github.seggan.sfcalc;
 
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
-import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,9 +16,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
-import static io.github.seggan.sfcalc.StringRegistry.format;
+import static io.github.seggan.sfcalc.StringRegistry.*;
 
 /**
  * The main class for the calculator
@@ -28,7 +26,7 @@ import static io.github.seggan.sfcalc.StringRegistry.format;
  * @author TheBusyBiscuit
  */
 public class Calculator {
-    private SFCalc plugin;
+    private final SFCalc plugin;
 
     public Calculator(SFCalc pl) {
         this.plugin = pl;
@@ -146,9 +144,6 @@ public class Calculator {
      * - it is a slimefun item
      * - there is a positive amount in the map(still requires crafting), and
      * - it is not blacklisted.
-     *
-     * @param map
-     * @return
      */
     @Nullable
     private SlimefunItemStack getNextItem(Map<ItemStack, Long> map) {
@@ -170,12 +165,6 @@ public class Calculator {
         ItemStack clone = key.clone();
         clone.setAmount(1);
         map.merge(clone, amount, Long::sum);
-    }
-
-    private void addAll(@Nonnull Map<ItemStack, Long> map, @Nonnull Map<ItemStack, Long> otherMap, long multiplier) {
-        for (Map.Entry<ItemStack, Long> entry : otherMap.entrySet()) {
-            add(map, entry.getKey(), entry.getValue() * multiplier);
-        }
     }
 
     @Nonnull

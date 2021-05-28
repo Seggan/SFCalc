@@ -12,9 +12,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 @Getter
@@ -50,6 +48,7 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
         blacklistedIds.add("UU_MATTER");
         blacklistedIds.add("SILICON");
         blacklistedIds.add("FALLEN_METEOR");
+        blacklistedIds.add("RUBBER");
 
     }
 

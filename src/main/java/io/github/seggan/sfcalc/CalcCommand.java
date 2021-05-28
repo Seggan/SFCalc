@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static io.github.seggan.sfcalc.StringRegistry.format;
+import static io.github.seggan.sfcalc.StringRegistry.*;
 
 public class CalcCommand extends AbstractCommand {
     private static final List<String> ids = new ArrayList<>();
-    private SFCalc plugin;
+    private final SFCalc plugin;
 
     public CalcCommand(SFCalc pl) {
         super("calc", "Calculates the resources needed for a given item", false);

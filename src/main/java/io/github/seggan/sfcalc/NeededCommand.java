@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static io.github.seggan.sfcalc.StringRegistry.format;
+import static io.github.seggan.sfcalc.StringRegistry.*;
 
 public class NeededCommand extends AbstractCommand {
     private static final List<String> ids = new ArrayList<>();
-    private SFCalc plugin;
+    private final SFCalc plugin;
 
     public NeededCommand(SFCalc pl) {
         super("needed", "Tells you how much more resources are needed", false);
