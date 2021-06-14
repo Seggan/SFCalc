@@ -1,22 +1,25 @@
 package io.github.seggan.sfcalc;
 
-import io.github.mooy1.infinitylib.commands.CommandManager;
-import io.github.mooy1.infinitylib.core.PluginUtils;
-import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import lombok.Getter;
+import io.github.mooy1.infinitylib.AbstractAddon;
+import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
+import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.annotation.Nonnull;
+import lombok.Getter;
+
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 @Getter
-public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
+public class SFCalc extends AbstractAddon implements Listener {
     private static SFCalc instance;
     private Calculator calculator;
 
@@ -26,13 +29,8 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
     private StringRegistry stringRegistry;
 
     @Override
-    public void onEnable() {
+    protected void enable() {
         instance = this;
-
-        PluginUtils.setup("SFCalc", this, "Seggan/SFCalc/master", getFile());
-        PluginUtils.setupMetrics(8812);
-
-        CommandManager.setup("sfcalc", "/sfc", new CalcCommand(this), new NeededCommand(this));
 
         stringRegistry = new StringRegistry();
         calculator = new Calculator(this);
@@ -49,18 +47,35 @@ public class SFCalc extends JavaPlugin implements SlimefunAddon, Listener {
         blacklistedIds.add("SILICON");
         blacklistedIds.add("FALLEN_METEOR");
         blacklistedIds.add("RUBBER");
+    }
 
+    @Override
+    protected void disable() {
+        instance = null;
     }
 
     @Nonnull
     @Override
-    public JavaPlugin getJavaPlugin() {
-        return this;
+    protected String getGithubPath() {
+        return "Seggan/SFCalc/master";
     }
 
+    @Nullable
     @Override
-    public String getBugTrackerURL() {
-        return "https://github.com/Seggan/SFCalc/issues";
+    public String getAutoUpdatePath() {
+        return "auto-updates";
+    }
+
+    @Nullable
+    @Override
+    protected Metrics setupMetrics() {
+        return new SFCalcMetrics(this);
+    }
+
+    @Nullable
+    @Override
+    protected List<AbstractCommand> setupSubCommands() {
+        return Arrays.asList(new CalcCommand(this), new NeededCommand(this));
     }
 
     @Nonnull

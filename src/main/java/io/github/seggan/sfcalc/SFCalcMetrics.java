@@ -1,6 +1,8 @@
 package io.github.seggan.sfcalc;
 
 import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
+import io.github.mooy1.infinitylib.bstats.charts.AdvancedPie;
+import io.github.mooy1.infinitylib.bstats.charts.SingleLineChart;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +21,7 @@ public class SFCalcMetrics extends Metrics {
     public SFCalcMetrics(SFCalc plugin) {
         super(plugin, 8812);
 
-        addCustomChart(new Metrics.AdvancedPie("items_searched", () -> {
+        addCustomChart(new AdvancedPie("items_searched", () -> {
             Map<String, Integer> result = new HashMap<>();
             Set<String> itemSet = new HashSet<>(itemsSearched);
 
@@ -37,7 +39,7 @@ public class SFCalcMetrics extends Metrics {
             return result;
         }));
 
-        addCustomChart(new Metrics.SingleLineChart("searches", () -> {
+        addCustomChart(new SingleLineChart("searches", () -> {
             int searches = itemsSearched.size();
 
             if (sent) {

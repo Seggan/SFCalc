@@ -1,12 +1,12 @@
 package io.github.seggan.sfcalc;
 
-import io.github.mooy1.infinitylib.core.ConfigUtils;
-import lombok.Getter;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import org.apache.commons.lang.Validate;
 
-import javax.annotation.Nonnull;
+import lombok.Getter;
+
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
 
 @Getter
 public final class StringRegistry {
@@ -26,17 +26,17 @@ public final class StringRegistry {
     private final String invalidNumberString;
 
     StringRegistry() {
-        headerString = ConfigUtils.getString("header-string", "&e&nRecipe for %s:");
-        headerAmountString = ConfigUtils.getString("header-amount-string", "&e&nRecipe for %d %s:");
-        stackString = ConfigUtils.getString("stack-string", "&e%d (%d x%d + %d)");
-        amountString = ConfigUtils.getString("amount-string", "&e%s of %s");
-        neededString = ConfigUtils.getString("needed-string", "&e%s more %s needed");
-        noItemString = ConfigUtils.getString("no-item-string", "&cThat item was not found.");
-        notANumberString = ConfigUtils.getString("not-a-number-string", "&cThat's not a number!");
-        tooManyCategoriesString = ConfigUtils.getString("category-error-string", "&cThat many categories is not supported yet. Please use the command form of the calculator.");
-        tooManyItemsString = ConfigUtils.getString("item-error-string", "&cThat many items is not supported yet. Please use the command form of the calculator.");
-        notAPlayerString = ConfigUtils.getString("not-a-player-string", "&cYou must be a player to send this message!");
-        invalidNumberString = ConfigUtils.getString("invalid-number-string", "&cInvalid number!");
+        headerString = SFCalc.inst().getConfig().getString("header-string", "&e&nRecipe for %s:");
+        headerAmountString = SFCalc.inst().getConfig().getString("header-amount-string", "&e&nRecipe for %d %s:");
+        stackString = SFCalc.inst().getConfig().getString("stack-string", "&e%d (%d x%d + %d)");
+        amountString = SFCalc.inst().getConfig().getString("amount-string", "&e%s of %s");
+        neededString = SFCalc.inst().getConfig().getString("needed-string", "&e%s more %s needed");
+        noItemString = SFCalc.inst().getConfig().getString("no-item-string", "&cThat item was not found.");
+        notANumberString = SFCalc.inst().getConfig().getString("not-a-number-string", "&cThat's not a number!");
+        tooManyCategoriesString = SFCalc.inst().getConfig().getString("category-error-string", "&cThat many categories is not supported yet. Please use the command form of the calculator.");
+        tooManyItemsString = SFCalc.inst().getConfig().getString("item-error-string", "&cThat many items is not supported yet. Please use the command form of the calculator.");
+        notAPlayerString = SFCalc.inst().getConfig().getString("not-a-player-string", "&cYou must be a player to send this message!");
+        invalidNumberString = SFCalc.inst().getConfig().getString("invalid-number-string", "&cInvalid number!");
     }
 
     @Nonnull

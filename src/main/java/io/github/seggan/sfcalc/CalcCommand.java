@@ -7,10 +7,10 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import javax.annotation.Nonnull;
 
 import static io.github.seggan.sfcalc.StringRegistry.*;
 
@@ -24,7 +24,7 @@ public class CalcCommand extends AbstractCommand {
     }
 
     @Override
-    protected void onExecute(@Nonnull CommandSender sender, @Nonnull String[] args) {
+    public void onExecute(@Nonnull CommandSender sender, @Nonnull String[] args) {
         long amount;
         String reqItem;
         SlimefunItem item;
@@ -68,7 +68,7 @@ public class CalcCommand extends AbstractCommand {
     }
 
     @Override
-    protected void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
+    public void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
         if (ids.isEmpty()) {
             for (SlimefunItem item : SlimefunPlugin.getRegistry().getEnabledSlimefunItems()) {
                 ids.add(item.getId().toLowerCase(Locale.ROOT));
