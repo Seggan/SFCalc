@@ -20,6 +20,7 @@ import javax.annotation.Nullable;
 
 @Getter
 public class SFCalc extends AbstractAddon implements Listener {
+
     private static SFCalc instance;
     private Calculator calculator;
 
@@ -93,4 +94,5 @@ public class SFCalc extends AbstractAddon implements Listener {
             e.getPlayer().sendMessage(ChatColor.RED + "[SFCalc] Hey, I see you are using outdated SFCalc config! For SFCalc to work properly, please delete config.yml and restart the server");
         }
     }
+
 }

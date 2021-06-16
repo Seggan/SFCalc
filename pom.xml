@@ -60,6 +60,17 @@
                             <shadedPattern>io.github.seggan.sfcalc.infinitylib</shadedPattern>
                         </relocation>
                     </relocations>
+                    <filters>
+                        <filter>
+                            <artifact>io.github.mooy1:InfinityLib</artifact>
+                            <includes>
+                                <include>**/infinitylib/AbstractAddon.java/**</include>
+                                <include>**/infinitylib/configuration/**</include>
+                                <include>**/infinitylib/commands/**</include>
+                                <include>**/infinitylib/bstats/**</include>
+                            </includes>
+                        </filter>
+                    </filters>
                 </configuration>
                 <executions>
                     <execution>
@@ -83,11 +94,6 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-
-        <repository>
-            <id>CodeMC</id>
-            <url>https://repo.codemc.org/repository/maven-public</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -108,7 +114,7 @@
         <dependency>
             <groupId>io.github.mooy1</groupId>
             <artifactId>InfinityLib</artifactId>
-            <version>cd3d15a1c6</version>
+            <version>92a4b20</version>
             <scope>compile</scope>
         </dependency>
 
