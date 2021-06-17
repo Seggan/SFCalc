@@ -33,7 +33,7 @@ public class SFCalc extends AbstractAddon implements Listener {
     protected void enable() {
         instance = this;
 
-        stringRegistry = new StringRegistry();
+        stringRegistry = new StringRegistry(getConfig());
         calculator = new Calculator(this);
 
         blacklistedRecipes.add(RecipeType.ORE_WASHER);
@@ -86,13 +86,6 @@ public class SFCalc extends AbstractAddon implements Listener {
 
     public Calculator getCalc() {
         return calculator;
-    }
-
-    @EventHandler
-    public void onOpJoin(PlayerJoinEvent e) {
-        if (e.getPlayer().isOp() && stringRegistry.getAmountString().contains("%s")) {
-            e.getPlayer().sendMessage(ChatColor.RED + "[SFCalc] Hey, I see you are using outdated SFCalc config! For SFCalc to work properly, please delete config.yml and restart the server");
-        }
     }
 
 }

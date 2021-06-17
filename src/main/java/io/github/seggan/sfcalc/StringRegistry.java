@@ -1,17 +1,19 @@
 package io.github.seggan.sfcalc;
 
-import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
-import org.apache.commons.lang.Validate;
+import java.io.IOException;
+
+import javax.annotation.Nonnull;
 
 import lombok.Getter;
 
-import java.util.regex.Pattern;
-import javax.annotation.Nonnull;
+import org.apache.commons.lang.Validate;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import io.github.mooy1.infinitylib.configuration.AddonConfig;
+import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 
 @Getter
 public final class StringRegistry {
-
-    private static final Pattern FORMAT_PATTERN = Pattern.compile("%\\d");
 
     private final String headerString;
     private final String headerAmountString;
@@ -25,18 +27,23 @@ public final class StringRegistry {
     private final String notAPlayerString;
     private final String invalidNumberString;
 
-    StringRegistry() {
-        headerString = SFCalc.inst().getConfig().getString("header-string", "&e&nRecipe for %s:");
-        headerAmountString = SFCalc.inst().getConfig().getString("header-amount-string", "&e&nRecipe for %d %s:");
-        stackString = SFCalc.inst().getConfig().getString("stack-string", "&e%d (%d x%d + %d)");
-        amountString = SFCalc.inst().getConfig().getString("amount-string", "&e%s of %s");
-        neededString = SFCalc.inst().getConfig().getString("needed-string", "&e%s more %s needed");
-        noItemString = SFCalc.inst().getConfig().getString("no-item-string", "&cThat item was not found.");
-        notANumberString = SFCalc.inst().getConfig().getString("not-a-number-string", "&cThat's not a number!");
-        tooManyCategoriesString = SFCalc.inst().getConfig().getString("category-error-string", "&cThat many categories is not supported yet. Please use the command form of the calculator.");
-        tooManyItemsString = SFCalc.inst().getConfig().getString("item-error-string", "&cThat many items is not supported yet. Please use the command form of the calculator.");
-        notAPlayerString = SFCalc.inst().getConfig().getString("not-a-player-string", "&cYou must be a player to send this message!");
-        invalidNumberString = SFCalc.inst().getConfig().getString("invalid-number-string", "&cInvalid number!");
+    StringRegistry(AddonConfig config) {
+        if (config.getString("header-string").contains("%s")) {
+            // The config is outdated, overwrite it with default values
+            config.resetToDefaults();
+        }
+
+        headerString = config.getString("header-string");
+        headerAmountString = config.getString("header-amount-string");
+        stackString = config.getString("stack-string");
+        amountString = config.getString("amount-string");
+        neededString = config.getString("needed-string");
+        noItemString = config.getString("no-item-string");
+        notANumberString = config.getString("not-a-number-string");
+        tooManyCategoriesString = config.getString("category-error-string");
+        tooManyItemsString = config.getString("item-error-string");
+        notAPlayerString = config.getString("not-a-player-string");
+        invalidNumberString = config.getString("invalid-number-string");
     }
 
     @Nonnull
@@ -52,4 +59,5 @@ public final class StringRegistry {
 
         return ChatColors.color(finalString);
     }
+
 }
