@@ -63,12 +63,15 @@
                     <filters>
                         <filter>
                             <artifact>io.github.mooy1:InfinityLib</artifact>
-                            <includes>
-                                <include>**/infinitylib/AbstractAddon.java/**</include>
-                                <include>**/infinitylib/configuration/**</include>
-                                <include>**/infinitylib/commands/**</include>
-                                <include>**/infinitylib/bstats/**</include>
-                            </includes>
+                            <excludes>
+                                <exclude>**/infinitylib/slimefun/**</exclude>
+                                <exclude>**/infinitylib/categories/**</exclude>
+                                <exclude>**/infinitylib/items/**</exclude>
+                                <exclude>**/infinitylib/players/**</exclude>
+                                <exclude>**/infinitylib/persistence/**</exclude>
+                                <exclude>**/infinitylib/presets/**</exclude>
+                                <exclude>**/infinitylib/recipes/**</exclude>
+                            </excludes>
                         </filter>
                     </filters>
                 </configuration>
