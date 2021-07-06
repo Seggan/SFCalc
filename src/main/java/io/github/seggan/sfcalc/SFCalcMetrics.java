@@ -3,6 +3,7 @@ package io.github.seggan.sfcalc;
 import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
 import io.github.mooy1.infinitylib.bstats.charts.AdvancedPie;
 import io.github.mooy1.infinitylib.bstats.charts.SingleLineChart;
+import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,6 +55,6 @@ public class SFCalcMetrics extends Metrics {
     }
 
     public static void addItemSearched(String s) {
-        itemsSearched.add(s);
+        itemsSearched.add(ChatUtils.removeColorCodes(s));
     }
 }
