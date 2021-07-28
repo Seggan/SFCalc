@@ -7,6 +7,7 @@ function getJSON(url){
 
 document.onload = function() {
     document.getElementById('calculator').onsubmit = function() {
+        alert('code')
         var items = getJSON('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json');
         alert(items[0].name);
     };
