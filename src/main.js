@@ -1,1 +1,3 @@
-alert("This is a test")
+$(function() {
+    alert("Another test");
+});
