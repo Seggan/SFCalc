@@ -4,5 +4,5 @@ $('.calculator').on('submit', function() {
         items = data;
     });
 
-    document.write(items[0].id);
+    alert(items[0].id);
 });
