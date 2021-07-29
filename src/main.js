@@ -1,9 +1,7 @@
 var itemObj;
 fetch('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json')
 .then(res => res.json())
-.then(out => {
-    itemObj = out;
-})
+.then(out => itemObj = out)
 .catch(err => console.error);
 
 window.onload = e => {
