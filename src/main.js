@@ -17,5 +17,7 @@ window.onload = e => {
         getJSON('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json', items => {
             alert(items[0].name);
         });
+
+        return false;
     };
 };
