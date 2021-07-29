@@ -13,10 +13,10 @@ var getJSON = function(url, callback) {
     xhr.send();
 };
 
-window.onload = function(e) {
-    alert('code');
-    document.getElementById('calculator').onsubmit = function() {
-        getJSON('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json', function(items) {
+window.onload = e => {
+    document.getElementById('calculator').onsubmit = e => {
+        alert('code');
+        getJSON('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json', items => {
             alert(items[0].name);
         });
     };
