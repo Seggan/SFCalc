@@ -1,8 +1,13 @@
 var getJSON = function(url, callback) {
+    alert('code')
     fetch(url)
-    .then(res => res.json())
+    .then(res => {
+        alert('codd');
+        res.json()
+    })
     .then(out => {
-        console.log('Checkout this JSON! ', out);
+        alert('codde');
+        callback(out);
     })
     .catch(err => console.error(err));
 };
