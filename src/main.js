@@ -1,9 +1,7 @@
 var getJSON = function(url, callback) {
-    alert('code')
     fetch(url)
     .then(res => res.json())
     .then(out => {
-        alert('codde');
         callback(out);
     })
     .catch(err => console.error);
