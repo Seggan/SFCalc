@@ -1,17 +1,10 @@
 var getJSON = function(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.responseType = 'json';
-    alert('code');
-    xhr.onload = function() {
-        var status = xhr.status;
-        if (status === 200) {
-            callback(xhr.response);
-        } else {
-            console.error(status);
-        }
-    };
-    xhr.send();
+    fetch(url)
+    .then(res => res.json())
+    .then(out => {
+        console.log('Checkout this JSON! ', out);
+    })
+    .catch(err => console.error(err));
 };
 
 window.onload = e => {
