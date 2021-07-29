@@ -1,15 +1,12 @@
 var getJSON = function(url, callback) {
     alert('code')
     fetch(url)
-    .then(res => {
-        alert('codd');
-        res.json()
-    })
+    .then(res => res.json())
     .then(out => {
         alert('codde');
         callback(out);
     })
-    .catch(err => console.error(err));
+    .catch(err => console.error);
 };
 
 window.onload = e => {
