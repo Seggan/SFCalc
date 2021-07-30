@@ -4,9 +4,7 @@ window.onload = e => {
     .then(itemList => {
         var items = {};
         for (const key in itemList) {
-            console.log(key);
             var item = itemList[key];
-            console.log(item);
             items[item.id] = item;
         }
     
