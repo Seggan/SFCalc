@@ -11,7 +11,7 @@ fetch('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json')
 
 window.onload = e => {
     document.getElementById('calculator').onsubmit = e => {
-        alert(itemList[0].id);
+        alert(items['OSMIUM_DUST'].id);
 
         return false;
     };
