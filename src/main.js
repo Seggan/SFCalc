@@ -6,7 +6,8 @@ fetch('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json')
 
 var items = {};
 
-for (const item of itemList) {
+for (const key in itemList) {
+    var item = itemList[key];
     items[item.id] = item;
 }
 
