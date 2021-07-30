@@ -11,7 +11,7 @@ for (const key in itemList) {
     items[item.id] = item;
 }
 
-console.log(items["OSMIUM_DUST"]);
+console.log(items);
 
 window.onload = e => {
     document.getElementById('calculator').onsubmit = e => {
