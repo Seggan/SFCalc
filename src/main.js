@@ -3,11 +3,14 @@ var items = {};
 fetch('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json')
 .then(res => res.json())
 .then(itemList => {
-    for (const key in itemList) {
-        var item = itemList[key];
+    for (const item of itemList) {
         items[item.id] = item;
     }
-}).catch(err => console.error);  
+}).catch(err => console.error);
+
+function calculate(state, item) {
+
+}
 
 window.onload = e => {
     document.getElementById('calculator').onsubmit = e => {
