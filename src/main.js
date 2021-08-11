@@ -56,6 +56,8 @@ window.onload = _e => {
     document.getElementById('submit').onclick = _e => {
         var results = calculate(document.getElementById('id').value);
 
+        results = Object.fromEntries(Object.entries(results).sort(([,a],[,b]) => a-b));
+
         var div = document.getElementById('results');
         div.innerHTML = "";
         for (const result in results) {
@@ -72,6 +74,7 @@ window.onload = _e => {
             }
 
             var disp = document.createElement('p');
+            disp.setAttribute('class', '_e');
             disp.innerHTML = results[result] + " of <span class=\"" + color + "\">" + name + "</span>";
 
             div.appendChild(disp);
