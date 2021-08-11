@@ -1,7 +1,9 @@
 const items = {};
 const blacklistedItems = [
     "UU_MATTER",
-    "SILICON"
+    "SILICON",
+    "RUBBER",
+    "VOID_BIT"
 ];
 const blacklistedRecipes = [
     "ore_washer",
@@ -10,7 +12,8 @@ const blacklistedRecipes = [
     "mob_drop",
     "barter_drop",
     "ore_crusher",
-    "multiblock"
+    "multiblock",
+    "meteor_attractor"
 ];
 
 fetch('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json')
