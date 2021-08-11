@@ -72,7 +72,7 @@ window.onload = _e => {
             }
 
             var disp = document.createElement('div');
-            disp.setAttribute('id', color);
+            disp.setAttribute('class', color);
             disp.innerHTML += results[result] + " of " + name;
 
             div.appendChild(disp);
