@@ -6,13 +6,25 @@
     text-align: center;
 }
 
-h1, form, #under-construction {
+h1, h6, form, #under-construction {
     width: 45%;
+}
+
+a {
+    color: cornflowerblue;
+}
+
+a:visited {
+    color: cornflowerblue;
 }
 
 table, th, td {
     border-collapse: collapse;
     border: 1px solid black;
+}
+
+table {
+    width: 35%;
 }
 
 ._0 {
