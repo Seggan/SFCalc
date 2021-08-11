@@ -5,17 +5,13 @@
     margin-right: auto;
 }
 
-h1, form {
+h1, form, #under-construction {
     width: 45%;
 }
 
 table, th, td {
     border-collapse: collapse;
     border: 1px solid black;
-}
-
-#under-construction {
-    width: 45%;
 }
 
 ._0 {
