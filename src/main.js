@@ -59,7 +59,7 @@ window.onload = _e => {
         results = Object.fromEntries(Object.entries(results).sort(([,a],[,b]) => a-b));
 
         var div = document.getElementById('results');
-        div.innerHTML = "";
+        div.innerHTML = '<tr><th>Item</th><th>Amount</th></tr>';
         for (const result in results) {
             var color = '_0';
             var name = result;
@@ -73,8 +73,8 @@ window.onload = _e => {
                 name = name.substring(2);
             }
 
-            var disp = document.createElement('p');
-            disp.innerHTML = results[result] + " of <span class=\"" + color + "\">" + name + "</span>";
+            var disp = document.createElement('tr');
+            disp.innerHTML = '<td class="' + color + '\">' + name + '</td><td><b>' + results[result] + '</b></td>';
 
             div.appendChild(disp);
         }
