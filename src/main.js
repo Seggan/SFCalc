@@ -39,7 +39,7 @@ function calculate(itemStr) {
     for (const ing of item.recipe) {
         var value = ing.value;
         var ingItem = items[value];
-        if (!ing.slimefun || blacklistedItems.contains(value) || blacklistedRecipes.contains(ingItem.recipeType)) {
+        if (!ing.slimefun || blacklistedItems.includes(value) || blacklistedRecipes.includes(ingItem.recipeType)) {
             var temp = {};
             temp[value] = 1;
             add(results, temp);
