@@ -74,7 +74,6 @@ window.onload = _e => {
             }
 
             var disp = document.createElement('p');
-            disp.setAttribute('class', '_e');
             disp.innerHTML = results[result] + " of <span class=\"" + color + "\">" + name + "</span>";
 
             div.appendChild(disp);
