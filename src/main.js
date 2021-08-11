@@ -9,7 +9,8 @@ const blacklistedRecipes = [
     "gold_pan",
     "mob_drop",
     "barter_drop",
-    "ore_crusher"
+    "ore_crusher",
+    "multiblock"
 ];
 
 fetch('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json')
@@ -37,13 +38,13 @@ function calculate(itemStr) {
     var item = items[itemStr];
     for (const ing of item.recipe) {
         var value = ing.value;
-        if (ing.slimefun) {
-            var ret = calculate(value);
-            add(results, ret);
-        } else {
+        if (!ing.slimefun || value in blacklistedItems || item.recipeType in blacklistedRecipes) {
             var temp = {};
             temp[value] = 1;
             add(results, temp);
+        } else {
+            var ret = calculate(value);
+            add(results, ret);
         }
     }
 
