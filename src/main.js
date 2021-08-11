@@ -60,8 +60,13 @@ window.onload = _e => {
         div.innerHTML = "";
         for (const result in results) {
             var color;
-            var name;
-            if (result.startsWith('&')) {
+            var name = result;
+
+            if (name.toUpperCase() === name) {
+                name = results[result];
+            }
+            
+            if (name.startsWith('&')) {
                 color = '_' + result.charAt(1);
                 name = result.substring(2);
             } else {
