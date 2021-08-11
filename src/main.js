@@ -19,7 +19,7 @@ fetch('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json')
     for (const item of itemList) {
         items[item.id] = item;
     }
-}).catch(err => console.error);
+}).catch(_err => console.error);
 
 function add(map1, map2) {
     for (const key in map2) {
@@ -52,9 +52,28 @@ function calculate(itemStr) {
     return results;
 }
 
-window.onload = e => {
-    document.getElementById('submit').onclick = e => {
-        console.log(calculate(document.getElementById('id').value));
+window.onload = _e => {
+    document.getElementById('submit').onclick = _e => {
+        var results = calculate(document.getElementById('id').value);
+
+        var div = document.getElementById('results');
+        for (const result in results) {
+            var color;
+            var name;
+            if (result.startsWith('&')) {
+                color = '_' + result.charAt(1);
+                name = result.substring(2);
+            } else {
+                name = result;
+                color = '_f';
+            }
+
+            var disp = document.createElement('div');
+            disp.setAttribute('id', color);
+            disp.innerHTML += results[result] + " of " + name;
+
+            div.appendChild(disp);
+        }
 
         return false;
     };
