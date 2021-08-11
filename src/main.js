@@ -1,4 +1,4 @@
-var items = {};
+const items = {};
 const blacklistedItems = [
     "UU_MATTER",
     "SILICON"
@@ -34,17 +34,17 @@ function add(map1, map2) {
 }
 
 function calculate(itemStr) {
-    var results = {};
-    var item = items[itemStr];
+    const results = {};
+    const item = items[itemStr];
     for (const ing of item.recipe) {
-        var value = ing.value;
-        var ingItem = items[value];
+        const value = ing.value;
+        const ingItem = items[value];
         if (!ing.slimefun || blacklistedItems.includes(value) || blacklistedRecipes.includes(ingItem.recipeType)) {
-            var temp = {};
+            const temp = {};
             temp[value] = 1;
             add(results, temp);
         } else {
-            var ret = calculate(value);
+            const ret = calculate(value);
             add(results, ret);
         }
     }
@@ -54,19 +54,19 @@ function calculate(itemStr) {
 
 window.onload = _e => {
     document.getElementById('calculator').onsubmit = _e => {
-        var id = document.getElementById('id').value.toUpperCase();
+        const id = document.getElementById('id').value.toUpperCase();
         if (!(id in items)) {
             alert('Invalid item ID');
             return false;
         }
 
-        var results = calculate(id);
+        const results = calculate(id);
 
         results = Object.fromEntries(Object.entries(results).sort(([,a],[,b]) => a-b));
 
         document.getElementById('result-table').removeAttribute('hidden');
 
-        var div = document.getElementById('results');
+        const div = document.getElementById('results');
         div.innerHTML = '';
         for (const result in results) {
             var color = '_0';
@@ -81,7 +81,7 @@ window.onload = _e => {
                 name = name.substring(2);
             }
 
-            var disp = document.createElement('tr');
+            const disp = document.createElement('tr');
             disp.innerHTML = '<td class="' + color + '\"><b>' + name + '</b></td><td>' + results[result] + '</td>';
 
             div.appendChild(disp);
