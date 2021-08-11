@@ -53,7 +53,7 @@ function calculate(itemStr) {
 }
 
 window.onload = _e => {
-    document.getElementById('submit').onclick = _e => {
+    document.getElementById('calculator').onsubmit = _e => {
         var results = calculate(document.getElementById('id').value);
 
         results = Object.fromEntries(Object.entries(results).sort(([,a],[,b]) => a-b));
@@ -61,7 +61,7 @@ window.onload = _e => {
         var div = document.getElementById('results');
         div.innerHTML = "";
         for (const result in results) {
-            var color = '_f';
+            var color = '_0';
             var name = result;
 
             if (name.toUpperCase() === name) {
