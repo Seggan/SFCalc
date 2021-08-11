@@ -58,6 +58,8 @@ window.onload = _e => {
 
         results = Object.fromEntries(Object.entries(results).sort(([,a],[,b]) => a-b));
 
+        document.getElementById('result-table').removeAttribute('hidden');
+
         var div = document.getElementById('results');
         div.innerHTML = '';
         for (const result in results) {

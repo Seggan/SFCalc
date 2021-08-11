@@ -5,20 +5,13 @@
     margin-right: auto;
 }
 
-h1 {
-    width: 45%;
-}
-
-form {
-    width: 45%;
-}
-
 table {
-    width: auto;
+    border-collapse: collapse;
+    border: 1px solid black;
 }
 
 #under-construction {
-    width: 30%;
+    width: 45%;
 }
 
 ._0 {
