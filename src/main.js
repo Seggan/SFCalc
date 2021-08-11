@@ -20,8 +20,21 @@ fetch('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json')
     }
 }).catch(err => console.error);
 
-function calculate(item) {
+function add(map1, map2) {
+    for (const key in map2) {
+        if (key in map1) {
+            var inThere = map1[key];
+            inThere += map2[key];
+            map1[key] = inThere;
+        } else {
+            map1[key] = map2[key];
+        }
+    }
+}
+
+function calculate(itemStr) {
     var results = {};
+    var item = items[itemStr];
     for (const ing of item.recipe) {
         var value = ing.value;
         if (ing.slimefun) {
@@ -50,7 +63,7 @@ function calculate(item) {
 }
 
 window.onload = e => {
-    document.getElementById('calculator').onsubmit = e => {
+    document.getElementById('submit').onclick = e => {
         alert(calculate(document.getElementById('id').value));
 
         return false;
