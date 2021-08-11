@@ -71,9 +71,8 @@ window.onload = _e => {
                 name = name.substring(2);
             }
 
-            var disp = document.createElement('div');
-            disp.setAttribute('class', color);
-            disp.innerHTML += results[result] + " of " + name;
+            var disp = document.createElement('p');
+            disp.innerHTML = results[result] + " of <span class=\"" + color + "\">" + name + "</span>";
 
             div.appendChild(disp);
         }
