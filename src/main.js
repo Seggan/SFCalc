@@ -54,7 +54,7 @@ function calculate(itemStr) {
 
 window.onload = _e => {
     document.getElementById('calculator').onsubmit = _e => {
-        var results = calculate(document.getElementById('id').value);
+        var results = calculate(document.getElementById('id').value.toUpperCase());
 
         results = Object.fromEntries(Object.entries(results).sort(([,a],[,b]) => a-b));
 
@@ -76,7 +76,7 @@ window.onload = _e => {
             }
 
             var disp = document.createElement('tr');
-            disp.innerHTML = '<td class="' + color + '\">' + name + '</td><td><b>' + results[result] + '</b></td>';
+            disp.innerHTML = '<td class="' + color + '\"><b>' + name + '</b></td><td>' + results[result] + '</td>';
 
             div.appendChild(disp);
         }
