@@ -5,6 +5,18 @@
     margin-right: auto;
 }
 
+h1 {
+    width: 30%;
+}
+
+form {
+    width: 30%;
+}
+
+table {
+    width: auto;
+}
+
 #under-construction {
     width: 30%;
 }
