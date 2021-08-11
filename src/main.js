@@ -61,7 +61,7 @@ window.onload = _e => {
         var div = document.getElementById('results');
         div.innerHTML = "";
         for (const result in results) {
-            var color = '_e';
+            var color = '_f';
             var name = result;
 
             if (name.toUpperCase() === name) {
