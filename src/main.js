@@ -57,6 +57,7 @@ window.onload = _e => {
         var results = calculate(document.getElementById('id').value);
 
         var div = document.getElementById('results');
+        div.innerHTML = "";
         for (const result in results) {
             var color;
             var name;
