@@ -59,7 +59,7 @@ window.onload = _e => {
         var div = document.getElementById('results');
         div.innerHTML = "";
         for (const result in results) {
-            var color;
+            var color = '_f';
             var name = result;
 
             if (name.toUpperCase() === name) {
@@ -67,11 +67,8 @@ window.onload = _e => {
             }
 
             if (name.startsWith('§')) {
-                color = '_' + result.charAt(1);
-                name = result.substring(2);
-            } else {
-                name = result;
-                color = '_f';
+                color = '_' + name.charAt(1);
+                name = name.substring(2);
             }
 
             var disp = document.createElement('div');
