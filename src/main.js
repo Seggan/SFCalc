@@ -39,23 +39,11 @@ function calculate(itemStr) {
         var value = ing.value;
         if (ing.slimefun) {
             var ret = calculate(value);
-            for (const key in ret) {
-                if (key in results) {
-                    var inThere = results[key];
-                    inThere += ret[key];
-                    results[key] = inThere;
-                } else {
-                    results[key] = ret[key];
-                }
-            }
+            add(results, ret);
         } else {
-            if (value in results) {
-                var inThere = results[value];
-                inThere++;
-                results[value] = inThere;
-            } else {
-                results[value] = 1;
-            }
+            var temp = {};
+            temp[value] = 1;
+            add(results, temp);
         }
     }
 
@@ -64,7 +52,7 @@ function calculate(itemStr) {
 
 window.onload = e => {
     document.getElementById('submit').onclick = e => {
-        alert(calculate(document.getElementById('id').value));
+        console.log(calculate(document.getElementById('id').value));
 
         return false;
     };
