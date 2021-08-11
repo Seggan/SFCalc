@@ -54,7 +54,13 @@ function calculate(itemStr) {
 
 window.onload = _e => {
     document.getElementById('calculator').onsubmit = _e => {
-        var results = calculate(document.getElementById('id').value.toUpperCase());
+        var id = document.getElementById('id').value.toUpperCase();
+        if (!(id in items)) {
+            alert('Invalid item ID');
+            return false;
+        }
+
+        var results = calculate(id);
 
         results = Object.fromEntries(Object.entries(results).sort(([,a],[,b]) => a-b));
 
