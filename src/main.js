@@ -24,7 +24,7 @@ fetch('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json')
 function add(map1, map2) {
     for (const key in map2) {
         if (key in map1) {
-            var inThere = map1[key];
+            let inThere = map1[key];
             inThere += map2[key];
             map1[key] = inThere;
         } else {
@@ -60,7 +60,7 @@ window.onload = _e => {
             return false;
         }
 
-        const results = calculate(id);
+        let results = calculate(id);
 
         results = Object.fromEntries(Object.entries(results).sort(([,a],[,b]) => a-b));
 
@@ -69,8 +69,8 @@ window.onload = _e => {
         const div = document.getElementById('results');
         div.innerHTML = '';
         for (const result in results) {
-            var color = '_0';
-            var name = result;
+            let color = '_0';
+            let name = result;
 
             if (name.toUpperCase() === name) {
                 name = items[result].name;
