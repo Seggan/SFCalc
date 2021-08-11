@@ -5,6 +5,10 @@
     margin-right: auto;
 }
 
+h1, form {
+    width: 45%;
+}
+
 table, th, td {
     border-collapse: collapse;
     border: 1px solid black;
