@@ -63,10 +63,10 @@ window.onload = _e => {
             var name = result;
 
             if (name.toUpperCase() === name) {
-                name = results[result];
+                name = items[result].name;
             }
-            
-            if (name.startsWith('&')) {
+
+            if (name.startsWith('§')) {
                 color = '_' + result.charAt(1);
                 name = result.substring(2);
             } else {
