@@ -59,7 +59,7 @@ window.onload = _e => {
         results = Object.fromEntries(Object.entries(results).sort(([,a],[,b]) => a-b));
 
         var div = document.getElementById('results');
-        div.innerHTML = '<tr><th>Item</th><th>Amount</th></tr>';
+        div.innerHTML = '';
         for (const result in results) {
             var color = '_0';
             var name = result;
