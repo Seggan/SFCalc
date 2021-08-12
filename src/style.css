@@ -10,8 +10,16 @@ h1, h6, form, #under-construction {
     width: 45%;
 }
 
+h6 {
+    margin-top: 5px;
+}
+
 #amount {
     min-width: 10%;
+}
+
+a {
+    color: cornflowerblue;
 }
 
 a:visited {
