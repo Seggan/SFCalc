@@ -24,14 +24,14 @@ fetch('https://raw.githubusercontent.com/Seggan/SFCalc/gh-pages/src/items.json')
     }
 }).catch(_err => console.error);
 
-function add(map1, map2) {
+function add(map1, map2, amount) {
     for (const key in map2) {
         if (key in map1) {
             let inThere = map1[key];
-            inThere += map2[key];
+            inThere += map2[key] * amount;
             map1[key] = inThere;
         } else {
-            map1[key] = map2[key];
+            map1[key] = map2[key] * amount;
         }
     }
 }
@@ -42,13 +42,13 @@ function calculate(itemStr) {
     for (const ing of item.recipe) {
         const value = ing.value;
         const ingItem = items[value];
-        if (!ing.slimefun || blacklistedItems.includes(value) || blacklistedRecipes.includes(ingItem.recipeType)) {
+        if (ing.value.toUpperCase() != ing.value || blacklistedItems.includes(value) || blacklistedRecipes.includes(ingItem.recipeType)) {
             const temp = {};
             temp[value] = 1;
-            add(results, temp);
+            add(results, temp, ing.amount);
         } else {
             const ret = calculate(value);
-            add(results, ret);
+            add(results, ret, ing.amount);
         }
     }
 
