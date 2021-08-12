@@ -85,7 +85,7 @@ window.onload = _e => {
             }
 
             const disp = document.createElement('tr');
-            disp.innerHTML = '<td class="' + color + '\"><b>' + name + '</b></td><td>' + results[result] + '</td>';
+            disp.innerHTML = '<td class="' + color + '\"><b>' + name + '</b></td><td>' + results[result] * document.getElementById('amount').value + '</td>';
 
             div.appendChild(disp);
         }
