@@ -10,6 +10,10 @@ h1, h6, form, #under-construction {
     width: 45%;
 }
 
+#amount {
+    width: fit-content;
+}
+
 a:visited {
     color: cornflowerblue;
 }
