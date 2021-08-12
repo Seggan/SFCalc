@@ -11,7 +11,7 @@ h1, h6, form, #under-construction {
 }
 
 #amount {
-    width: fit-content;
+    min-width: 10%;
 }
 
 a:visited {
