@@ -151,6 +151,7 @@ public class Calculator {
             if(entry.getKey() instanceof SlimefunItemStack) {
                 SlimefunItemStack ingredient = (SlimefunItemStack)entry.getKey();
                 if (!plugin.getBlacklistedIds().contains(ingredient.getItemId()) &&
+                        ingredient.getItem() != null &&
                         !plugin.getBlacklistedRecipes().contains(ingredient.getItem().getRecipeType())) {
                     if(entry.getValue() > 0) {
                         return ingredient;
