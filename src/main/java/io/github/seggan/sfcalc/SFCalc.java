@@ -48,6 +48,7 @@ public class SFCalc extends AbstractAddon implements Listener {
         blacklistedIds.add("SILICON");
         blacklistedIds.add("FALLEN_METEOR");
         blacklistedIds.add("RUBBER");
+        blacklistedIds.add("VOID_BIT");
     }
 
     @Override
