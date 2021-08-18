@@ -46,3 +46,7 @@ not-a-player-string: "&cYou must be a player to send this message!"
 
 # Invalid number string ("Invalid number!")
 invalid-number-string: "&cInvalid number!"
+
+options:
+  # Use carbon as a base material instead of coal in calculations
+  use-carbon-instead-of-coal: true

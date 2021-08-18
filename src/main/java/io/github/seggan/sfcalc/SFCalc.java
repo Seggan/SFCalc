@@ -4,10 +4,7 @@ import io.github.mooy1.infinitylib.AbstractAddon;
 import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import org.bukkit.ChatColor;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 import lombok.Getter;
 
@@ -49,6 +46,9 @@ public class SFCalc extends AbstractAddon implements Listener {
         blacklistedIds.add("FALLEN_METEOR");
         blacklistedIds.add("RUBBER");
         blacklistedIds.add("VOID_BIT");
+        if (getConfig().getBoolean("options.use-carbon-instead-of-coal", true)) {
+            blacklistedIds.add("CARBON");
+        }
     }
 
     @Override
