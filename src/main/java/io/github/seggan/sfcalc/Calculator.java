@@ -118,13 +118,6 @@ public class Calculator {
 
         if (plugin.getBlacklistedIds().contains(parent.getId())) return result;
 
-        //uncraft the material
-        add(result, parent.getItem(), -parent.getRecipeOutput().getAmount());
-        for (ItemStack item : parent.getRecipe()) {
-            if (item == null) continue;
-            add(result, item, item.getAmount());
-        }
-
         //uncraft submaterials
         SlimefunItemStack next = getNextItem(result);
         while (next != null) {

@@ -11,5 +11,6 @@ dependency-reduced-pom.xml
 .classpath
 .project
 *.iml
+*.bat
 .DS_Store
 token.txt
