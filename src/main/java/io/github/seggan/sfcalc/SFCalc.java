@@ -77,7 +77,7 @@ public class SFCalc extends AbstractAddon implements Listener {
     @Nullable
     @Override
     protected List<AbstractCommand> setupSubCommands() {
-        return Arrays.asList(new CalcCommand(this), new NeededCommand(this));
+        return Arrays.asList(new CalcCommand(this), new NeededCommand(this), new WebsiteCommand());
     }
 
     @Nonnull
