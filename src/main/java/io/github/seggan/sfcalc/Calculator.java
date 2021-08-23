@@ -114,22 +114,20 @@ public class Calculator {
     public Map<ItemStack, Long> calculate(@Nonnull SlimefunItem parent, long amount) {
 
         Map<ItemStack, Long> result = new HashMap<>();
-        add(result, parent.getItem(), amount);
-
-        if (plugin.getBlacklistedIds().contains(parent.getId())) return result;
-
-        //uncraft the material
-        add(result, parent.getItem(), -parent.getRecipeOutput().getAmount());
+		
+		// uncraft the material first to bypass the blacklist
+		int multiplier = parent.getRecipeOutput().getAmount();
+		long operations = (amount + multiplier - 1) / multiplier; //ceiling(needed/multiplier) but abusing fast ints
         for (ItemStack item : parent.getRecipe()) {
             if (item == null) continue;
-            add(result, item, item.getAmount());
+            add(result, item, item.getAmount() * operations);
         }
 
         //uncraft submaterials
         SlimefunItemStack next = getNextItem(result);
         while (next != null) {
-            int multiplier = next.getItem().getRecipeOutput().getAmount();
-            long operations = (result.get(next) + multiplier - 1) / multiplier; //ceiling(needed/multiplier) but abusing fast ints
+            multiplier = next.getItem().getRecipeOutput().getAmount();
+            operations = (result.get(next) + multiplier - 1) / multiplier; //ceiling(needed/multiplier) but abusing fast ints
             add(result, next, -(multiplier * operations));
             for (ItemStack item : next.getItem().getRecipe()) {
                 if (item == null) continue;
@@ -154,7 +152,8 @@ public class Calculator {
             if (entry.getKey() instanceof SlimefunItemStack) {
                 SlimefunItemStack ingredient = (SlimefunItemStack) entry.getKey();
                 if (ingredient.getItem() != null &&
-                    !plugin.getBlacklistedRecipes().contains(ingredient.getItem().getRecipeType())) {
+                    !plugin.getBlacklistedRecipes().contains(ingredient.getItem().getRecipeType()) &&
+					!plugin.getBlacklistedIds().contains(ingredient.getItem().getId())) {
                     if (entry.getValue() > 0) {
                         return ingredient;
                     }
