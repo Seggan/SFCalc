@@ -7,7 +7,7 @@ api-version: 1.15
 
 commands:
   sfcalc:
-    description: Calculate the required resources for the specified item. Replace spaces with underscores (_).
+    description: Base SFCalc command
     usage: "Usage: /sfcalc calc <item> [amount]"
     aliases:
       - sfc

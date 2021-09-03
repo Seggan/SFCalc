@@ -1,30 +1,32 @@
 package io.github.seggan.sfcalc;
 
-import io.github.mooy1.infinitylib.AbstractAddon;
-import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
-import io.github.mooy1.infinitylib.commands.AbstractCommand;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import io.github.mooy1.infinitylib.core.AbstractAddon;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import org.bukkit.event.Listener;
 
 import lombok.Getter;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 @Getter
 public class SFCalc extends AbstractAddon implements Listener {
 
     private static SFCalc instance;
-    private Calculator calculator;
-
     private final Set<RecipeType> blacklistedRecipes = new HashSet<>();
     private final Set<String> blacklistedIds = new HashSet<>();
-
+    private Calculator calculator;
     private StringRegistry stringRegistry;
+
+    public SFCalc() {
+        super("Seggan", "SFCalc", "master", "auto-updates");
+    }
+
+    @Nonnull
+    static SFCalc inst() {
+        return instance;
+    }
 
     @Override
     protected void enable() {
@@ -49,40 +51,17 @@ public class SFCalc extends AbstractAddon implements Listener {
         if (getConfig().getBoolean("options.use-carbon-instead-of-coal", true)) {
             blacklistedIds.add("CARBON");
         }
+
+        getCommand()
+            .addSub(new CalcCommand(this))
+            .addSub(new NeededCommand(this))
+            .addSub(new WebsiteCommand());
+
     }
 
     @Override
     protected void disable() {
         instance = null;
-    }
-
-    @Nonnull
-    @Override
-    protected String getGithubPath() {
-        return "Seggan/SFCalc/master";
-    }
-
-    @Nullable
-    @Override
-    public String getAutoUpdatePath() {
-        return "auto-updates";
-    }
-
-    @Nullable
-    @Override
-    protected Metrics setupMetrics() {
-        return new SFCalcMetrics(this);
-    }
-
-    @Nullable
-    @Override
-    protected List<AbstractCommand> setupSubCommands() {
-        return Arrays.asList(new CalcCommand(this), new NeededCommand(this), new WebsiteCommand());
-    }
-
-    @Nonnull
-    static SFCalc inst() {
-        return instance;
     }
 
     public Calculator getCalc() {

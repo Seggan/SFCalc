@@ -1,8 +1,8 @@
 package io.github.seggan.sfcalc;
 
-import io.github.mooy1.infinitylib.bstats.bukkit.Metrics;
-import io.github.mooy1.infinitylib.bstats.charts.AdvancedPie;
-import io.github.mooy1.infinitylib.bstats.charts.SingleLineChart;
+import io.github.mooy1.infinitylib.metrics.bukkit.Metrics;
+import io.github.mooy1.infinitylib.metrics.charts.AdvancedPie;
+import io.github.mooy1.infinitylib.metrics.charts.SingleLineChart;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 
 import java.util.ArrayList;

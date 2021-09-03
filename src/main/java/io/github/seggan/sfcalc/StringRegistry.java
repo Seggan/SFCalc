@@ -1,16 +1,14 @@
 package io.github.seggan.sfcalc;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
+import io.github.mooy1.infinitylib.core.AddonConfig;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
+import org.apache.commons.lang.Validate;
 
 import lombok.Getter;
 
-import org.apache.commons.lang.Validate;
-
-import io.github.mooy1.infinitylib.configuration.AddonConfig;
-import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
 
 @Getter
 public final class StringRegistry {
@@ -44,21 +42,6 @@ public final class StringRegistry {
         config.save();
     }
 
-    private String reformat(AddonConfig config, String key, int... numbers) {
-        String val = config.getString(key);
-
-        AtomicInteger i = new AtomicInteger();
-        String formatted = this.percentPattern.matcher(val)
-                .replaceAll(matchResult -> "%" + numbers[i.getAndIncrement()]);
-
-        if (i.get() == numbers.length) {
-            config.set(key, formatted);
-            return formatted;
-        }
-
-        return val;
-    }
-
     @Nonnull
     public static String format(@Nonnull String formatString, @Nonnull Object... objects) {
         Validate.notNull(formatString);
@@ -71,6 +54,21 @@ public final class StringRegistry {
         }
 
         return ChatColors.color(finalString);
+    }
+
+    private String reformat(AddonConfig config, String key, int... numbers) {
+        String val = config.getString(key);
+
+        AtomicInteger i = new AtomicInteger();
+        String formatted = this.percentPattern.matcher(val)
+            .replaceAll(matchResult -> "%" + numbers[i.getAndIncrement()]);
+
+        if (i.get() == numbers.length) {
+            config.set(key, formatted);
+            return formatted;
+        }
+
+        return val;
     }
 
 }

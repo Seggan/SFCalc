@@ -1,6 +1,6 @@
 package io.github.seggan.sfcalc;
 
-import io.github.mooy1.infinitylib.commands.AbstractCommand;
+import io.github.mooy1.infinitylib.commands.SubCommand;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -9,15 +9,16 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-public class WebsiteCommand extends AbstractCommand {
+public class WebsiteCommand extends SubCommand {
 
     public WebsiteCommand() {
         super("website", "Gives the SFCalc website", false);
     }
 
     @Override
-    public void onExecute(@Nonnull CommandSender commandSender, @Nonnull String[] strings) {
+    public void execute(@Nonnull CommandSender commandSender, @Nonnull String[] strings) {
         ClickEvent event = new ClickEvent(ClickEvent.Action.OPEN_URL, "https://sfcalc-online.pages.dev");
         if (commandSender instanceof Player) {
             Player p = (Player) commandSender;
@@ -33,7 +34,8 @@ public class WebsiteCommand extends AbstractCommand {
     }
 
     @Override
-    public void onTab(@Nonnull CommandSender commandSender, @Nonnull String[] strings, @Nonnull List<String> list) {
+    @ParametersAreNonnullByDefault
+    protected void complete(CommandSender sender, String[] args, List<String> completions) {
 
     }
 }
