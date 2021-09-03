@@ -3,6 +3,7 @@ package io.github.seggan.sfcalc;
 import io.github.mooy1.infinitylib.commands.SubCommand;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.CommonPatterns;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
@@ -44,7 +45,7 @@ public class NeededCommand extends SubCommand {
 
         if (args.length == 1) {
             amount = 1;
-        } else if (!CalcCommand.NUMBER.matcher(args[1]).matches()) {
+        } else if (!CommonPatterns.NUMERIC.matcher(args[1]).matches()) {
             sender.sendMessage(format(registry.getNotANumberString()));
             return;
         } else {

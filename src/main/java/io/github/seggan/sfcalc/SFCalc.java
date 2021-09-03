@@ -8,7 +8,6 @@ import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.annotation.Nonnull;
 
 @Getter
 public class SFCalc extends AbstractAddon implements Listener {
@@ -23,14 +22,11 @@ public class SFCalc extends AbstractAddon implements Listener {
         super("Seggan", "SFCalc", "master", "auto-updates");
     }
 
-    @Nonnull
-    static SFCalc inst() {
-        return instance;
-    }
-
     @Override
     protected void enable() {
         instance = this;
+
+        new SFCalcMetrics(this);
 
         stringRegistry = new StringRegistry(getConfig());
         calculator = new Calculator(this);

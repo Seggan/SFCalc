@@ -3,20 +3,18 @@ package io.github.seggan.sfcalc;
 import io.github.mooy1.infinitylib.commands.SubCommand;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.CommonPatterns;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 import static io.github.seggan.sfcalc.StringRegistry.*;
 
 public class CalcCommand extends SubCommand {
-
-    public static final Pattern NUMBER = Pattern.compile("\\d+");
 
     private static final List<String> ids = new ArrayList<>();
     private final SFCalc plugin;
@@ -42,7 +40,7 @@ public class CalcCommand extends SubCommand {
 
         if (args.length == 1) {
             amount = 1;
-        } else if (!NUMBER.matcher(args[1]).matches()) {
+        } else if (!CommonPatterns.NUMERIC.matcher(args[1]).matches()) {
             sender.sendMessage(format(registry.getNotANumberString()));
             return;
         } else {
