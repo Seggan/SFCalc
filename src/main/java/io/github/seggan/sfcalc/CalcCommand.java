@@ -26,58 +26,62 @@ public class CalcCommand extends SubCommand {
 
     @Override
     public void execute(@Nonnull CommandSender sender, @Nonnull String[] args) {
-        long amount;
-        String reqItem;
-        SlimefunItem item;
+        SFCalc.REPORTER.executeOrElseReport(() -> {
+            long amount;
+            String reqItem;
+            SlimefunItem item;
 
-        StringRegistry registry = plugin.getStringRegistry();
+            StringRegistry registry = plugin.getStringRegistry();
 
-        if (args.length > 2 || args.length == 0) {
-            return;
-        }
+            if (args.length > 2 || args.length == 0) {
+                return;
+            }
 
-        reqItem = args[0];
+            reqItem = args[0];
 
-        if (args.length == 1) {
-            amount = 1;
-        } else if (!CommonPatterns.NUMERIC.matcher(args[1]).matches()) {
-            sender.sendMessage(format(registry.getNotANumberString()));
-            return;
-        } else {
-            try {
-                amount = Long.parseLong(args[1]);
-                if (amount == 0 || amount > Integer.MAX_VALUE) {
+            if (args.length == 1) {
+                amount = 1;
+            } else if (!CommonPatterns.NUMERIC.matcher(args[1]).matches()) {
+                sender.sendMessage(format(registry.getNotANumberString()));
+                return;
+            } else {
+                try {
+                    amount = Long.parseLong(args[1]);
+                    if (amount == 0 || amount > Integer.MAX_VALUE) {
+                        sender.sendMessage(format(registry.getInvalidNumberString()));
+                        return;
+                    }
+                } catch (NumberFormatException e) {
                     sender.sendMessage(format(registry.getInvalidNumberString()));
                     return;
                 }
-            } catch (NumberFormatException e) {
-                sender.sendMessage(format(registry.getInvalidNumberString()));
+            }
+
+            item = SlimefunItem.getById(reqItem.toUpperCase(Locale.ROOT));
+
+            if (item == null) {
+                sender.sendMessage(format(registry.getNoItemString()));
                 return;
             }
-        }
 
-        item = SlimefunItem.getById(reqItem.toUpperCase(Locale.ROOT));
+            SFCalcMetrics.addItemSearched(item.getItemName());
 
-        if (item == null) {
-            sender.sendMessage(format(registry.getNoItemString()));
-            return;
-        }
-
-        SFCalcMetrics.addItemSearched(item.getItemName());
-
-        plugin.getCalc().printResults(sender, item, amount, false);
+            plugin.getCalc().printResults(sender, item, amount, false);
+        });
     }
 
     @Override
     public void complete(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
-        if (ids.isEmpty()) {
-            for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
-                ids.add(item.getId().toLowerCase(Locale.ROOT));
+        SFCalc.REPORTER.executeOrElseReport(() -> {
+            if (ids.isEmpty()) {
+                for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
+                    ids.add(item.getId().toLowerCase(Locale.ROOT));
+                }
             }
-        }
 
-        if (args.length == 1) {
-            StringUtil.copyPartialMatches(args[0], ids, tabs);
-        }
+            if (args.length == 1) {
+                StringUtil.copyPartialMatches(args[0], ids, tabs);
+            }
+        });
     }
 }

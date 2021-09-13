@@ -71,6 +71,10 @@
                             <pattern>io.github.mooy1.infinitylib</pattern>
                             <shadedPattern>io.github.seggan.sfcalc.infinitylib</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>io.github.seggan.errorreporter</pattern>
+                            <shadedPattern>io.github.seggan.sfcalc.errorreporter</shadedPattern>
+                        </relocation>
                     </relocations>
                     <filters>
                         <filter>
@@ -145,6 +149,13 @@
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.seggan</groupId>
+            <artifactId>ErrorReporter-Java</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

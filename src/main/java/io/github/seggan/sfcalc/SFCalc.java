@@ -1,7 +1,9 @@
 package io.github.seggan.sfcalc;
 
 import io.github.mooy1.infinitylib.core.AbstractAddon;
+import io.github.seggan.errorreporter.ErrorReporter;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import org.bukkit.event.Listener;
 
 import lombok.Getter;
@@ -11,6 +13,8 @@ import java.util.Set;
 
 @Getter
 public class SFCalc extends AbstractAddon implements Listener {
+
+    public static ErrorReporter REPORTER;
 
     private static SFCalc instance;
     private final Set<RecipeType> blacklistedRecipes = new HashSet<>();
@@ -26,33 +30,44 @@ public class SFCalc extends AbstractAddon implements Listener {
     protected void enable() {
         instance = this;
 
-        new SFCalcMetrics(this);
+        REPORTER  = new ErrorReporter("Seggan", "SFCalc", () ->
+            "SFCalc " +
+            getPluginVersion() +
+            "\nSlimefun " +
+            Slimefun.getVersion() +
+            "\nMinecraft " +
+            Slimefun.getMinecraftVersion().getName()
+        );
+        REPORTER.preSend(obj -> !getPluginVersion().equals("UNOFFICIAL"));
 
-        stringRegistry = new StringRegistry(getConfig());
-        calculator = new Calculator(this);
+        REPORTER.executeOrElseReport(() -> {
+            new SFCalcMetrics(this);
 
-        blacklistedRecipes.add(RecipeType.ORE_WASHER);
-        blacklistedRecipes.add(RecipeType.GEO_MINER);
-        blacklistedRecipes.add(RecipeType.GOLD_PAN);
-        blacklistedRecipes.add(RecipeType.MOB_DROP);
-        blacklistedRecipes.add(RecipeType.BARTER_DROP);
-        blacklistedRecipes.add(RecipeType.ORE_CRUSHER);
-        blacklistedRecipes.add(RecipeType.NULL);
+            stringRegistry = new StringRegistry(getConfig());
+            calculator = new Calculator(this);
 
-        blacklistedIds.add("UU_MATTER");
-        blacklistedIds.add("SILICON");
-        blacklistedIds.add("FALLEN_METEOR");
-        blacklistedIds.add("RUBBER");
-        blacklistedIds.add("VOID_BIT");
-        if (getConfig().getBoolean("options.use-carbon-instead-of-coal", true)) {
-            blacklistedIds.add("CARBON");
-        }
+            blacklistedRecipes.add(RecipeType.ORE_WASHER);
+            blacklistedRecipes.add(RecipeType.GEO_MINER);
+            blacklistedRecipes.add(RecipeType.GOLD_PAN);
+            blacklistedRecipes.add(RecipeType.MOB_DROP);
+            blacklistedRecipes.add(RecipeType.BARTER_DROP);
+            blacklistedRecipes.add(RecipeType.ORE_CRUSHER);
+            blacklistedRecipes.add(RecipeType.NULL);
 
-        getCommand()
-            .addSub(new CalcCommand(this))
-            .addSub(new NeededCommand(this))
-            .addSub(new WebsiteCommand());
+            blacklistedIds.add("UU_MATTER");
+            blacklistedIds.add("SILICON");
+            blacklistedIds.add("FALLEN_METEOR");
+            blacklistedIds.add("RUBBER");
+            blacklistedIds.add("VOID_BIT");
+            if (getConfig().getBoolean("options.use-carbon-instead-of-coal", true)) {
+                blacklistedIds.add("CARBON");
+            }
 
+            getCommand()
+                .addSub(new CalcCommand(this))
+                .addSub(new NeededCommand(this))
+                .addSub(new WebsiteCommand());
+        });
     }
 
     @Override
