@@ -40,6 +40,8 @@ public class SFCalc extends AbstractAddon implements Listener {
         );
         REPORTER.preSend(obj -> !getPluginVersion().equals("UNOFFICIAL"));
 
+        REPORTER.setOn(getConfig().getBoolean("error-reports", true));
+
         REPORTER.executeOrElseReport(() -> {
             new SFCalcMetrics(this);
 

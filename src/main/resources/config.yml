@@ -1,5 +1,8 @@
 # Enable auto updates to get the latest fixes
 auto-updates: true
+# Auto error reporting. Recommended to be true. No data other than error and
+# SFCalc/Slimefun/Minecraft version is collected
+error-reports: true
 
 # The messages for showing recipes. Percent signs with numbers are placeholders for either item names or
 # numbers. See the comments above individual options to see what they are replaced by
