@@ -6,17 +6,18 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.CommonPatterns;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import javax.annotation.Nonnull;
 
 import static io.github.seggan.sfcalc.StringRegistry.*;
 
 public class NeededCommand extends SubCommand {
-    private static final List<String> ids = new ArrayList<>();
+
+    private static final Set<String> ids = new HashSet<>();
     private final SFCalc plugin;
 
     public NeededCommand(SFCalc pl) {
@@ -85,7 +86,11 @@ public class NeededCommand extends SubCommand {
             }
 
             if (args.length == 1) {
-                StringUtil.copyPartialMatches(args[0], ids, tabs);
+                for (String id : ids) {
+                    if (id.contains(args[0].toLowerCase(Locale.ROOT))) {
+                        tabs.add(id);
+                    }
+                }
             }
         });
     }
