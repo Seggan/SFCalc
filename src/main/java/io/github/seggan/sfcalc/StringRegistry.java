@@ -1,14 +1,16 @@
 package io.github.seggan.sfcalc;
 
-import io.github.mooy1.infinitylib.core.AddonConfig;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
-import org.apache.commons.lang.Validate;
-
 import lombok.Getter;
+import org.apache.commons.lang.Validate;
+import org.bukkit.configuration.file.FileConfiguration;
 
+import javax.annotation.Nonnull;
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
-import javax.annotation.Nonnull;
 
 @Getter
 public final class StringRegistry {
@@ -26,7 +28,7 @@ public final class StringRegistry {
     private final String notAPlayerString;
     private final String invalidNumberString;
 
-    StringRegistry(AddonConfig config) {
+    StringRegistry(FileConfiguration config, File file) {
         headerString = reformat(config, "header-string", 1);
         headerAmountString = reformat(config, "header-amount-string", 2, 1);
         stackString = reformat(config, "stack-string", 1, 2, 3, 4);
@@ -39,7 +41,11 @@ public final class StringRegistry {
         notAPlayerString = config.getString("not-a-player-string");
         invalidNumberString = config.getString("invalid-number-string");
 
-        config.save();
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     @Nonnull
@@ -56,7 +62,7 @@ public final class StringRegistry {
         return ChatColors.color(finalString);
     }
 
-    private String reformat(AddonConfig config, String key, int... numbers) {
+    private String reformat(FileConfiguration config, String key, int... numbers) {
         String val = config.getString(key);
 
         AtomicInteger i = new AtomicInteger();

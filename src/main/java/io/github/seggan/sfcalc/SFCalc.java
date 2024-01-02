@@ -1,18 +1,20 @@
 package io.github.seggan.sfcalc;
 
-import io.github.mooy1.infinitylib.core.AbstractAddon;
 import io.github.seggan.errorreporter.ErrorReporter;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
-import org.bukkit.event.Listener;
-
+import io.github.thebusybiscuit.slimefun4.libraries.dough.updater.BlobBuildUpdater;
 import lombok.Getter;
+import org.bukkit.command.TabExecutor;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
-public class SFCalc extends AbstractAddon implements Listener {
+public class SFCalc extends JavaPlugin implements Listener {
 
     public static ErrorReporter REPORTER;
 
@@ -22,30 +24,28 @@ public class SFCalc extends AbstractAddon implements Listener {
     private Calculator calculator;
     private StringRegistry stringRegistry;
 
-    public SFCalc() {
-        super("Seggan", "SFCalc", "master", "auto-updates");
-    }
-
     @Override
-    protected void enable() {
+    public void onEnable() {
         instance = this;
 
-        REPORTER  = new ErrorReporter("Seggan", "SFCalc", () ->
-            "SFCalc " +
-            getPluginVersion() +
-            "\nSlimefun " +
-            Slimefun.getVersion() +
-            "\nMinecraft " +
-            Slimefun.getMinecraftVersion().getName()
+        new BlobBuildUpdater(this, getFile(), "SFCalc").start();
+
+        REPORTER = new ErrorReporter("Seggan", "SFCalc", () ->
+                "SFCalc " +
+                        getDescription().getVersion() +
+                        "\nSlimefun " +
+                        Slimefun.getVersion() +
+                        "\nMinecraft " +
+                        Slimefun.getMinecraftVersion().getName()
         );
-        REPORTER.preSend(obj -> !getPluginVersion().equals("UNOFFICIAL"));
+        REPORTER.preSend(obj -> !getDescription().getVersion().equals("UNOFFICIAL"));
 
         REPORTER.setOn(getConfig().getBoolean("error-reports", true));
 
         REPORTER.executeOrElseReport(() -> {
             new SFCalcMetrics(this);
 
-            stringRegistry = new StringRegistry(getConfig());
+            stringRegistry = new StringRegistry(getConfig(), new File(getDataFolder(), "config.yml"));
             calculator = new Calculator(this);
 
             blacklistedRecipes.add(RecipeType.ORE_WASHER);
@@ -65,15 +65,14 @@ public class SFCalc extends AbstractAddon implements Listener {
                 blacklistedIds.add("CARBON");
             }
 
-            getCommand()
-                .addSub(new CalcCommand(this))
-                .addSub(new NeededCommand(this))
-                .addSub(new WebsiteCommand());
+            TabExecutor calcCommand = new CalcCommand(this);
+            getCommand("sfcalc").setExecutor(calcCommand);
+            getCommand("sfcalc").setTabCompleter(calcCommand);
         });
     }
 
     @Override
-    protected void disable() {
+    public void onDisable() {
         instance = null;
     }
 

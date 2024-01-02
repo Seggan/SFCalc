@@ -1,17 +1,11 @@
 package io.github.seggan.sfcalc;
 
-import io.github.mooy1.infinitylib.metrics.bukkit.Metrics;
-import io.github.mooy1.infinitylib.metrics.charts.AdvancedPie;
-import io.github.mooy1.infinitylib.metrics.charts.SingleLineChart;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.AdvancedPie;
+import org.bstats.charts.SingleLineChart;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SFCalcMetrics extends Metrics {
 

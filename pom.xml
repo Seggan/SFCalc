@@ -17,7 +17,7 @@
     </properties>
 
     <build>
-        <finalName>${project.name} v${project.version}</finalName>
+        <finalName>${project.name}</finalName>
         <defaultGoal>clean package -T 2.0C</defaultGoal>
 
         <resources>
@@ -44,8 +44,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>17</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
 
@@ -68,28 +68,14 @@
                 <configuration>
                     <relocations>
                         <relocation>
-                            <pattern>io.github.mooy1.infinitylib</pattern>
-                            <shadedPattern>io.github.seggan.sfcalc.infinitylib</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>io.github.seggan.errorreporter</pattern>
                             <shadedPattern>io.github.seggan.sfcalc.errorreporter</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>io.github.seggan.sfcalc.bstats</shadedPattern>
+                        </relocation>
                     </relocations>
-                    <filters>
-                        <filter>
-                            <artifact>io.github.mooy1:InfinityLib</artifact>
-                            <excludes>
-                                <exclude>**/infinitylib/slimefun/**</exclude>
-                                <exclude>**/infinitylib/categories/**</exclude>
-                                <exclude>**/infinitylib/items/**</exclude>
-                                <exclude>**/infinitylib/players/**</exclude>
-                                <exclude>**/infinitylib/persistence/**</exclude>
-                                <exclude>**/infinitylib/presets/**</exclude>
-                                <exclude>**/infinitylib/recipes/**</exclude>
-                            </excludes>
-                        </filter>
-                    </filters>
                 </configuration>
                 <executions>
                     <execution>
@@ -105,8 +91,8 @@
 
     <repositories>
         <repository>
-            <id>jittpack</id>
-            <url>https://jitpack.io</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io/</url>
         </repository>
 
         <repository>
@@ -124,17 +110,17 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.TheBusyBiscuit</groupId>
-            <artifactId>Slimefun4</artifactId>
-            <version>RC-27</version>
-            <scope>provided</scope>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.2</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>io.github.mooy1</groupId>
-            <artifactId>InfinityLib</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
+            <groupId>com.github.Slimefun</groupId>
+            <artifactId>Slimefun4</artifactId>
+            <version>RC-36</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

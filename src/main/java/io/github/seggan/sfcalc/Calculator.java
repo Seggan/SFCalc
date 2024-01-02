@@ -9,15 +9,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.*;
 
-import static io.github.seggan.sfcalc.StringRegistry.*;
+import static io.github.seggan.sfcalc.StringRegistry.format;
 
 /**
  * The main class for the calculator
@@ -149,8 +145,7 @@ public class Calculator {
     @Nullable
     private SlimefunItemStack getNextItem(Map<ItemStack, Long> map) {
         for (Map.Entry<ItemStack, Long> entry : map.entrySet()) {
-            if (entry.getKey() instanceof SlimefunItemStack) {
-                SlimefunItemStack ingredient = (SlimefunItemStack) entry.getKey();
+            if (entry.getKey() instanceof SlimefunItemStack ingredient) {
                 if (ingredient.getItem() != null &&
                     !plugin.getBlacklistedRecipes().contains(ingredient.getItem().getRecipeType()) &&
 					!plugin.getBlacklistedIds().contains(ingredient.getItem().getId())) {

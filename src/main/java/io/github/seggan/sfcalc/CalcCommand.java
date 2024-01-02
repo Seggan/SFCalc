@@ -1,31 +1,28 @@
 package io.github.seggan.sfcalc;
 
-import io.github.mooy1.infinitylib.commands.SubCommand;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.CommonPatterns;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 import javax.annotation.Nonnull;
+import java.util.*;
 
-import static io.github.seggan.sfcalc.StringRegistry.*;
+import static io.github.seggan.sfcalc.StringRegistry.format;
 
-public class CalcCommand extends SubCommand {
+public class CalcCommand implements TabExecutor {
 
     private static final Set<String> ids = new HashSet<>();
     private final SFCalc plugin;
 
     public CalcCommand(SFCalc pl) {
-        super("calc", "Calculates the resources needed for a given item", false);
         this.plugin = pl;
     }
 
     @Override
-    public void execute(@Nonnull CommandSender sender, @Nonnull String[] args) {
+    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String alias, @Nonnull String[] args) {
         SFCalc.REPORTER.executeOrElseReport(() -> {
             long amount;
             String reqItem;
@@ -68,10 +65,12 @@ public class CalcCommand extends SubCommand {
 
             plugin.getCalc().printResults(sender, item, amount, false);
         });
+        return true;
     }
 
     @Override
-    public void complete(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
+    public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String alias, @Nonnull String[] args) {
+        List<String> tabs = new ArrayList<>();
         SFCalc.REPORTER.executeOrElseReport(() -> {
             if (ids.isEmpty()) {
                 for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
@@ -87,5 +86,6 @@ public class CalcCommand extends SubCommand {
                 }
             }
         });
+        return tabs;
     }
 }
