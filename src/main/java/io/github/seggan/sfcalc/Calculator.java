@@ -41,7 +41,6 @@ public class Calculator {
      */
     public void printResults(@Nonnull CommandSender sender, @Nonnull SlimefunItem item, long amount, boolean needed) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            this.top.set(item);
             Map<ItemStack, Long> results = calculate(item, amount);
 
             StringRegistry registry = plugin.getStringRegistry();
@@ -91,7 +90,6 @@ public class Calculator {
                     sender.sendMessage(format(registry.getAmountString(), getBasicName(entry.getKey()), parsedAmount));
                 }
             }
-            this.top.remove();
         });
     }
 
@@ -112,22 +110,22 @@ public class Calculator {
 
     @Nonnull
     public Map<ItemStack, Long> calculate(@Nonnull SlimefunItem parent, long amount) {
-
+        top.set(parent);
         Map<ItemStack, Long> result = new HashMap<>();
 
         // uncraft the material first to bypass the blacklist
         int multiplier = parent.getRecipeOutput().getAmount();
-        long operations = (amount + multiplier - 1) / multiplier; //ceiling(needed/multiplier) but abusing fast ints
+        long operations = (amount + multiplier - 1) / multiplier; // ceiling(needed/multiplier) but abusing fast ints
         for (ItemStack item : parent.getRecipe()) {
             if (item == null) continue;
             add(result, item, item.getAmount() * operations);
         }
 
-        //uncraft submaterials
+        // uncraft submaterials
         SlimefunItemStack next = getNextItem(result);
         while (next != null) {
             multiplier = next.getItem().getRecipeOutput().getAmount();
-            operations = (result.get(next) + multiplier - 1) / multiplier; //ceiling(needed/multiplier) but abusing fast ints
+            operations = (result.get(next) + multiplier - 1) / multiplier; // ceiling(needed/multiplier) but abusing fast ints
             add(result, next, -(multiplier * operations));
             for (ItemStack item : next.getItem().getRecipe()) {
                 if (item == null) continue;
@@ -135,6 +133,7 @@ public class Calculator {
             }
             next = getNextItem(result);
         }
+        top.remove();
 
         return result;
     }
