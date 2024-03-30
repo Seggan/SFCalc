@@ -24,6 +24,8 @@ import static io.github.seggan.sfcalc.StringRegistry.format;
 public class Calculator {
     private final SFCalc plugin;
 
+    private final ThreadLocal<SlimefunItem> top = new ThreadLocal<>();
+
     public Calculator(SFCalc pl) {
         this.plugin = pl;
     }
@@ -32,13 +34,14 @@ public class Calculator {
      * Calculates the resources for the item and prints the out to the specified {@link CommandSender}
      *
      * @param sender the sender to send the calculation to
-     * @param item the Slimefun item to calculate
+     * @param item   the Slimefun item to calculate
      * @param amount the amount to calculate for
      * @param needed whether it should print out how many are needed. Requires {@code sender instanceof Player}
-     * to be {@code true}
+     *               to be {@code true}
      */
     public void printResults(@Nonnull CommandSender sender, @Nonnull SlimefunItem item, long amount, boolean needed) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            this.top.set(item);
             Map<ItemStack, Long> results = calculate(item, amount);
 
             StringRegistry registry = plugin.getStringRegistry();
@@ -88,6 +91,7 @@ public class Calculator {
                     sender.sendMessage(format(registry.getAmountString(), getBasicName(entry.getKey()), parsedAmount));
                 }
             }
+            this.top.remove();
         });
     }
 
@@ -110,10 +114,10 @@ public class Calculator {
     public Map<ItemStack, Long> calculate(@Nonnull SlimefunItem parent, long amount) {
 
         Map<ItemStack, Long> result = new HashMap<>();
-		
-		// uncraft the material first to bypass the blacklist
-		int multiplier = parent.getRecipeOutput().getAmount();
-		long operations = (amount + multiplier - 1) / multiplier; //ceiling(needed/multiplier) but abusing fast ints
+
+        // uncraft the material first to bypass the blacklist
+        int multiplier = parent.getRecipeOutput().getAmount();
+        long operations = (amount + multiplier - 1) / multiplier; //ceiling(needed/multiplier) but abusing fast ints
         for (ItemStack item : parent.getRecipe()) {
             if (item == null) continue;
             add(result, item, item.getAmount() * operations);
@@ -146,9 +150,12 @@ public class Calculator {
     private SlimefunItemStack getNextItem(Map<ItemStack, Long> map) {
         for (Map.Entry<ItemStack, Long> entry : map.entrySet()) {
             if (entry.getKey() instanceof SlimefunItemStack ingredient) {
-                if (ingredient.getItem() != null &&
-                    !plugin.getBlacklistedRecipes().contains(ingredient.getItem().getRecipeType()) &&
-					!plugin.getBlacklistedIds().contains(ingredient.getItem().getId())) {
+                if (
+                        ingredient.getItem() != null &&
+                                !plugin.getBlacklistedRecipes().contains(ingredient.getItem().getRecipeType()) &&
+                                !plugin.getBlacklistedIds().contains(ingredient.getItem().getId()) &&
+                                top.get() != ingredient.getItem()
+                ) {
                     if (entry.getValue() > 0) {
                         return ingredient;
                     }
