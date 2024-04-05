@@ -80,7 +80,7 @@ public class CalcCommand implements TabExecutor {
 
             if (args.length == 1) {
                 for (String id : ids) {
-                    if (id.contains(args[0].toLowerCase(Locale.ROOT))) {
+                    if (id.contains(args[0].toLowerCase(Locale.ROOT)) && !SlimefunItem.getById(id).isHidden()) {
                         tabs.add(id);
                     }
                 }
