@@ -1,7 +1,6 @@
 package io.github.seggan.sfcalc;
 
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -122,12 +121,12 @@ public class Calculator {
         }
 
         // uncraft submaterials
-        SlimefunItemStack next = getNextItem(result);
+        SlimefunItem next = getNextItem(result);
         while (next != null) {
-            multiplier = next.getItem().getRecipeOutput().getAmount();
-            operations = (result.get(next) + multiplier - 1) / multiplier; // ceiling(needed/multiplier) but abusing fast ints
-            add(result, next, -(multiplier * operations));
-            for (ItemStack item : next.getItem().getRecipe()) {
+            multiplier = next.getRecipeOutput().getAmount();
+            operations = (result.get(next.getItem()) + multiplier - 1) / multiplier; // ceiling(needed/multiplier) but abusing fast ints
+            add(result, next.getItem(), -(multiplier * operations));
+            for (ItemStack item : next.getRecipe()) {
                 if (item == null) continue;
                 add(result, item, item.getAmount() * operations);
             }
@@ -146,17 +145,18 @@ public class Calculator {
      * - it is not blacklisted.
      */
     @Nullable
-    private SlimefunItemStack getNextItem(Map<ItemStack, Long> map) {
+    private SlimefunItem getNextItem(Map<ItemStack, Long> map) {
         for (Map.Entry<ItemStack, Long> entry : map.entrySet()) {
-            if (entry.getKey() instanceof SlimefunItemStack ingredient) {
-                if (
-                        ingredient.getItem() != null &&
-                                !plugin.getBlacklistedRecipes().contains(ingredient.getItem().getRecipeType()) &&
-                                !plugin.getBlacklistedIds().contains(ingredient.getItem().getId()) &&
-                                top.get() != ingredient.getItem()
+            SlimefunItem item = SlimefunItem.getByItem(entry.getKey());
+            if (item != null) {
+                if (!plugin.getBlacklistedRecipes().contains(item.getRecipeType())
+                        &&
+                        !plugin.getBlacklistedIds().contains(item.getId())
+                        &&
+                        top.get() != item
                 ) {
                     if (entry.getValue() > 0) {
-                        return ingredient;
+                        return item;
                     }
                 }
             }
