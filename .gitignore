@@ -5,6 +5,8 @@
 /.settings/
 /.idea/
 /test/
+/.gradle/
+/build/
 
 dependency-reduced-pom.xml
 
